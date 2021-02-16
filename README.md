@@ -12,3 +12,5 @@ The plan for this project is to redo the MFM that will include more technology t
   - Redesign the UI
   - Cloud sync
   - And overall do a better job at organising the project
+  
+Previous version: https://github.com/kedaitayar/MFM
