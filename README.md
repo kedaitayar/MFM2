@@ -1,7 +1,7 @@
 # MFM2
 Mobile Financial Management v2
 
-The plan for this project is to redo the MFM that will include more technology that is missing from the previous such as:
+The plan for this project is to redo the MFM that will include more technology that is missing from the previous project such as:
   - View binding
   - Navigation component
   - Dependency Injection
