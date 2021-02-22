@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_transaction_budget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Income" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_transaction_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_transaction_budget"
+        tools:text="Cash" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_transaction_account_to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/text_view_transaction_account"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_transaction_budget"
+        tools:text="Cash"
+        tools:visibility="visible" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_transaction_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="RM 100.00" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_transaction_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/text_view_transaction_amount"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_transaction_amount"
+        tools:text="12/12/12" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
