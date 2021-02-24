@@ -1,10 +1,13 @@
-package io.github.kedaitayar.mfm2.data.entity
+package io.github.kedaitayar.mfm.data.entity
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(indices = [Index(value = ["budgetName"], unique = true)])
+@Entity(
+    indices = [Index(value = ["budgetName"], unique = true)]
+)
 data class Budget(
     @PrimaryKey(autoGenerate = true)
     var budgetId: Long? = null,

@@ -5,20 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import io.github.kedaitayar.mfm.data.dao.AccountDao
+import io.github.kedaitayar.mfm.data.dao.BasicDao
 import io.github.kedaitayar.mfm.data.dao.BudgetDao
 import io.github.kedaitayar.mfm.data.dao.TransactionDao
-import io.github.kedaitayar.mfm.data.entity.TransactionType
-import io.github.kedaitayar.mfm2.data.entity.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import io.github.kedaitayar.mfm.data.entity.*
 
 @Database(
     entities = [Account::class, Transaction::class, TransactionType::class, Budget::class, BudgetTransaction::class, BudgetType::class, BudgetDeadline::class],
-    version = 2,
+    version = 3,
     exportSchema = true
 )
 @TypeConverters(Converters::class)
@@ -26,6 +21,7 @@ abstract class MFMDatabase : RoomDatabase() {
     abstract fun accountDao(): AccountDao
     abstract fun transactionDao(): TransactionDao
     abstract fun budgetDao(): BudgetDao
+    abstract fun basicDao(): BasicDao
 
     companion object {
         private const val DATABASE_NAME: String = "mfm_db"

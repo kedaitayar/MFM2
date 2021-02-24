@@ -1,4 +1,4 @@
-package io.github.kedaitayar.mfm2.data.entity
+package io.github.kedaitayar.mfm.data.entity
 
 import androidx.room.Entity
 import androidx.room.Index

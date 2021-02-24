@@ -15,8 +15,7 @@ import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetTypeDropdownData
 import io.github.kedaitayar.mfm.databinding.FragmentAddBudgetBinding
 import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
-import io.github.kedaitayar.mfm2.data.entity.Budget
-import io.github.kedaitayar.mfm2.data.entity.BudgetType
+import io.github.kedaitayar.mfm.data.entity.Budget
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

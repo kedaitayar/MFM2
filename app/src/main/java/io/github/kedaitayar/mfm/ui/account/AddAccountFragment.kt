@@ -1,13 +1,11 @@
 package io.github.kedaitayar.mfm.ui.account
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,7 +14,7 @@ import io.github.kedaitayar.mfm.databinding.FragmentAddAccountBinding
 import io.github.kedaitayar.mfm.util.NavigationResult.setNavigationResult
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.viewmodels.AccountViewModel
-import io.github.kedaitayar.mfm2.data.entity.Account
+import io.github.kedaitayar.mfm.data.entity.Account
 import kotlinx.coroutines.*
 
 private const val TAG = "AddAccountFragment"

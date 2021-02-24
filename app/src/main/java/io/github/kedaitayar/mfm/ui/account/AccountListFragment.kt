@@ -18,7 +18,7 @@ import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentAccountListBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.viewmodels.AccountViewModel
-import io.github.kedaitayar.mfm2.data.entity.Account
+import io.github.kedaitayar.mfm.data.entity.Account
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,14 +38,14 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
         _binding = FragmentAccountListBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
-        recyclerViewSetup()
+        val adapter = AccountListAdapter()
+        recyclerViewSetup(adapter)
 
         return binding.root
     }
 
     //setup account list recyclerview
-    private fun recyclerViewSetup() {
-        val adapter = AccountListAdapter()
+    private fun recyclerViewSetup(adapter: AccountListAdapter) {
         binding.recyclerViewAccountList.adapter = adapter
         binding.recyclerViewAccountList.layoutManager = GridLayoutManager(requireContext(), 2)
         accountViewModel.accountListAdapterData.observe(viewLifecycleOwner, Observer {

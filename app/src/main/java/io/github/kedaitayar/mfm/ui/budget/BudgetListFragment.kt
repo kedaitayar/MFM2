@@ -46,22 +46,10 @@ class BudgetListFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        budgetViewModel.selectedDate.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                Log.i(TAG, "observe selectedDate: $it")
-            }
-        })
-
-        /// temp,
         if (budgetType == -1) {
-            budgetViewModel.allBudget.observe(viewLifecycleOwner, Observer {
-                it?.let { list ->
-                    val recyclerList: List<BudgetListAdapterData> = list.map { item ->
-                        BudgetListAdapterData(budgetId = item.budgetId!!, budgetName = item.budgetName)
-                    }
-                    adapter.submitList(recyclerList)
-                }
-            })
+            setupRecyclerViewData(budgetViewModel.monthlyBudgetListData, adapter)
+        } else {
+            setupRecyclerViewData(budgetViewModel.monthlyBudgetListData, adapter)
         }
 
         return binding.root
@@ -73,6 +61,9 @@ class BudgetListFragment : Fragment() {
     ) {
         livedata.observe(viewLifecycleOwner, Observer {
             it?.let {
+                for (item in it) {
+                    Log.i(TAG, "setupRecyclerViewData: $it")
+                }
                 adapter.submitList(it)
             }
         })

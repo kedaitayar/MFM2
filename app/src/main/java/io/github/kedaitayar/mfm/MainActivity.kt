@@ -5,10 +5,10 @@ import android.os.Bundle
 import androidx.activity.viewModels
 
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.kedaitayar.mfm.data.entity.BudgetType
 import io.github.kedaitayar.mfm.data.entity.TransactionType
 import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
 import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
-import io.github.kedaitayar.mfm2.data.entity.BudgetType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

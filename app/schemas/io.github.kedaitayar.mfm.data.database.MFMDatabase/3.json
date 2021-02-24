@@ -1,0 +1,348 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "4d4072a23799216c0675a71384991ec5",
+    "entities": [
+      {
+        "tableName": "Account",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`accountId` INTEGER PRIMARY KEY AUTOINCREMENT, `accountName` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "accountId",
+            "columnName": "accountId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "accountName",
+            "columnName": "accountName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "accountId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_Account_accountName",
+            "unique": true,
+            "columnNames": [
+              "accountName"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Account_accountName` ON `${TABLE_NAME}` (`accountName`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Transaction",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`transactionId` INTEGER PRIMARY KEY AUTOINCREMENT, `transactionAmount` REAL NOT NULL, `transactionTime` TEXT, `transactionType` INTEGER NOT NULL, `transactionAccountId` INTEGER NOT NULL, `transactionBudgetId` INTEGER, `transactionAccountTransferTo` INTEGER, FOREIGN KEY(`transactionAccountId`) REFERENCES `Account`(`accountId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`transactionBudgetId`) REFERENCES `Budget`(`budgetId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`transactionAccountTransferTo`) REFERENCES `Account`(`accountId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "transactionId",
+            "columnName": "transactionId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "transactionAmount",
+            "columnName": "transactionAmount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "transactionTime",
+            "columnName": "transactionTime",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "transactionType",
+            "columnName": "transactionType",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "transactionAccountId",
+            "columnName": "transactionAccountId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "transactionBudgetId",
+            "columnName": "transactionBudgetId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "transactionAccountTransferTo",
+            "columnName": "transactionAccountTransferTo",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "transactionId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_Transaction_transactionAccountId_transactionBudgetId_transactionAccountTransferTo",
+            "unique": false,
+            "columnNames": [
+              "transactionAccountId",
+              "transactionBudgetId",
+              "transactionAccountTransferTo"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Transaction_transactionAccountId_transactionBudgetId_transactionAccountTransferTo` ON `${TABLE_NAME}` (`transactionAccountId`, `transactionBudgetId`, `transactionAccountTransferTo`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Account",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "transactionAccountId"
+            ],
+            "referencedColumns": [
+              "accountId"
+            ]
+          },
+          {
+            "table": "Budget",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "transactionBudgetId"
+            ],
+            "referencedColumns": [
+              "budgetId"
+            ]
+          },
+          {
+            "table": "Account",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "transactionAccountTransferTo"
+            ],
+            "referencedColumns": [
+              "accountId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "TransactionType",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`transactionTypeId` INTEGER PRIMARY KEY AUTOINCREMENT, `transactionTypeName` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "transactionTypeId",
+            "columnName": "transactionTypeId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "transactionTypeName",
+            "columnName": "transactionTypeName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "transactionTypeId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Budget",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`budgetId` INTEGER PRIMARY KEY AUTOINCREMENT, `budgetGoal` REAL NOT NULL, `budgetName` TEXT NOT NULL, `budgetType` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "budgetId",
+            "columnName": "budgetId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "budgetGoal",
+            "columnName": "budgetGoal",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "budgetName",
+            "columnName": "budgetName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "budgetType",
+            "columnName": "budgetType",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "budgetId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_Budget_budgetName",
+            "unique": true,
+            "columnNames": [
+              "budgetName"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Budget_budgetName` ON `${TABLE_NAME}` (`budgetName`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "BudgetTransaction",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`budgetTransactionMonth` INTEGER NOT NULL, `budgetTransactionYear` INTEGER NOT NULL, `budgetTransactionAmount` REAL NOT NULL, `budgetTransactionBudgetId` INTEGER NOT NULL, PRIMARY KEY(`budgetTransactionMonth`, `budgetTransactionYear`, `budgetTransactionBudgetId`), FOREIGN KEY(`budgetTransactionBudgetId`) REFERENCES `Budget`(`budgetId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "budgetTransactionMonth",
+            "columnName": "budgetTransactionMonth",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "budgetTransactionYear",
+            "columnName": "budgetTransactionYear",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "budgetTransactionAmount",
+            "columnName": "budgetTransactionAmount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "budgetTransactionBudgetId",
+            "columnName": "budgetTransactionBudgetId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "budgetTransactionMonth",
+            "budgetTransactionYear",
+            "budgetTransactionBudgetId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Budget",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "budgetTransactionBudgetId"
+            ],
+            "referencedColumns": [
+              "budgetId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "BudgetType",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`budgetTypeId` INTEGER PRIMARY KEY AUTOINCREMENT, `budgetTypeName` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "budgetTypeId",
+            "columnName": "budgetTypeId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "budgetTypeName",
+            "columnName": "budgetTypeName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "budgetTypeId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_BudgetType_budgetTypeName",
+            "unique": true,
+            "columnNames": [
+              "budgetTypeName"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_BudgetType_budgetTypeName` ON `${TABLE_NAME}` (`budgetTypeName`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "BudgetDeadline",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`budgetId` INTEGER, `budgetDeadline` TEXT, PRIMARY KEY(`budgetId`), FOREIGN KEY(`budgetId`) REFERENCES `Budget`(`budgetId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "budgetId",
+            "columnName": "budgetId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "budgetDeadline",
+            "columnName": "budgetDeadline",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "budgetId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Budget",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "budgetId"
+            ],
+            "referencedColumns": [
+              "budgetId"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4d4072a23799216c0675a71384991ec5')"
+    ]
+  }
+}

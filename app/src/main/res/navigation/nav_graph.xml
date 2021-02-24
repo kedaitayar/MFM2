@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_mainFragment_to_addBudgetFragment"
             app:destination="@id/addBudgetFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_budgetingFragment"
+            app:destination="@id/budgetingFragment" />
     </fragment>
     <fragment
         android:id="@+id/addAccountFragment"
@@ -47,4 +50,9 @@
         android:name="io.github.kedaitayar.mfm.ui.budget.AddBudgetFragment"
         android:label="fragment_add_budget"
         tools:layout="@layout/fragment_add_budget" />
+    <fragment
+        android:id="@+id/budgetingFragment"
+        android:name="io.github.kedaitayar.mfm.ui.budget.BudgetingFragment"
+        android:label="fragment_budgeting"
+        tools:layout="@layout/fragment_budgeting" />
 </navigation>

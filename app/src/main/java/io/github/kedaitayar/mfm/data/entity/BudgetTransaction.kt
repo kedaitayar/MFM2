@@ -1,7 +1,8 @@
-package io.github.kedaitayar.mfm2.data.entity
+package io.github.kedaitayar.mfm.data.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import io.github.kedaitayar.mfm.data.entity.Budget
 
 @Entity(
     primaryKeys = ["budgetTransactionMonth", "budgetTransactionYear", "budgetTransactionBudgetId"],

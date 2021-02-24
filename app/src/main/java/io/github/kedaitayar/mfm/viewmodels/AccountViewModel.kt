@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.data.repository.AccountRepository
-import io.github.kedaitayar.mfm2.data.entity.Account
+import io.github.kedaitayar.mfm.data.entity.Account
 import javax.inject.Inject
 
 @HiltViewModel

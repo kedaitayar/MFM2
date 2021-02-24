@@ -1,13 +1,20 @@
-package io.github.kedaitayar.mfm2.data.entity
+package io.github.kedaitayar.mfm.data.entity
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import java.time.LocalDateTime
 import java.time.OffsetDateTime
 
-@Entity
+@Entity(
+    foreignKeys = [ForeignKey(
+        entity = Budget::class,
+        parentColumns = arrayOf("budgetId"),
+        childColumns = arrayOf("budgetId"),
+        onDelete = ForeignKey.CASCADE
+    )]
+)
 data class BudgetDeadline(
     @PrimaryKey
     val budgetId: Long? = null,
-    val budgetDeadline: OffsetDateTime? = null
+    var budgetDeadline: OffsetDateTime? = null
 )

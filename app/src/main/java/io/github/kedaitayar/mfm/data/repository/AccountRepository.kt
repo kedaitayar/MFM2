@@ -2,24 +2,28 @@ package io.github.kedaitayar.mfm.data.repository
 
 import androidx.lifecycle.LiveData
 import io.github.kedaitayar.mfm.data.dao.AccountDao
+import io.github.kedaitayar.mfm.data.dao.BasicDao
 import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
-import io.github.kedaitayar.mfm2.data.entity.Account
+import io.github.kedaitayar.mfm.data.entity.Account
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AccountRepository @Inject constructor(private val accountDao: AccountDao) {
+class AccountRepository @Inject constructor(
+    private val accountDao: AccountDao,
+    private val basicDao: BasicDao
+) {
 
     suspend fun insert(account: Account): Long {
-        return accountDao.insert(account)
+        return basicDao.insert(account)
     }
 
     suspend fun delete(account: Account): Int {
-        return accountDao.delete(account)
+        return basicDao.delete(account)
     }
 
     suspend fun update(account: Account): Int {
-        return accountDao.update(account)
+        return basicDao.update(account)
     }
 
     suspend fun getAccountById(accountId: Long): Account {

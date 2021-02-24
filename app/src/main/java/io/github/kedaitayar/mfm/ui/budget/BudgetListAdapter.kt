@@ -24,8 +24,8 @@ class BudgetListAdapter :
             Log.i(TAG, "bind: $item")
             binding.apply {
                 textViewBudgetName.text = item.budgetName
-                textViewBudgeted.text = "placeholder"
-                textViewUsed.text = "placeholder"
+                textViewBudgeted.text = item.budgetAllocation.toString()
+                textViewUsed.text = item.budgetUsed.toString()
             }
         }
     }

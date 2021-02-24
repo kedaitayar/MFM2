@@ -15,7 +15,7 @@ import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentExpenseTransactionBinding
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
-import io.github.kedaitayar.mfm2.data.entity.Transaction
+import io.github.kedaitayar.mfm.data.entity.Transaction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -8,6 +8,5 @@ data class BudgetListAdapterData(
     var budgetUsed: Double = 0.0,
     var budgetTypeId: Long = 0,
     var budgetTypeName: String = "",
-    var isExpanded: Boolean = false,
     var budgetTotalPrevAllocation: Double = 0.0
 )

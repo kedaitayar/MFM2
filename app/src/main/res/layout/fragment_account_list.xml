@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.account.AccountListFragment">
 
     <com.google.android.material.card.MaterialCardView
@@ -16,6 +17,8 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_account_list"
+                tools:listitem="@layout/recycler_view_item_account_list"
+                tools:itemCount="3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 

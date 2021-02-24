@@ -7,6 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.github.kedaitayar.mfm.data.dao.AccountDao
+import io.github.kedaitayar.mfm.data.dao.BasicDao
 import io.github.kedaitayar.mfm.data.dao.BudgetDao
 import io.github.kedaitayar.mfm.data.dao.TransactionDao
 import io.github.kedaitayar.mfm.data.database.MFMDatabase
@@ -36,6 +37,11 @@ class RoomModule {
     @Provides
     fun provideBudgetDao(mfmDatabase: MFMDatabase): BudgetDao {
         return mfmDatabase.budgetDao()
+    }
+
+    @Provides
+    fun provideBasicDao(mfmDatabase: MFMDatabase): BasicDao {
+        return mfmDatabase.basicDao()
     }
 
     @Singleton

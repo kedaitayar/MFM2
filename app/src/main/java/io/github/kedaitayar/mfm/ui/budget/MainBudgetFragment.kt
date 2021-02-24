@@ -26,11 +26,16 @@ class MainBudgetFragment: Fragment(R.layout.fragment_main_budget) {
         context ?: return binding.root
 
         childFragmentManager.beginTransaction().apply {
+            replace(R.id.fragment_container_date, MonthYearScrollFragment())
             replace(R.id.fragment_container_budget_list_type1, BudgetListFragment.newInstance(-1))
         }.commit()
 
         binding.buttonAddBudget.setOnClickListener {
             val action = MainFragmentDirections.actionMainFragmentToAddBudgetFragment()
+            findNavController().navigate(action)
+        }
+        binding.buttonBudgeting.setOnClickListener {
+            val action = MainFragmentDirections.actionMainFragmentToBudgetingFragment()
             findNavController().navigate(action)
         }
 

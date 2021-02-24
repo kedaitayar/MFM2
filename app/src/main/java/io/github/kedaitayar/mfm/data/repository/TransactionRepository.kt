@@ -1,44 +1,44 @@
 package io.github.kedaitayar.mfm.data.repository
 
 import androidx.lifecycle.LiveData
+import io.github.kedaitayar.mfm.data.dao.BasicDao
 import io.github.kedaitayar.mfm.data.dao.TransactionDao
 import io.github.kedaitayar.mfm.data.entity.TransactionType
 import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData
-import io.github.kedaitayar.mfm2.data.entity.Account
-import io.github.kedaitayar.mfm2.data.entity.Budget
-import io.github.kedaitayar.mfm2.data.entity.Transaction
+import io.github.kedaitayar.mfm.data.entity.Account
+import io.github.kedaitayar.mfm.data.entity.Budget
+import io.github.kedaitayar.mfm.data.entity.Transaction
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TransactionRepository @Inject constructor(private val transactionDao: TransactionDao) {
+class TransactionRepository @Inject constructor(
+    private val transactionDao: TransactionDao,
+    private val basicDao: BasicDao
+) {
 
     suspend fun insert(transaction: Transaction): Long {
-        return transactionDao.insert(transaction)
+        return basicDao.insert(transaction)
     }
 
     suspend fun delete(transaction: Transaction): Int {
-        return transactionDao.delete(transaction)
+        return basicDao.delete(transaction)
     }
 
     suspend fun update(transaction: Transaction): Int {
-        return transactionDao.update(transaction)
-    }
-
-    suspend fun deleteAll() {
-        return transactionDao.deleteAll()
+        return basicDao.update(transaction)
     }
 
     fun getAllTransaction(): LiveData<List<Transaction>> {
-        return transactionDao.getAllTransaction()
+        return basicDao.getAllTransaction()
     }
 
     fun getAllAccount(): LiveData<List<Account>> {
-        return transactionDao.getAllAccount()
+        return basicDao.getAllAccount()
     }
 
     fun getAllBudget(): LiveData<List<Budget>> {
-        return transactionDao.getAllBudget()
+        return basicDao.getAllBudget()
     }
 
     fun getTransactionListData(): LiveData<List<TransactionListAdapterData>> {
@@ -47,22 +47,18 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
 
     // transactionType
     suspend fun insert(transactionType: TransactionType): Long {
-        return transactionDao.insert(transactionType)
+        return basicDao.insert(transactionType)
     }
 
     suspend fun delete(transactionType: TransactionType): Int {
-        return transactionDao.delete(transactionType)
+        return basicDao.delete(transactionType)
     }
 
     suspend fun update(transactionType: TransactionType): Int {
-        return transactionDao.update(transactionType)
-    }
-
-    suspend fun deleteAllTransactionType() {
-        return transactionDao.deleteAllTransactionType()
+        return basicDao.update(transactionType)
     }
 
     fun getAllTransactionType(): LiveData<List<TransactionType>> {
-        return transactionDao.getAllTransactionType()
+        return basicDao.getAllTransactionType()
     }
 }
