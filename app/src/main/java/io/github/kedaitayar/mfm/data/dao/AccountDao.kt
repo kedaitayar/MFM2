@@ -45,16 +45,9 @@ interface AccountDao {
     )
     fun getAccountListData(): LiveData<List<AccountListAdapterData>>
 
-    @Query("SELECT * FROM budget")
-    fun getAllBudget(): LiveData<List<Budget>>
+    @Query("SELECT SUM(budgetTransactionAmount) FROM budgettransaction")
+    fun getTotalBudgetedAmount(): LiveData<Double>
 
-    @Insert
-    suspend fun insert(transaction: Transaction): Long
-
-    @Update
-    suspend fun update(transaction: Transaction): Int
-
-    @Insert
-    suspend fun insert(budget: Budget): Long
-
+    @Query("SELECT SUM(transactionAmount) FROM `transaction` WHERE transactionType = 2")
+    fun getTotalIncome(): LiveData<Double>
 }

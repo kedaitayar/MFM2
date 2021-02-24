@@ -33,4 +33,12 @@ class AccountRepository @Inject constructor(
     fun getAccountListData(): LiveData<List<AccountListAdapterData>> {
         return accountDao.getAccountListData()
     }
+
+    fun getTotalBudgetedAmount(): LiveData<Double> {
+        return  accountDao.getTotalBudgetedAmount()
+    }
+
+    fun getTotalIncome(): LiveData<Double> {
+        return accountDao.getTotalIncome()
+    }
 }

@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
@@ -44,10 +45,10 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
         return binding.root
     }
 
-    //setup account list recyclerview
+
     private fun recyclerViewSetup(adapter: AccountListAdapter) {
         binding.recyclerViewAccountList.adapter = adapter
-        binding.recyclerViewAccountList.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.recyclerViewAccountList.layoutManager = LinearLayoutManager(requireContext())
         accountViewModel.accountListAdapterData.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)

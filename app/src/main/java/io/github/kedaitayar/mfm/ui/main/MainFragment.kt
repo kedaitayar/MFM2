@@ -34,7 +34,7 @@ class MainFragment : Fragment() {
             tab.text = getTabTitle(position)
         }.attach()
 
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+//        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
         binding.fab.setOnClickListener {
             val action = MainFragmentDirections.actionMainFragmentToAddTransactionFragment()
@@ -46,7 +46,7 @@ class MainFragment : Fragment() {
 
     private fun getTabTitle(position: Int): String? {
         return when (position) {
-            ACCOUNT_PAGE_INDEX -> "Account"
+            ACCOUNT_PAGE_INDEX -> "Dashboard"
             TRANSACTION_PAGE_INDEX -> "Transaction"
             BUDGET_PAGE_INDEX -> "Budget"
             else -> null
