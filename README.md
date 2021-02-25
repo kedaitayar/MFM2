@@ -1,7 +1,7 @@
 # MFM2
 Mobile Financial Management v2
 
-The plan for this project is to redo the MFM that will include more technology that is missing from the previous project such as:
+The plan for this project is to rewrite MFM v1 that will include more technology that is missing from the previous project such as:
   - View binding
   - Navigation component
   - Dependency Injection
@@ -11,6 +11,6 @@ The plan for this project is to redo the MFM that will include more technology t
     - UI testing
   - Redesign the UI
   - Data backup
-  - And overall do a better job at organising the project
+  - And overall do a better job at coding and organising the project
   
 Previous version: https://github.com/kedaitayar/MFM
