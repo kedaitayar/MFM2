@@ -54,7 +54,7 @@ interface BasicDao {
     @Query("SELECT * FROM budgettransaction")
     fun getAllBudgetTransaction(): LiveData<List<BudgetTransaction>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(budgetTransaction: BudgetTransaction): Long
 
     @Update

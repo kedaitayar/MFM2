@@ -41,12 +41,30 @@ class MainAccountFragment : Fragment(R.layout.fragment_main_account) {
 
         setupAddAccountButton()
         setupAddAccountFragmentResultObserver()
-        setupToBeBudgetedAmount()
+        setupDashboardInfo()
 
         return binding.root
     }
 
-    private fun setupToBeBudgetedAmount() {
+    //TODO: extract string
+    private fun setupDashboardInfo() {
+        accountViewModel.thisMonthSpending.observe(viewLifecycleOwner) {
+            it?.let {
+                binding.textViewSpendingThisMonthAmount.text = "RM $it"
+            }
+        }
+        accountViewModel.nextMonthBudgeted.observe(viewLifecycleOwner) {
+            it?.let {
+                binding.textViewBudgetedNextMonthAmount.text = "RM $it"
+            }
+        }
+        accountViewModel.totalBudgetedAndGoal.observe(viewLifecycleOwner) {
+            it?.let {
+                binding.textViewUncompletedBudget.text =
+                    "RM ${it.budgetGoal - it.budgetTransactionAmount}"
+                binding.ringView.setRingProgress((it.budgetTransactionAmount / it.budgetGoal * 100).toInt())
+            }
+        }
         accountViewModel.totalIncome.observe(viewLifecycleOwner, Observer {
             it?.let {
                 setAccountIncome(it)
@@ -78,13 +96,12 @@ class MainAccountFragment : Fragment(R.layout.fragment_main_account) {
 
     private fun setAccountIncome(totalIncome: Double) {
         this.totalIncome = totalIncome
-        binding.textViewToBeBudgetedAmount.text = "RM " + (this.totalIncome - this.totalBudgeted).toString()
+        binding.textViewNotBudgetedAmount.text = "RM " + (this.totalIncome - this.totalBudgeted).toString()
     }
 
     private fun setTotalBudgeted(totalBudgeted: Double) {
         this.totalBudgeted = totalBudgeted
-        binding.textViewToBeBudgetedAmount.text =
-            "RM " + (this.totalIncome - this.totalBudgeted).toString()
+        binding.textViewNotBudgetedAmount.text = "RM " + (this.totalIncome - this.totalBudgeted).toString()
     }
 
     override fun onDestroyView() {

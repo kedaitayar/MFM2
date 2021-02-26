@@ -7,24 +7,30 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_transaction_budget"
+        style="@style/TextStyle2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Income" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_transaction_account"
+        style="@style/TextStyle5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_transaction_budget"
         tools:text="Cash" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_transaction_account_to"
+        style="@style/TextStyle5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_baseline_chevron_right_24"
         android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/text_view_transaction_account"
         app:layout_constraintTop_toBottomOf="@+id/text_view_transaction_budget"
@@ -33,18 +39,44 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_transaction_amount"
+        style="@style/TextStyle2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_popup_menu"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="RM 100.00" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_transaction_date"
+        style="@style/TextStyle5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="@+id/text_view_transaction_amount"
         app:layout_constraintTop_toBottomOf="@+id/text_view_transaction_amount"
         tools:text="12/12/12" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_popup_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:padding="0dp"
+        app:icon="@drawable/ic_baseline_more_vert_24"
+        app:iconPadding="0dp"
+        app:iconTint="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/text_view_transaction_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_view_transaction_amount" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="2dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_transaction_date" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

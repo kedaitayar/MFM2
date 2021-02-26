@@ -14,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.BudgetTransaction
 import io.github.kedaitayar.mfm.databinding.FragmentBudgetingBinding
+import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -67,6 +68,7 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting) {
                             }
                         }
                     }
+                    hideKeyboard()
                     findNavController().navigateUp()
                     true
                 }

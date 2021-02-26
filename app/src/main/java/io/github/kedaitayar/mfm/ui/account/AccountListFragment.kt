@@ -48,7 +48,7 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
 
     private fun recyclerViewSetup(adapter: AccountListAdapter) {
         binding.recyclerViewAccountList.adapter = adapter
-        binding.recyclerViewAccountList.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerViewAccountList.layoutManager = GridLayoutManager(requireContext(), 2)
         accountViewModel.accountListAdapterData.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)

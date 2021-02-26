@@ -3,11 +3,14 @@ package io.github.kedaitayar.mfm.ui.budget
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
+import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
+import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData
 import io.github.kedaitayar.mfm.databinding.RecyclerViewItemBudgetListBinding
 
 private const val TAG = "BudgetListAdapter"
@@ -16,16 +19,45 @@ class BudgetListAdapter :
     ListAdapter<BudgetListAdapterData, BudgetListAdapter.BudgetListViewHolder>(
         BudgetListDiffCallback()
     ) {
+    private var listener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onPopupMenuButtonClick(
+            budgetListAdapterData: BudgetListAdapterData,
+            popupMenuButton: Button
+        )
+    }
 
     inner class BudgetListViewHolder(private val binding: RecyclerViewItemBudgetListBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.buttonMore.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    listener?.onPopupMenuButtonClick(getItem(adapterPosition), it as Button)
+                }
+            }
+        }
 
         fun bind(item: BudgetListAdapterData) {
             Log.i(TAG, "bind: $item")
             binding.apply {
                 textViewBudgetName.text = item.budgetName
-                textViewBudgeted.text = item.budgetAllocation.toString()
                 textViewUsed.text = item.budgetUsed.toString()
+
+                val goalPercentage = ((item.budgetAllocation / item.budgetGoal) * 100).toInt()
+                textViewBudgeted.text = item.budgetAllocation.toString()
+                textViewBudgeted.piePercent = goalPercentage
+                if (goalPercentage >= 100) {
+                    textViewBudgeted.bgColor = ContextCompat.getColor(textViewBudgeted.context, R.color.gGreen)
+                } else {
+                    textViewBudgeted.bgColor = ContextCompat.getColor(textViewBudgeted.context, R.color.gYellow)
+                }
+                if (item.budgetUsed <= item.budgetAllocation) {
+                    textViewUsed.background.setTint(ContextCompat.getColor(textViewBudgeted.context, R.color.gGreen))
+                } else {
+                    textViewUsed.background.setTint(ContextCompat.getColor(textViewBudgeted.context, R.color.gRed))
+                }
             }
         }
     }
@@ -43,6 +75,10 @@ class BudgetListAdapter :
     override fun onBindViewHolder(holder: BudgetListViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.listener = listener
     }
 }
 

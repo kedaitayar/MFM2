@@ -6,13 +6,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.PopupMenu
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
+import io.github.kedaitayar.mfm.data.entity.Account
+import io.github.kedaitayar.mfm.data.entity.Transaction
+import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
+import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentTransactionListBinding
+import io.github.kedaitayar.mfm.ui.account.AccountListAdapter
+import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 private const val TAG = "TransactionListFragment"
 
@@ -29,22 +41,53 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
         _binding = FragmentTransactionListBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
-        val recyclerView = binding.recyclerView
         val adapter = TransactionListAdapter()
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
         setupRecyclerView(adapter)
 
         return binding.root
     }
 
-    private fun setupRecyclerView(adapter: TransactionListAdapter){
+    private fun setupRecyclerView(adapter: TransactionListAdapter) {
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         transactionViewModel.allTransactionListAdapterData.observe(viewLifecycleOwner, Observer {
             it?.let { list ->
                 for (item in list) {
                     Log.i(TAG, "setupRecyclerView: $item")
                 }
                 adapter.submitList(list)
+            }
+        })
+        popupMenuSetup(adapter)
+    }
+
+    private fun popupMenuSetup(adapter: TransactionListAdapter) {
+        adapter.setOnItemClickListener(object : TransactionListAdapter.OnItemClickListener {
+
+            override fun onPopupMenuButtonClick(
+                transactionListAdapterData: TransactionListAdapterData,
+                popupMenuButton: Button
+            ) {
+                val popupMenu = PopupMenu(this@TransactionListFragment.context, popupMenuButton)
+                popupMenu.inflate(R.menu.menu_transaction_list_item)
+                popupMenu.setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.edit -> {
+                            true
+                        }
+                        R.id.delete -> {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val account =
+                                    Transaction(transactionId = transactionListAdapterData.transactionId)
+                                val result = transactionViewModel.delete(account)
+                                Log.i(TAG, "onPopupMenuButtonClick: delete result: $result")
+                            }
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                popupMenu.show()
             }
         })
     }

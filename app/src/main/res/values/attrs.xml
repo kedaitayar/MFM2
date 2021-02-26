@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PillPieCustomView">
+        <attr name="piePercentage" format="integer" />
+        <attr name="bgColor" format="integer" />
+    </declare-styleable>
+    <declare-styleable name="RingCustomView">
+        <attr name="ringProgress" format="integer" />
+        <attr name="ringStrokeWidth" format="integer" />
+        <attr name="ringColor" format="color" />
+    </declare-styleable>
+</resources>

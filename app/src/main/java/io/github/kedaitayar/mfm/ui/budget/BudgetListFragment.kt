@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.PopupMenu
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -41,11 +43,7 @@ class BudgetListFragment : Fragment() {
         _binding = FragmentBudgetListBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
-        val recyclerView = binding.recyclerView
         val adapter = BudgetListAdapter()
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
         if (budgetType == -1) {
             setupRecyclerViewData(budgetViewModel.monthlyBudgetListData, adapter)
         } else {
@@ -59,12 +57,40 @@ class BudgetListFragment : Fragment() {
         livedata: LiveData<List<BudgetListAdapterData>>,
         adapter: BudgetListAdapter
     ) {
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         livedata.observe(viewLifecycleOwner, Observer {
             it?.let {
                 for (item in it) {
                     Log.i(TAG, "setupRecyclerViewData: $it")
                 }
                 adapter.submitList(it)
+            }
+        })
+        popupMenuSetup(adapter)
+    }
+
+    private fun popupMenuSetup(adapter: BudgetListAdapter) {
+        adapter.setOnItemClickListener(object : BudgetListAdapter.OnItemClickListener {
+
+            override fun onPopupMenuButtonClick(
+                budgetListAdapterData: BudgetListAdapterData,
+                popupMenuButton: Button
+            ) {
+                val popupMenu = PopupMenu(this@BudgetListFragment.context, popupMenuButton)
+                popupMenu.inflate(R.menu.menu_budget_list_item)
+                popupMenu.setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.edit -> {
+                            true
+                        }
+                        R.id.detail -> {
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                popupMenu.show()
             }
         })
     }

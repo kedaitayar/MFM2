@@ -6,78 +6,172 @@
     android:layout_height="match_parent"
     tools:context=".ui.account.MainAccountFragment">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_view_account_list"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_view_account_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/text_view_account"
-                style="@style/TextAppearance.MaterialComponents.Headline3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:text="Account"
-                android:textColor="@android:color/primary_text_light"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_add_account"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:padding="0dp"
-                android:layout_marginEnd="14dp"
-                app:icon="@drawable/ic_baseline_add_24"
-                app:iconPadding="0dp"
-                app:iconTint="@android:color/primary_text_light"
-                app:layout_constraintBottom_toBottomOf="@+id/text_view_account"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/text_view_account" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_view_account"
+                    style="@style/TextStyle1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Account"
+                    android:textColor="@android:color/primary_text_light"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/text_view_to_be_budgeted_amount"
-                style="@style/TextAppearance.MaterialComponents.Headline6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:text="RM 1 000.00"
-                app:layout_constraintStart_toStartOf="@+id/text_view_account"
-                app:layout_constraintTop_toBottomOf="@+id/text_view_account"
-                tools:text="RM 1 000.00" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_add_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="14dp"
+                    android:background="@android:color/transparent"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:padding="0dp"
+                    app:icon="@drawable/ic_baseline_add_24"
+                    app:iconPadding="0dp"
+                    app:iconTint="@android:color/primary_text_light"
+                    app:layout_constraintBottom_toBottomOf="@+id/text_view_account"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/text_view_account" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/text_view_to_be_budgeted"
-                style="@style/TextAppearance.MaterialComponents.Subtitle1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="To be budgeted"
-                android:paddingBottom="24dp"
-                app:layout_constraintStart_toStartOf="@+id/text_view_to_be_budgeted_amount"
-                app:layout_constraintTop_toBottomOf="@+id/text_view_to_be_budgeted_amount" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_view_not_budgeted_amount"
+                    style="@style/TextStyle2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:includeFontPadding="false"
+                    android:text="RM 0.00"
+                    app:layout_constraintStart_toStartOf="@+id/text_view_account"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_account" />
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_view_not_budgeted"
+                    style="@style/TextStyle6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="not budgeted"
+                    app:layout_constraintStart_toStartOf="@+id/text_view_not_budgeted_amount"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_not_budgeted_amount" />
 
-            <FrameLayout
-                android:id="@+id/account_list_fragment_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_view_account" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_view_spending_this_month_amount"
+                    style="@style/TextStyle2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:includeFontPadding="false"
+                    android:text="RM 0.00"
+                    app:layout_constraintStart_toStartOf="@+id/text_view_not_budgeted"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_not_budgeted" />
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_view_spending_this_month"
+                    style="@style/TextStyle6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="spending this month"
+                    app:layout_constraintStart_toStartOf="@+id/text_view_spending_this_month_amount"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_spending_this_month_amount" />
 
-    </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_view_budgeted_next_month_amount"
+                    style="@style/TextStyle2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:includeFontPadding="false"
+                    android:text="RM 0.00"
+                    app:layout_constraintStart_toStartOf="@+id/text_view_spending_this_month"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_spending_this_month" />
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_view_budgeted_next_month"
+                    style="@style/TextStyle6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="budgeted next month"
+                    app:layout_constraintStart_toStartOf="@+id/text_view_budgeted_next_month_amount"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_budgeted_next_month_amount" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="end"
+                    app:constraint_referenced_ids="text_view_not_budgeted, text_view_not_budgeted_amount, text_view_spending_this_month_amount, text_view_spending_this_month, text_view_budgeted_next_month_amount, text_view_budgeted_next_month" />
+
+                <io.github.kedaitayar.mfm.ui.RingCustomView
+                    android:id="@+id/ring_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="32dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/text_view_budgeted_next_month"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/barrier"
+                    app:layout_constraintTop_toTopOf="@+id/text_view_not_budgeted_amount"
+                    app:ringColor="@color/design_default_color_primary"
+                    app:ringStrokeWidth="20" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="@+id/ring_view"
+                    app:layout_constraintEnd_toEndOf="@+id/ring_view"
+                    app:layout_constraintStart_toStartOf="@+id/ring_view"
+                    app:layout_constraintTop_toTopOf="@+id/ring_view">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/text_view_uncompleted_budget"
+                        style="@style/TextStyle2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="RM 0.00" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/TextStyle6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="uncompleted budget" />
+
+                </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/account_list_fragment_container"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:paddingBottom="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ring_view" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,8 +5,7 @@ import androidx.room.*
 import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.data.podata.AccountTransactionChartData
 import io.github.kedaitayar.mfm.data.entity.Account
-import io.github.kedaitayar.mfm.data.entity.Budget
-import io.github.kedaitayar.mfm.data.entity.Transaction
+import io.github.kedaitayar.mfm.data.podata.BudgetedAndGoal
 import java.time.OffsetDateTime
 
 @Dao
@@ -50,4 +49,70 @@ interface AccountDao {
 
     @Query("SELECT SUM(transactionAmount) FROM `transaction` WHERE transactionType = 2")
     fun getTotalIncome(): LiveData<Double>
+
+    //TODO: unit test
+    @Query(
+        """
+        SELECT SUM(transactionAmount) as transactionAmount
+        FROM `Transaction`
+        WHERE transactionTime BETWEEN :timeFrom AND :timeTo
+        AND transactionType = 1
+    """
+    )
+    fun getMonthSpending(timeFrom: OffsetDateTime, timeTo: OffsetDateTime): LiveData<Double>
+
+    @Query(
+        """
+        SELECT
+            SUM(budgetTransactionAmount) as budgetTransactionAmount
+        FROM
+            budget 
+            LEFT JOIN
+                budgettype 
+                ON budgetType = budgetTypeId 
+            LEFT JOIN
+                budgettransaction 
+                ON budgetId = budgetTransactionBudgetId 
+        WHERE
+            (
+                budgetTransactionMonth = :month 
+                AND budgetTransactionYear = :year 
+                AND budgetTypeId != 2
+            )
+            OR 
+            (
+                budgetTransactionYear = :year 
+                AND budgetTypeId = 2
+            )
+    """
+    )
+    fun getMonthBudgeted(month: Int, year: Int): LiveData<Double>
+
+    @Query(
+        """
+        SELECT
+            SUM(budgetGoal) as budgetGoal,
+            SUM(budgetTransactionAmount) as budgetTransactionAmount
+        FROM
+            budget 
+            LEFT JOIN
+                budgettype 
+                ON budgetType = budgetTypeId 
+            LEFT JOIN
+                budgettransaction 
+                ON budgetId = budgetTransactionBudgetId 
+        WHERE
+            (
+                budgetTransactionMonth = :month 
+                AND budgetTransactionYear = :year 
+                AND budgetTypeId != 2
+            )
+            OR 
+            (
+                budgetTransactionYear = :year 
+                AND budgetTypeId = 2
+            )
+    """
+    )
+    fun getUncompletedBudget(month: Int, year: Int): LiveData<BudgetedAndGoal>
 }
