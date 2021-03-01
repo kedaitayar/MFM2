@@ -14,27 +14,36 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_add_budget"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="add budget"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_container_date" />
-
-    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_budgeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="budgeting"
-        app:layout_constraintStart_toEndOf="@+id/button_add_budget"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_container_date" />
+
+    <com.google.android.material.button.MaterialButton
+        app:iconSize="32dp"
+        android:id="@+id/button_add_budget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="14dp"
+        android:background="@android:color/transparent"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:padding="0dp"
+        app:icon="@drawable/ic_round_add_24"
+        app:iconPadding="0dp"
+        app:iconTint="@android:color/primary_text_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button_budgeting"/>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_view_budget_list_type1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_add_budget">
+        app:layout_constraintTop_toBottomOf="@+id/button_budgeting">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -72,12 +81,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/text_view_budget" />
 
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="2dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_budget"/>
+
             <FrameLayout
                 android:id="@+id/fragment_container_budget_list_type1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_view_budget" />
+                app:layout_constraintTop_toBottomOf="@+id/divider" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
