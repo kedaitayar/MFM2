@@ -5,6 +5,7 @@ import io.github.kedaitayar.mfm.data.dao.AccountDao
 import io.github.kedaitayar.mfm.data.dao.BasicDao
 import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.data.entity.Account
+import io.github.kedaitayar.mfm.data.podata.AccountTransactionBudgetData
 import io.github.kedaitayar.mfm.data.podata.BudgetedAndGoal
 import java.time.OffsetDateTime
 import javax.inject.Inject
@@ -54,5 +55,9 @@ class AccountRepository @Inject constructor(
 
     fun getUncompletedBudget(month: Int, year: Int): LiveData<BudgetedAndGoal> {
         return accountDao.getUncompletedBudget(month, year)
+    }
+
+    fun getAccountTransactionBudget(accountId: Long, timeFrom: OffsetDateTime, timeTo: OffsetDateTime): List<AccountTransactionBudgetData> {
+        return accountDao.getAccountTransactionBudget(accountId, timeFrom, timeTo)
     }
 }

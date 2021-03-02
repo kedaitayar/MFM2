@@ -74,12 +74,9 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
                             findNavController().navigate(action)
                             true
                         }
-                        R.id.delete -> {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                val account = Account(accountId = accountListAdapterData.accountId)
-                                val result = accountViewModel.delete(account)
-                                Log.i(TAG, "onPopupMenuButtonClick: delete result: $result")
-                            }
+                        R.id.edit -> {
+                            val action = MainFragmentDirections.actionMainFragmentToAddEditAccountFragment(accountListAdapterData.accountId)
+                            findNavController().navigate(action)
                             true
                         }
                         else -> false

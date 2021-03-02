@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.data.repository.AccountRepository
 import io.github.kedaitayar.mfm.data.entity.Account
+import io.github.kedaitayar.mfm.data.podata.AccountTransactionBudgetData
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.data.podata.BudgetedAndGoal
 import java.time.OffsetDateTime
@@ -25,6 +26,14 @@ class AccountViewModel @Inject constructor(
     val thisMonthSpending: LiveData<Double> = getThisMonthSpendingData()
     val nextMonthBudgeted: LiveData<Double> = getMonthBudgeted()
     val totalBudgetedAndGoal: LiveData<BudgetedAndGoal> = getUncompletedBudget()
+
+    suspend fun getAccountTransactionBudget(accountId: Long): List<AccountTransactionBudgetData> {
+        val now = OffsetDateTime.now()
+        val timeFrom =
+            OffsetDateTime.of(now.year, now.monthValue, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+        val timeTo = timeFrom.plusMonths(1).minusNanos(1)
+        return accountRepository.getAccountTransactionBudget(accountId, timeFrom, timeTo)
+    }
 
     private fun getThisMonthSpendingData(): LiveData<Double> {
         val now = OffsetDateTime.now()

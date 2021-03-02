@@ -6,6 +6,6 @@
         android:title="Detail" />
 
     <item
-        android:id="@+id/delete"
-        android:title="Delete" />
+        android:id="@+id/edit"
+        android:title="Edit" />
 </menu>

@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -78,7 +77,7 @@ class MainAccountFragment : Fragment(R.layout.fragment_main_account) {
     }
 
     private fun setupAddAccountFragmentResultObserver() {
-        val result = getNavigationResultLiveData<Long>(AddAccountFragment.ADD_ACCOUNT_RESULT_KEY)
+        val result = getNavigationResultLiveData<Long>(AddEditAccountFragment.ADD_ACCOUNT_RESULT_KEY)
         result?.observe(viewLifecycleOwner) {
             Log.i(
                 TAG,
@@ -89,7 +88,7 @@ class MainAccountFragment : Fragment(R.layout.fragment_main_account) {
 
     private fun setupAddAccountButton() {
         binding.buttonAddAccount.setOnClickListener {
-            val action = MainFragmentDirections.actionMainFragmentToAddAccountFragment()
+            val action = MainFragmentDirections.actionMainFragmentToAddEditAccountFragment()
             findNavController().navigate(action)
         }
     }

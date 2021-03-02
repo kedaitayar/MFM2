@@ -5,6 +5,7 @@ import androidx.room.*
 import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.data.podata.AccountTransactionChartData
 import io.github.kedaitayar.mfm.data.entity.Account
+import io.github.kedaitayar.mfm.data.podata.AccountTransactionBudgetData
 import io.github.kedaitayar.mfm.data.podata.BudgetedAndGoal
 import java.time.OffsetDateTime
 
@@ -115,4 +116,22 @@ interface AccountDao {
     """
     )
     fun getUncompletedBudget(month: Int, year: Int): LiveData<BudgetedAndGoal>
+
+    // TODO: unit test
+    @Query("""
+        SELECT
+            sum(transactionAmount) AS transactionAmount, 
+            transactionType, 
+            transactionBudgetId, 
+            budgetGoal, 
+            budgetName, 
+            budgetType
+        FROM `Transaction`
+        LEFT JOIN Budget ON transactionBudgetId = budgetId
+        WHERE transactionAccountId = :accountId
+            AND NOT transactionType = 2
+            AND transactionTime BETWEEN :timeFrom AND :timeTo
+        GROUP BY transactionBudgetId
+    """)
+    fun getAccountTransactionBudget(accountId: Long, timeFrom: OffsetDateTime, timeTo: OffsetDateTime): List<AccountTransactionBudgetData>
 }

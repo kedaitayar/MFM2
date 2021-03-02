@@ -28,18 +28,11 @@ class AccountDetailFragment : Fragment() {
         context ?: return binding.root
 
         val accountId = args.accountId
-        accountViewModel.accountListAdapterData.observe(viewLifecycleOwner, Observer {
-            it?.let { list ->
-                val accountListAdapterData = list.first { item ->
-                    item.accountId == accountId
-                }
-                binding.textViewAccountName.text = accountListAdapterData.accountName
-                binding.textViewAccountIncome.text = accountListAdapterData.accountIncome.toString()
-                binding.textViewAccountExpense.text = accountListAdapterData.accountExpense.toString()
-                binding.textViewAccountTransferIn.text = accountListAdapterData.accountTransferIn.toString()
-                binding.textViewAccountTransferOut.text = accountListAdapterData.accountTransferOut.toString()
-            }
-        })
+
+
+        childFragmentManager.beginTransaction().apply {
+            replace(R.id.fragment_container_account_budget_chart, AccountBudgetChartFragment.newInstance(args.accountId))
+        }.commit()
 
         return binding.root
     }
