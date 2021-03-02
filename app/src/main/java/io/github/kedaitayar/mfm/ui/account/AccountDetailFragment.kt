@@ -32,6 +32,7 @@ class AccountDetailFragment : Fragment() {
 
         childFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container_account_budget_chart, AccountBudgetChartFragment.newInstance(args.accountId))
+            replace(R.id.fragment_container_account_transaction_graph, AccountTransactionGraphFragment.newInstance(args.accountId))
         }.commit()
 
         return binding.root

@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
-private const val ARG_ACCOUNT_ID = "io.github.kedaitayar.mfm.ui.account.accountId"
+private const val ARG_ACCOUNT_ID = "io.github.kedaitayar.mfm.ui.account.AccountBudgetChartFragment.accountId"
 
 @AndroidEntryPoint
 class AccountBudgetChartFragment : Fragment(R.layout.fragment_account_budget_chart) {
@@ -44,6 +44,12 @@ class AccountBudgetChartFragment : Fragment(R.layout.fragment_account_budget_cha
         _binding = FragmentAccountBudgetChartBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
+        setupPieChartAndBudgetList()
+
+        return binding.root
+    }
+
+    private fun setupPieChartAndBudgetList(){
         val adapter = AccountBudgetChartListAdapter()
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -74,20 +80,13 @@ class AccountBudgetChartFragment : Fragment(R.layout.fragment_account_budget_cha
                 }
                 val dataSet = PieDataSet(entries, "dataset label")
 
-
                 // add a lot of colors
                 val colors = ArrayList<Int>()
-
                 for (c in ColorTemplate.VORDIPLOM_COLORS) colors.add(c)
-
                 for (c in ColorTemplate.JOYFUL_COLORS) colors.add(c)
-
                 for (c in ColorTemplate.COLORFUL_COLORS) colors.add(c)
-
                 for (c in ColorTemplate.LIBERTY_COLORS) colors.add(c)
-
                 for (c in ColorTemplate.PASTEL_COLORS) colors.add(c)
-
                 colors.add(ColorTemplate.getHoloBlue())
 
                 dataSet.colors = colors
@@ -105,8 +104,6 @@ class AccountBudgetChartFragment : Fragment(R.layout.fragment_account_budget_cha
                 }
             }
         }
-
-        return binding.root
     }
 
     override fun onDestroyView() {

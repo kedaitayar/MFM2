@@ -6,8 +6,10 @@ import io.github.kedaitayar.mfm.data.dao.BasicDao
 import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.podata.AccountTransactionBudgetData
+import io.github.kedaitayar.mfm.data.podata.AccountTransactionChartData
 import io.github.kedaitayar.mfm.data.podata.BudgetedAndGoal
 import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,7 +40,7 @@ class AccountRepository @Inject constructor(
     }
 
     fun getTotalBudgetedAmount(): LiveData<Double> {
-        return  accountDao.getTotalBudgetedAmount()
+        return accountDao.getTotalBudgetedAmount()
     }
 
     fun getTotalIncome(): LiveData<Double> {
@@ -57,7 +59,22 @@ class AccountRepository @Inject constructor(
         return accountDao.getUncompletedBudget(month, year)
     }
 
-    fun getAccountTransactionBudget(accountId: Long, timeFrom: OffsetDateTime, timeTo: OffsetDateTime): List<AccountTransactionBudgetData> {
+    suspend fun getAccountTransactionBudget(
+        accountId: Long,
+        timeFrom: OffsetDateTime,
+        timeTo: OffsetDateTime
+    ): List<AccountTransactionBudgetData> {
         return accountDao.getAccountTransactionBudget(accountId, timeFrom, timeTo)
+    }
+
+    suspend fun getAccountTransactionChartData(
+        accountId: Long,
+        month: Int,
+        year: Int
+    ): List<AccountTransactionChartData> {
+        val timeFrom = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+        val timeTo = timeFrom.plusMonths(1).minusNanos(1)
+        val timeToPrevMonth = timeFrom.minusNanos(1)
+        return accountDao.getAccountTransactionChartData(accountId, timeFrom, timeTo, timeToPrevMonth)
     }
 }

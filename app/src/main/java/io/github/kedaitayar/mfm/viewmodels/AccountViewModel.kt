@@ -5,12 +5,9 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.data.repository.AccountRepository
 import io.github.kedaitayar.mfm.data.entity.Account
-import io.github.kedaitayar.mfm.data.podata.AccountTransactionBudgetData
-import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
-import io.github.kedaitayar.mfm.data.podata.BudgetedAndGoal
+import io.github.kedaitayar.mfm.data.podata.*
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import javax.inject.Inject
@@ -33,6 +30,14 @@ class AccountViewModel @Inject constructor(
             OffsetDateTime.of(now.year, now.monthValue, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
         val timeTo = timeFrom.plusMonths(1).minusNanos(1)
         return accountRepository.getAccountTransactionBudget(accountId, timeFrom, timeTo)
+    }
+
+    suspend fun getAccountTransactionChartData(
+        accountId: Long,
+        month: Int,
+        year: Int
+    ): List<AccountTransactionChartData> {
+        return accountRepository.getAccountTransactionChartData(accountId, month, year)
     }
 
     private fun getThisMonthSpendingData(): LiveData<Double> {
