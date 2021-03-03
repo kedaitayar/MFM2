@@ -27,7 +27,8 @@ class MainBudgetFragment: Fragment(R.layout.fragment_main_budget) {
 
         childFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container_date, MonthYearScrollFragment())
-            replace(R.id.fragment_container_budget_list_type1, BudgetListFragment.newInstance(-1))
+            replace(R.id.fragment_container_budget_list_type1, BudgetListFragment.newInstance(1))
+            replace(R.id.fragment_container_budget_list_type2, BudgetListFragment.newInstance(2))
         }.commit()
 
         binding.buttonAddBudget.setOnClickListener {

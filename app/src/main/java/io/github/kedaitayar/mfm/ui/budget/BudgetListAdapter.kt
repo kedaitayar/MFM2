@@ -19,6 +19,7 @@ class BudgetListAdapter :
     ListAdapter<BudgetListAdapterData, BudgetListAdapter.BudgetListViewHolder>(
         BudgetListDiffCallback()
     ) {
+    private var budgetType = 0
     private var listener: OnItemClickListener? = null
 
     interface OnItemClickListener {
@@ -43,10 +44,8 @@ class BudgetListAdapter :
             Log.i(TAG, "bind: $item")
             binding.apply {
                 textViewBudgetName.text = item.budgetName
-                textViewUsed.text = item.budgetUsed.toString()
-
-                val goalPercentage = ((item.budgetAllocation / item.budgetGoal) * 100).toInt()
                 textViewBudgeted.text = item.budgetAllocation.toString()
+                val goalPercentage = ((item.budgetAllocation / item.budgetGoal) * 100).toInt()
                 textViewBudgeted.piePercent = goalPercentage
                 if (goalPercentage >= 100) {
                     textViewBudgeted.bgColor = ContextCompat.getColor(textViewBudgeted.context, R.color.gGreen)
@@ -54,10 +53,19 @@ class BudgetListAdapter :
                     textViewBudgeted.bgColor = ContextCompat.getColor(textViewBudgeted.context, R.color.gYellow)
                 }
                 if (item.budgetUsed <= item.budgetAllocation) {
-                    textViewUsed.background.setTint(ContextCompat.getColor(textViewBudgeted.context, R.color.gGreen))
+                    textViewAvailable.background.setTint(ContextCompat.getColor(textViewBudgeted.context, R.color.gGreen))
                 } else {
-                    textViewUsed.background.setTint(ContextCompat.getColor(textViewBudgeted.context, R.color.gRed))
+                    textViewAvailable.background.setTint(ContextCompat.getColor(textViewBudgeted.context, R.color.gRed))
                 }
+                when (budgetType) {
+                    1 -> {
+                        textViewAvailable.text = (item.budgetAllocation - item.budgetUsed).toString()
+                    }
+                    2 -> {
+                        textViewAvailable.text = (item.budgetAllocation + item.budgetTotalPrevAllocation - item.budgetUsed).toString()
+                    }
+                }
+
             }
         }
     }
@@ -79,6 +87,10 @@ class BudgetListAdapter :
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
+    }
+
+    fun setBudgetType(budgetTypeId: Int) {
+        this.budgetType = budgetTypeId
     }
 }
 

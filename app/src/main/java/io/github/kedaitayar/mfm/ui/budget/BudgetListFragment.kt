@@ -44,10 +44,17 @@ class BudgetListFragment : Fragment() {
         context ?: return binding.root
 
         val adapter = BudgetListAdapter()
-        if (budgetType == -1) {
-            setupRecyclerViewData(budgetViewModel.monthlyBudgetListData, adapter)
-        } else {
-            setupRecyclerViewData(budgetViewModel.monthlyBudgetListData, adapter)
+        adapter.setBudgetType(budgetType ?: 0)
+        when (budgetType) {
+            1 -> {
+                setupRecyclerViewData(budgetViewModel.monthlyBudgetListData, adapter)
+            }
+            2 -> {
+                setupRecyclerViewData(budgetViewModel.yearlyBudgetListData, adapter)
+            }
+            else -> {
+                setupRecyclerViewData(budgetViewModel.monthlyBudgetListData, adapter)
+            }
         }
 
         return binding.root

@@ -43,12 +43,14 @@ class AddBudgetFragment : Fragment(R.layout.fragment_add_budget) {
                 val budgetTypeDropdownData = binding.autoCompleteBudgetType.adapter.getItem(dropDownPos) as BudgetTypeDropdownData
                 val budgetTypeId = budgetTypeDropdownData.budgetTypeId?.toInt()
                 if (budgetTypeId != null){
-                    val budget = Budget(
-                        budgetName = binding.textInputEditBudgetName.text.toString(),
-                        budgetGoal = binding.textInputEditBudgetGoal.text.toString().toDouble(),
-                        budgetType = budgetTypeId
-                    )
-                    budgetViewModel.insert(budget)
+                    if (budgetTypeId == 1 || budgetTypeId == 2) {
+                        val budget = Budget(
+                            budgetName = binding.textInputEditBudgetName.text.toString(),
+                            budgetGoal = binding.textInputEditBudgetGoal.text.toString().toDouble(),
+                            budgetType = budgetTypeId
+                        )
+                        budgetViewModel.insert(budget)
+                    }
                 }
                 findNavController().navigateUp()
             }

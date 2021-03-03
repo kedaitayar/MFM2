@@ -10,6 +10,7 @@ import io.github.kedaitayar.mfm.data.entity.BudgetType
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -73,15 +74,20 @@ class BudgetRepository @Inject constructor(
     }
 
 
-    fun getBudgetMonthlyListAdapterDO(
-        month: Int,
-        year: Int
-    ): LiveData<List<BudgetListAdapterData>> {
+    fun getBudgetMonthlyListAdapter(month: Int, year: Int): LiveData<List<BudgetListAdapterData>> {
         val timeFrom = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
         val timeTo = timeFrom.plusMonths(1).minusNanos(1)
-        Log.i(TAG, "getBudgetMonthlyListAdapterDO timeFrom: $timeFrom")
-        Log.i(TAG, "getBudgetMonthlyListAdapterDO timeTo: $timeTo")
-        return budgetDao.getBudgetMonthlyListAdapterDO(month, year, timeFrom, timeTo)
+        Log.i(TAG, "getBudgetMonthlyListAdapter timeFrom: $timeFrom")
+        Log.i(TAG, "getBudgetMonthlyListAdapter timeTo: $timeTo")
+        return budgetDao.getBudgetMonthlyListAdapter(month, year, timeFrom, timeTo)
+    }
+
+    fun getBudgetYearlyListAdapter(month: Int, year: Int): LiveData<List<BudgetListAdapterData>> {
+        val timeFrom = OffsetDateTime.of(year, 1, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+        val timeTo = timeFrom.plusYears(1).minusNanos(1)
+        Log.i(TAG, "getBudgetYearlyListAdapter timeFrom: $timeFrom")
+        Log.i(TAG, "getBudgetYearlyListAdapter timeTo: $timeTo")
+        return budgetDao.getBudgetYearlyListAdapter(month, year, timeFrom, timeTo)
     }
 
     fun getBudgetingListAdapterDO(

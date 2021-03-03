@@ -90,7 +90,130 @@ interface BudgetDao {
             AND budgetType = 1
     """
     )
-    fun getBudgetMonthlyListAdapterDO(
+    fun getBudgetMonthlyListAdapter(
+        month: Int,
+        year: Int,
+        timeFrom: OffsetDateTime,
+        timeTo: OffsetDateTime
+    ): LiveData<List<BudgetListAdapterData>>
+
+    // TODO: unit test
+    @Query(
+        """
+        SELECT
+            budgetId,
+            budgetName,
+            SUM(budgetAllocation) AS budgetAllocation,
+            budgetGoal,
+            SUM(budgetUsed) AS budgetUsed,
+            budgetTypeId,
+            budgetTypeName,
+            SUM(budgetTotalPrevAllocation) AS budgetTotalPrevAllocation 
+        FROM
+            (
+                SELECT
+                    budgetId,
+                    budgetName,
+                    0 AS budgetAllocation,
+                    budgetGoal,
+                    0 AS budgetUsed,
+                    budgetTypeId,
+                    budgetTypeName,
+                    SUM(budgetTransactionAmount) AS budgetTotalPrevAllocation 
+                FROM
+                    Budget 
+                    LEFT JOIN
+                        budgettype 
+                        ON budgetType = budgetTypeId 
+                    LEFT JOIN
+                        budgettransaction 
+                        ON budgetId = budgetTransactionBudgetId 
+                WHERE
+                    budgetType = 2
+                    AND budgetTransactionMonth < :month
+                    AND budgetTransactionYear <= :year
+                GROUP BY
+                    budgetId 
+                UNION ALL
+                SELECT
+                    budgetId,
+                    budgetName,
+                    budgetTransactionAmount AS budgetAllocation,
+                    budgetGoal,
+                    0 AS budgetUsed,
+                    budgetTypeId,
+                    budgetTypeName,
+                    0 AS budgetTotalPrevAllocation 
+                FROM
+                    Budget 
+                    LEFT JOIN
+                        budgettype 
+                        ON budgetType = budgetTypeId 
+                    LEFT JOIN
+                        budgettransaction 
+                        ON budgetId = budgetTransactionBudgetId 
+                WHERE
+                    budgetType = 2
+                    AND budgetTransactionMonth = :month
+                    AND budgetTransactionYear = :year
+                UNION ALL
+                SELECT
+                    budgetId,
+                    budgetName,
+                    0 AS budgetAllocation,
+                    budgetGoal,
+                    transactionAmount AS budgetUsed,
+                    budgetTypeId,
+                    budgetTypeName,
+                    0 AS budgetTotalPrevAllocation 
+                FROM
+                    `Transaction` 
+                    LEFT JOIN
+                        Budget 
+                        ON transactionBudgetId = budgetId 
+                    LEFT JOIN
+                        budgettype 
+                        ON budgetType = budgetTypeId 
+                WHERE
+                    budgetType = 2
+                    AND transactionTime BETWEEN :timeFrom AND :timeTo
+                UNION
+                SELECT
+                    budgetId,
+                    budgetName,
+                    0 AS budgetAllocation,
+                    budgetGoal,
+                    0 AS budgetUsed,
+                    budgetTypeId,
+                    budgetTypeName,
+                    0 AS budgetTotalPrevAllocation 
+                FROM
+                    Budget 
+                    LEFT JOIN
+                        budgettype 
+                        ON budgetType = budgetTypeId 
+                    LEFT JOIN
+                        budgettransaction 
+                        ON budgetId = budgetTransactionBudgetId 
+                WHERE
+                    Budget.budgetType = 2
+                    AND NOT EXISTS 
+                    (
+                        SELECT
+                            * 
+                        FROM
+                            budgettransaction 
+                        WHERE
+                            BudgetTransaction.budgetTransactionBudgetId = Budget.budgetId 
+                            AND budgetTransactionMonth = :month
+                            AND budgetTransactionYear = :year
+                    )
+            )
+        GROUP BY
+            budgetId
+    """
+    )
+    fun getBudgetYearlyListAdapter(
         month: Int,
         year: Int,
         timeFrom: OffsetDateTime,
