@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.BudgetTransaction
+import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentBudgetingBinding
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
@@ -36,14 +37,15 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting) {
     ): View {
         _binding = FragmentBudgetingBinding.inflate(inflater, container, false)
         context ?: return binding.root
-        val adapter = BudgetingListAdapter()
-        setupToolbar(adapter)
-        setupBudgetingListRecyclerView(adapter)
+        val adapter1 = BudgetingListAdapter()
+        val adapter2 = BudgetingListAdapter()
+        setupToolbar(adapter1, adapter2)
+        setupBudgetingListRecyclerView(adapter1, adapter2)
 
         return binding.root
     }
 
-    private fun setupToolbar(adapter: BudgetingListAdapter) {
+    private fun setupToolbar(monthlyAdapter: BudgetingListAdapter, yearlyAdapter: BudgetingListAdapter) {
         binding.topAppBar.inflateMenu(R.menu.menu_budgeting)
         binding.topAppBar.setNavigationIcon(R.drawable.ic_baseline_close_24)
         binding.topAppBar.setNavigationOnClickListener {
@@ -52,22 +54,34 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting) {
         binding.topAppBar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.save_budgeting -> {
-                    val budgetingList = adapter.currentList
-                    val budgetingAmountList = adapter.getBudgetingAmountList()
+                    val monthlyBudgetingList = monthlyAdapter.currentList
+                    val monthlyBudgetingAmountList = monthlyAdapter.getBudgetingAmountList()
                     val date = budgetViewModel.selectedDate.value!!
-                    for ((index, budgeting) in budgetingList.withIndex()) {
-                        if (budgeting.budgetTypeId != 2L) {
-                            val budgetTransaction = BudgetTransaction(
-                                budgetTransactionAmount = ((budgetingAmountList[index])?.toDouble() ?: 0.0),
-                                budgetTransactionBudgetId = budgeting.budgetId,
-                                budgetTransactionMonth = date.monthValue,
-                                budgetTransactionYear = date.year
-                            )
-                            CoroutineScope(Dispatchers.IO).launch {
-                                budgetViewModel.insert(budgetTransaction)
-                            }
+                    for ((index, budgeting) in monthlyBudgetingList.withIndex()) {
+                        val budgetTransaction = BudgetTransaction(
+                            budgetTransactionAmount = ((monthlyBudgetingAmountList[index])?.toDouble() ?: 0.0),
+                            budgetTransactionBudgetId = budgeting.budgetId,
+                            budgetTransactionMonth = date.monthValue,
+                            budgetTransactionYear = date.year
+                        )
+                        CoroutineScope(Dispatchers.IO).launch {
+                            budgetViewModel.insert(budgetTransaction)
                         }
                     }
+                    val yearlyBudgetingList = yearlyAdapter.currentList
+                    val yearlyBudgetingAmountList = yearlyAdapter.getBudgetingAmountList()
+                    for ((index, budgeting) in yearlyBudgetingList.withIndex()) {
+                        val budgetTransaction = BudgetTransaction(
+                            budgetTransactionAmount = ((yearlyBudgetingAmountList[index])?.toDouble() ?: 0.0),
+                            budgetTransactionBudgetId = budgeting.budgetId,
+                            budgetTransactionMonth = date.monthValue,
+                            budgetTransactionYear = date.year
+                        )
+                        CoroutineScope(Dispatchers.IO).launch {
+                            budgetViewModel.insert(budgetTransaction)
+                        }
+                    }
+
                     hideKeyboard()
                     findNavController().navigateUp()
                     true
@@ -89,15 +103,23 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting) {
         })
     }
 
-    private fun setupBudgetingListRecyclerView(adapter: BudgetingListAdapter) {
-        binding.recyclerViewBudgeting.adapter = adapter
+    private fun setupBudgetingListRecyclerView(
+        monthlyAdapter: BudgetingListAdapter,
+        yearlyAdapter: BudgetingListAdapter
+    ) {
+        binding.recyclerViewBudgeting.adapter = monthlyAdapter
         binding.recyclerViewBudgeting.layoutManager = LinearLayoutManager(requireContext())
-        budgetViewModel.budgetingListData.observe(viewLifecycleOwner) {
+        budgetViewModel.monthlyBudgetingListData.observe(viewLifecycleOwner) {
             it?.let {
-                adapter.submitList(it)
-                for (item in it) {
-                    Log.i(TAG, "setupBudgetingListRecyclerView: $item")
-                }
+                monthlyAdapter.submitList(it)
+            }
+        }
+
+        binding.recyclerViewBudgeting2.adapter = yearlyAdapter
+        binding.recyclerViewBudgeting2.layoutManager = LinearLayoutManager(requireContext())
+        budgetViewModel.yearlyBudgetingListData.observe(viewLifecycleOwner) {
+            it?.let {
+                yearlyAdapter.submitList(it)
             }
         }
     }

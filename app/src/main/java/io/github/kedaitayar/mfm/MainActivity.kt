@@ -202,6 +202,23 @@ class MainActivity : AppCompatActivity() {
 //                transactionViewModel.insert(transaction7)
 //                transactionViewModel.insert(transaction8)
 //            }
+
+//            val account1 = Account(accountId = 1, accountName = "Cash")
+//            val account2 = Account(accountId = 2, accountName = "Bank")
+//            accountViewModel.insert(account1)
+//            accountViewModel.insert(account2)
+//            val budget1 = Budget(budgetId = 1, budgetGoal = 100.0, budgetName = "Food", budgetType = 1)
+//            val budget2 = Budget(budgetId = 2, budgetGoal = 100.0, budgetName = "Fuel", budgetType = 1)
+//            val budget3 = Budget(budgetId = 3, budgetGoal = 20.0, budgetName = "Drink", budgetType = 1)
+//            val budget4 = Budget(budgetId = 4, budgetGoal = 100.0, budgetName = "Internet", budgetType = 1)
+//            val budget5 = Budget(budgetId = 5, budgetGoal = 1000.0, budgetName = "Vacation", budgetType = 2)
+//            val budget6 = Budget(budgetId = 6, budgetGoal = 500.0, budgetName = "Car Maintenance", budgetType = 2)
+//            budgetViewModel.insert(budget1)
+//            budgetViewModel.insert(budget2)
+//            budgetViewModel.insert(budget3)
+//            budgetViewModel.insert(budget4)
+//            budgetViewModel.insert(budget5)
+//            budgetViewModel.insert(budget6)
         }
     }
 

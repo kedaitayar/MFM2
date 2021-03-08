@@ -365,4 +365,236 @@ interface BudgetDao {
         timeFrom: OffsetDateTime,
         timeTo: OffsetDateTime
     ): LiveData<List<BudgetListAdapterData>>
+
+
+    @Query("""
+        SELECT
+            budgetId,
+            budgetName,
+            budgetTransactionAmount AS budgetAllocation,
+            budgetGoal,
+            tbl.transactionAmount AS budgetUsed,
+            budgetTypeId,
+            budgetTypeName,
+            0 AS budgetTotalPrevAllocation 
+        FROM
+            budget 
+            LEFT JOIN
+                budgettype 
+                ON budgetType = budgetTypeId 
+            LEFT JOIN
+                budgettransaction 
+                ON budgetId = budgetTransactionBudgetId 
+            LEFT JOIN
+                (
+                    SELECT
+                        transactionBudgetId,
+                        SUM(transactionAmount) AS transactionAmount 
+                    FROM
+                        `transaction` 
+                        LEFT JOIN
+                            Budget 
+                            ON transactionBudgetId = budgetId 
+                    WHERE
+                        transactionTime BETWEEN :timeFrom AND :timeTo 
+                        AND budgetType = 1
+                    GROUP BY
+                        transactionBudgetId 
+                )
+                AS tbl 
+                ON budgetId = transactionBudgetId 
+        WHERE
+            budgetTransactionMonth = :month 
+            AND budgetTransactionYear = :year 
+            AND budgetTypeId = 1
+        UNION
+            SELECT
+                budgetId,
+                budgetName,
+                0 AS budgetAllocation,
+                budgetGoal,
+                tbl.transactionAmount AS budgetUsed,
+                budgetTypeId,
+                budgetTypeName,
+                0 AS budgetTotalPrevAllocation 
+            FROM
+                budget 
+            LEFT JOIN
+                budgettype 
+                ON budgetType = budgetTypeId 
+            LEFT JOIN
+                (
+                    SELECT
+                        transactionBudgetId,
+                        SUM(transactionAmount) AS transactionAmount 
+                    FROM
+                        `transaction` 
+                        LEFT JOIN
+                            Budget 
+                            ON transactionBudgetId = budgetId 
+                    WHERE
+                        transactionTime BETWEEN :timeFrom AND :timeTo 
+                        AND budgetType = 1
+                    GROUP BY
+                        transactionBudgetId 
+                )
+                AS tbl 
+                ON budgetId = transactionBudgetId
+            WHERE budgetType = 1
+                AND NOT EXISTS 
+                    (
+                        SELECT
+                            * 
+                        FROM
+                            budgettransaction 
+                        WHERE
+                            BudgetTransaction.budgetTransactionBudgetId = Budget.budgetId 
+                            AND budgetTransactionMonth = :month
+                            AND budgetTransactionYear = :year
+                    )
+    """)
+    fun getMonthlyBudgetingListAdapterDO(
+        month: Int,
+        year: Int,
+        timeFrom: OffsetDateTime,
+        timeTo: OffsetDateTime
+    ): LiveData<List<BudgetListAdapterData>>
+
+    @Query("""
+        SELECT
+            budgetId,
+            budgetName,
+            SUM(budgetAllocation) AS budgetAllocation,
+            budgetGoal,
+            SUM(budgetUsed) AS budgetUsed,
+            budgetTypeId,
+            budgetTypeName,
+            SUM(budgetTotalPrevAllocation) AS budgetTotalPrevAllocation 
+        FROM
+            (
+                SELECT
+                    budgetId,
+                    budgetName,
+                    budgetTransactionAmount AS budgetAllocation,
+                    budgetGoal,
+                    tbl.transactionAmount AS budgetUsed,
+                    budgetTypeId,
+                    budgetTypeName,
+                    0 AS budgetTotalPrevAllocation 
+                FROM
+                    budget 
+                    LEFT JOIN
+                        budgettype 
+                        ON budgetType = budgetTypeId 
+                    LEFT JOIN
+                        budgettransaction 
+                        ON budgetId = budgetTransactionBudgetId 
+                    LEFT JOIN
+                        (
+                            SELECT
+                                transactionBudgetId,
+                                SUM(transactionAmount) AS transactionAmount 
+                            FROM
+                                `transaction` 
+                                LEFT JOIN
+                                    Budget 
+                                    ON transactionBudgetId = budgetId 
+                            WHERE
+                                (
+                                    transactionTime BETWEEN :timeFrom AND :timeTo 
+                                    AND budgetType = 2 
+                                )
+                            GROUP BY
+                                transactionBudgetId 
+                        )
+                        AS tbl 
+                        ON budgetId = transactionBudgetId 
+                WHERE
+                    (
+                        budgetTransactionMonth = :month
+                        AND budgetTransactionYear = :year 
+                        AND budgetTypeId = 2 
+                    )
+                UNION
+                SELECT
+                    budgetId,
+                    budgetName,
+                    0 AS budgetAllocation,
+                    budgetGoal,
+                    tbl.transactionAmount AS budgetUsed,
+                    budgetTypeId,
+                    budgetTypeName,
+                    0 AS budgetTotalPrevAllocation 
+                FROM
+                    budget 
+                    LEFT JOIN
+                        budgettype 
+                        ON budgetType = budgetTypeId 
+                    LEFT JOIN
+                        (
+                            SELECT
+                                transactionBudgetId,
+                                SUM(transactionAmount) AS transactionAmount 
+                            FROM
+                                `transaction` 
+                                LEFT JOIN
+                                    Budget 
+                                    ON transactionBudgetId = budgetId 
+                            WHERE
+                                (
+                                    transactionTime BETWEEN :timeFrom AND :timeTo 
+                                    AND budgetType = 2 
+                                )
+                            GROUP BY
+                                transactionBudgetId 
+                        )
+                        AS tbl 
+                        ON budgetId = transactionBudgetId 
+                WHERE
+                    budget.budgetType = 2 
+                    AND NOT EXISTS 
+                    (
+                        SELECT
+                            * 
+                        FROM
+                            budgettransaction 
+                        WHERE
+                            BudgetTransaction.budgetTransactionBudgetId = Budget.budgetId 
+                            AND budgetTransactionMonth = :month 
+                            AND budgetTransactionYear = :year
+                    )
+                UNION All
+                SELECT
+                    budgetId,
+                    budgetName,
+                    0 AS budgetAllocation,
+                    budgetGoal,
+                    0 AS budgetUsed,
+                    budgetTypeId,
+                    budgetTypeName,
+                    SUM(budgetTransactionAmount) AS budgetTotalPrevAllocation 
+                FROM
+                    Budget 
+                    LEFT JOIN
+                        budgettype 
+                        ON budgetType = budgetTypeId 
+                    LEFT JOIN
+                        budgettransaction 
+                        ON budgetId = budgetTransactionBudgetId 
+                WHERE
+                    budgetType = 2 
+                    AND budgetTransactionMonth < :month
+                    AND budgetTransactionYear <= :year
+                GROUP BY
+                    budgetId 
+            )
+        GROUP BY
+            budgetId
+    """)
+    fun getYearlyBudgetingListAdapterDO(
+        month: Int,
+        year: Int,
+        timeFrom: OffsetDateTime,
+        timeTo: OffsetDateTime
+    ): LiveData<List<BudgetListAdapterData>>
 }

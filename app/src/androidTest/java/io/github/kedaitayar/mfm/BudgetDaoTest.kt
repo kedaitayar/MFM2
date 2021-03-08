@@ -241,143 +241,143 @@ class BudgetDaoTest {
     @Throws(IOException::class)
     fun getBudgetMonthlyListAdapter() {
         populateTestData()
+        // expected result
+        // result1
+        val budgetMonthly1 = BudgetListAdapterData(
+            budgetId = 1,
+            budgetName = "Food",
+            budgetAllocation = 0.0,
+            budgetGoal = 100.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+
+        val budgetMonthly2 = BudgetListAdapterData(
+            budgetId = 2,
+            budgetName = "Fuel",
+            budgetAllocation = 0.0,
+            budgetGoal = 100.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+
+        val budgetMonthly3 = BudgetListAdapterData(
+            budgetId = 3,
+            budgetName = "Drink",
+            budgetAllocation = 0.0,
+            budgetGoal = 20.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+
+        val budgetMonthly4 = BudgetListAdapterData(
+            budgetId = 4,
+            budgetName = "Internet",
+            budgetAllocation = 0.0,
+            budgetGoal = 100.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+
+        // result2
+        val budgetMonthly5 = BudgetListAdapterData(
+            budgetId = 1,
+            budgetName = "Food",
+            budgetAllocation = 10.0,
+            budgetGoal = 100.0,
+            budgetUsed = 5.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+
+        val budgetMonthly6 = BudgetListAdapterData(
+            budgetId = 2,
+            budgetName = "Fuel",
+            budgetAllocation = 30.0,
+            budgetGoal = 100.0,
+            budgetUsed = 30.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+
+        val budgetMonthly7 = BudgetListAdapterData(
+            budgetId = 3,
+            budgetName = "Drink",
+            budgetAllocation = 50.0,
+            budgetGoal = 20.0,
+            budgetUsed = 50.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+
+        val budgetMonthly8 = BudgetListAdapterData(
+            budgetId = 4,
+            budgetName = "Internet",
+            budgetAllocation = 0.0,
+            budgetGoal = 100.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+
+        // result3
+        val budgetMonthly9 = BudgetListAdapterData(
+            budgetId = 1,
+            budgetName = "Food",
+            budgetAllocation = 20.0,
+            budgetGoal = 100.0,
+            budgetUsed = 15.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+
+        val budgetMonthly10 = BudgetListAdapterData(
+            budgetId = 2,
+            budgetName = "Fuel",
+            budgetAllocation = 40.0,
+            budgetGoal = 100.0,
+            budgetUsed = 40.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+
+        val budgetMonthly11 = BudgetListAdapterData(
+            budgetId = 3,
+            budgetName = "Drink",
+            budgetAllocation = 0.0,
+            budgetGoal = 20.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+
+        val budgetMonthly12 = BudgetListAdapterData(
+            budgetId = 4,
+            budgetName = "Internet",
+            budgetAllocation = 0.0,
+            budgetGoal = 100.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+
         runBlocking {
-            // expected result
-            // result1
-            val budgetMonthly1 = BudgetListAdapterData(
-                budgetId = 1,
-                budgetName = "Food",
-                budgetAllocation = 0.0,
-                budgetGoal = 100.0,
-                budgetUsed = 0.0,
-                budgetTypeId = 1,
-                budgetTypeName = "Monthly",
-                budgetTotalPrevAllocation = 0.0
-            )
-
-            val budgetMonthly2 = BudgetListAdapterData(
-                budgetId = 2,
-                budgetName = "Fuel",
-                budgetAllocation = 0.0,
-                budgetGoal = 100.0,
-                budgetUsed = 0.0,
-                budgetTypeId = 1,
-                budgetTypeName = "Monthly",
-                budgetTotalPrevAllocation = 0.0
-            )
-
-            val budgetMonthly3 = BudgetListAdapterData(
-                budgetId = 3,
-                budgetName = "Drink",
-                budgetAllocation = 0.0,
-                budgetGoal = 20.0,
-                budgetUsed = 0.0,
-                budgetTypeId = 1,
-                budgetTypeName = "Monthly",
-                budgetTotalPrevAllocation = 0.0
-            )
-
-            val budgetMonthly4 = BudgetListAdapterData(
-                budgetId = 4,
-                budgetName = "Internet",
-                budgetAllocation = 0.0,
-                budgetGoal = 100.0,
-                budgetUsed = 0.0,
-                budgetTypeId = 1,
-                budgetTypeName = "Monthly",
-                budgetTotalPrevAllocation = 0.0
-            )
-
-            // result2
-            val budgetMonthly5 = BudgetListAdapterData(
-                budgetId = 1,
-                budgetName = "Food",
-                budgetAllocation = 10.0,
-                budgetGoal = 100.0,
-                budgetUsed = 5.0,
-                budgetTypeId = 1,
-                budgetTypeName = "Monthly",
-                budgetTotalPrevAllocation = 0.0
-            )
-
-            val budgetMonthly6 = BudgetListAdapterData(
-                budgetId = 2,
-                budgetName = "Fuel",
-                budgetAllocation = 30.0,
-                budgetGoal = 100.0,
-                budgetUsed = 30.0,
-                budgetTypeId = 1,
-                budgetTypeName = "Monthly",
-                budgetTotalPrevAllocation = 0.0
-            )
-
-            val budgetMonthly7 = BudgetListAdapterData(
-                budgetId = 3,
-                budgetName = "Drink",
-                budgetAllocation = 50.0,
-                budgetGoal = 20.0,
-                budgetUsed = 50.0,
-                budgetTypeId = 1,
-                budgetTypeName = "Monthly",
-                budgetTotalPrevAllocation = 0.0
-            )
-
-            val budgetMonthly8 = BudgetListAdapterData(
-                budgetId = 4,
-                budgetName = "Internet",
-                budgetAllocation = 0.0,
-                budgetGoal = 100.0,
-                budgetUsed = 0.0,
-                budgetTypeId = 1,
-                budgetTypeName = "Monthly",
-                budgetTotalPrevAllocation = 0.0
-            )
-
-            // result3
-            val budgetMonthly9 = BudgetListAdapterData(
-                budgetId = 1,
-                budgetName = "Food",
-                budgetAllocation = 20.0,
-                budgetGoal = 100.0,
-                budgetUsed = 15.0,
-                budgetTypeId = 1,
-                budgetTypeName = "Monthly",
-                budgetTotalPrevAllocation = 0.0
-            )
-
-            val budgetMonthly10 = BudgetListAdapterData(
-                budgetId = 2,
-                budgetName = "Fuel",
-                budgetAllocation = 40.0,
-                budgetGoal = 100.0,
-                budgetUsed = 40.0,
-                budgetTypeId = 1,
-                budgetTypeName = "Monthly",
-                budgetTotalPrevAllocation = 0.0
-            )
-
-            val budgetMonthly11 = BudgetListAdapterData(
-                budgetId = 3,
-                budgetName = "Drink",
-                budgetAllocation = 0.0,
-                budgetGoal = 20.0,
-                budgetUsed = 0.0,
-                budgetTypeId = 1,
-                budgetTypeName = "Monthly",
-                budgetTotalPrevAllocation = 0.0
-            )
-
-            val budgetMonthly12 = BudgetListAdapterData(
-                budgetId = 4,
-                budgetName = "Internet",
-                budgetAllocation = 0.0,
-                budgetGoal = 100.0,
-                budgetUsed = 0.0,
-                budgetTypeId = 1,
-                budgetTypeName = "Monthly",
-                budgetTotalPrevAllocation = 0.0
-            )
-
             val timeFrom1 = OffsetDateTime.of(2021, 4, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
             val timeTo1 = timeFrom1.plusMonths(1).minusNanos(1)
             val result1 = budgetDao.getBudgetMonthlyListAdapter(4, 2021, timeFrom1, timeTo1).getOrAwaitValue()
@@ -414,50 +414,50 @@ class BudgetDaoTest {
     @Throws(IOException::class)
     fun getBudgetYearlyListAdapter() {
         populateTestData()
-        runBlocking {
-            // expected result
-            // result1
-            val budgetMonthly1 = BudgetListAdapterData(
-                budgetId = 5,
-                budgetName = "Vacation",
-                budgetAllocation = 300.0,
-                budgetGoal = 1000.0,
-                budgetUsed = 0.0,
-                budgetTypeId = 2,
-                budgetTypeName = "Yearly",
-                budgetTotalPrevAllocation = 0.0
-            )
-            val budgetMonthly2 = BudgetListAdapterData(
-                budgetId = 6,
-                budgetName = "Car Maintenance",
-                budgetAllocation = 0.0,
-                budgetGoal = 500.0,
-                budgetUsed = 0.0,
-                budgetTypeId = 2,
-                budgetTypeName = "Yearly",
-                budgetTotalPrevAllocation = 0.0
-            )
-            val budgetMonthly3 = BudgetListAdapterData(
-                budgetId = 5,
-                budgetName = "Vacation",
-                budgetAllocation = 50.0,
-                budgetGoal = 1000.0,
-                budgetUsed = 0.0,
-                budgetTypeId = 2,
-                budgetTypeName = "Yearly",
-                budgetTotalPrevAllocation = 300.0
-            )
-            val budgetMonthly4 = BudgetListAdapterData(
-                budgetId = 5,
-                budgetName = "Vacation",
-                budgetAllocation = 100.0,
-                budgetGoal = 1000.0,
-                budgetUsed = 50.0,
-                budgetTypeId = 2,
-                budgetTypeName = "Yearly",
-                budgetTotalPrevAllocation = 350.0
-            )
+        // expected result
+        // result1
+        val budgetMonthly1 = BudgetListAdapterData(
+            budgetId = 5,
+            budgetName = "Vacation",
+            budgetAllocation = 300.0,
+            budgetGoal = 1000.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 2,
+            budgetTypeName = "Yearly",
+            budgetTotalPrevAllocation = 0.0
+        )
+        val budgetMonthly2 = BudgetListAdapterData(
+            budgetId = 6,
+            budgetName = "Car Maintenance",
+            budgetAllocation = 0.0,
+            budgetGoal = 500.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 2,
+            budgetTypeName = "Yearly",
+            budgetTotalPrevAllocation = 0.0
+        )
+        val budgetMonthly3 = BudgetListAdapterData(
+            budgetId = 5,
+            budgetName = "Vacation",
+            budgetAllocation = 50.0,
+            budgetGoal = 1000.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 2,
+            budgetTypeName = "Yearly",
+            budgetTotalPrevAllocation = 300.0
+        )
+        val budgetMonthly4 = BudgetListAdapterData(
+            budgetId = 5,
+            budgetName = "Vacation",
+            budgetAllocation = 100.0,
+            budgetGoal = 1000.0,
+            budgetUsed = 50.0,
+            budgetTypeId = 2,
+            budgetTypeName = "Yearly",
+            budgetTotalPrevAllocation = 350.0
+        )
 
+        runBlocking {
             val timeFrom1 = OffsetDateTime.of(2021, 1, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
             val timeTo1 = OffsetDateTime.of(2021, 4, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0)).plusMonths(1).minusNanos(1)
             val result1 = budgetDao.getBudgetYearlyListAdapter(4, 2021, timeFrom1, timeTo1).getOrAwaitValue()
@@ -481,6 +481,263 @@ class BudgetDaoTest {
             assertThat(result3.size).isEqualTo(2)
             assertThat(result3).contains(budgetMonthly4)
             assertThat(result3).contains(budgetMonthly2)
+        }
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun getMonthlyBudgetingListAdapterDO() {
+        populateTestData()
+        //expected result1
+        val budgetListAdapterData1 = BudgetListAdapterData(
+            budgetId = 1,
+            budgetName = "Food",
+            budgetAllocation = 0.0,
+            budgetGoal = 100.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+        val budgetListAdapterData2 = BudgetListAdapterData(
+            budgetId = 2,
+            budgetName = "Fuel",
+            budgetAllocation = 0.0,
+            budgetGoal = 100.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+        val budgetListAdapterData3 = BudgetListAdapterData(
+            budgetId = 3,
+            budgetName = "Drink",
+            budgetAllocation = 0.0,
+            budgetGoal = 20.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+        val budgetListAdapterData4 = BudgetListAdapterData(
+            budgetId = 4,
+            budgetName = "Internet",
+            budgetAllocation = 0.0,
+            budgetGoal = 100.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+        //expected result2
+        val budgetListAdapterData5 = BudgetListAdapterData(
+            budgetId = 1,
+            budgetName = "Food",
+            budgetAllocation = 10.0,
+            budgetGoal = 100.0,
+            budgetUsed = 5.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+        val budgetListAdapterData6 = BudgetListAdapterData(
+            budgetId = 2,
+            budgetName = "Fuel",
+            budgetAllocation = 30.0,
+            budgetGoal = 100.0,
+            budgetUsed = 30.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+        val budgetListAdapterData7 = BudgetListAdapterData(
+            budgetId = 3,
+            budgetName = "Drink",
+            budgetAllocation = 50.0,
+            budgetGoal = 20.0,
+            budgetUsed = 50.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+        val budgetListAdapterData8 = BudgetListAdapterData(
+            budgetId = 4,
+            budgetName = "Internet",
+            budgetAllocation = 0.0,
+            budgetGoal = 100.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+        //expected result3
+        val budgetListAdapterData9 = BudgetListAdapterData(
+            budgetId = 1,
+            budgetName = "Food",
+            budgetAllocation = 20.0,
+            budgetGoal = 100.0,
+            budgetUsed = 15.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+        val budgetListAdapterData10 = BudgetListAdapterData(
+            budgetId = 2,
+            budgetName = "Fuel",
+            budgetAllocation = 40.0,
+            budgetGoal = 100.0,
+            budgetUsed = 40.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+        val budgetListAdapterData11 = BudgetListAdapterData(
+            budgetId = 3,
+            budgetName = "Drink",
+            budgetAllocation = 0.0,
+            budgetGoal = 20.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+        val budgetListAdapterData12 = BudgetListAdapterData(
+            budgetId = 4,
+            budgetName = "Internet",
+            budgetAllocation = 0.0,
+            budgetGoal = 100.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 1,
+            budgetTypeName = "Monthly",
+            budgetTotalPrevAllocation = 0.0
+        )
+
+        runBlocking {
+            val timeFrom1 = OffsetDateTime.of(2021, 4, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+            val timeTo1 = timeFrom1.plusMonths(1).minusNanos(1)
+            val result1 = budgetDao.getMonthlyBudgetingListAdapterDO(4, 2021, timeFrom1, timeTo1).getOrAwaitValue()
+
+            val timeFrom2 = OffsetDateTime.of(2021, 5, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+            val timeTo2 = timeFrom2.plusMonths(1).minusNanos(1)
+            val result2 = budgetDao.getMonthlyBudgetingListAdapterDO(5, 2021, timeFrom2, timeTo2).getOrAwaitValue()
+
+            val timeFrom3 = OffsetDateTime.of(2021, 6, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+            val timeTo3 = timeFrom3.plusMonths(1).minusNanos(1)
+            val result3 = budgetDao.getMonthlyBudgetingListAdapterDO(6, 2021, timeFrom3, timeTo3).getOrAwaitValue()
+
+            assertThat(result1.size).isEqualTo(4)
+            assertThat(result1).contains(budgetListAdapterData1)
+            assertThat(result1).contains(budgetListAdapterData2)
+            assertThat(result1).contains(budgetListAdapterData3)
+            assertThat(result1).contains(budgetListAdapterData4)
+
+            assertThat(result2.size).isEqualTo(4)
+            assertThat(result2).contains(budgetListAdapterData5)
+            assertThat(result2).contains(budgetListAdapterData6)
+            assertThat(result2).contains(budgetListAdapterData7)
+            assertThat(result2).contains(budgetListAdapterData8)
+
+            assertThat(result3.size).isEqualTo(4)
+            assertThat(result3).contains(budgetListAdapterData9)
+            assertThat(result3).contains(budgetListAdapterData10)
+            assertThat(result3).contains(budgetListAdapterData11)
+            assertThat(result3).contains(budgetListAdapterData12)
+
+        }
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun getYearlyBudgetingListAdapterDO() {
+        populateTestData()
+        //expected result1
+        val budgetListAdapterData1 = BudgetListAdapterData(
+            budgetId = 5,
+            budgetName = "Vacation",
+            budgetAllocation = 300.0,
+            budgetGoal = 1000.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 2,
+            budgetTypeName = "Yearly",
+            budgetTotalPrevAllocation = 0.0
+        )
+        val budgetListAdapterData2 = BudgetListAdapterData(
+            budgetId = 6,
+            budgetName = "Car Maintenance",
+            budgetAllocation = 0.0,
+            budgetGoal = 500.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 2,
+            budgetTypeName = "Yearly",
+            budgetTotalPrevAllocation = 0.0
+        )
+        //expected result2
+        val budgetListAdapterData3 = BudgetListAdapterData(
+            budgetId = 5,
+            budgetName = "Vacation",
+            budgetAllocation = 50.0,
+            budgetGoal = 1000.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 2,
+            budgetTypeName = "Yearly",
+            budgetTotalPrevAllocation = 300.0
+        )
+        val budgetListAdapterData4 = BudgetListAdapterData(
+            budgetId = 6,
+            budgetName = "Car Maintenance",
+            budgetAllocation = 0.0,
+            budgetGoal = 500.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 2,
+            budgetTypeName = "Yearly",
+            budgetTotalPrevAllocation = 0.0
+        )
+        //expected result3
+        val budgetListAdapterData5 = BudgetListAdapterData(
+            budgetId = 5,
+            budgetName = "Vacation",
+            budgetAllocation = 100.0,
+            budgetGoal = 1000.0,
+            budgetUsed = 50.0,
+            budgetTypeId = 2,
+            budgetTypeName = "Yearly",
+            budgetTotalPrevAllocation = 350.0
+        )
+        val budgetListAdapterData6 = BudgetListAdapterData(
+            budgetId = 6,
+            budgetName = "Car Maintenance",
+            budgetAllocation = 0.0,
+            budgetGoal = 500.0,
+            budgetUsed = 0.0,
+            budgetTypeId = 2,
+            budgetTypeName = "Yearly",
+            budgetTotalPrevAllocation = 0.0
+        )
+
+        runBlocking {
+            val timeFrom1 = OffsetDateTime.of(2021, 4, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+            val timeTo1 = timeFrom1.plusMonths(1).minusNanos(1)
+            val result1 = budgetDao.getYearlyBudgetingListAdapterDO(4, 2021, timeFrom1, timeTo1).getOrAwaitValue()
+
+            val timeFrom2 = OffsetDateTime.of(2021, 5, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+            val timeTo2 = timeFrom2.plusMonths(1).minusNanos(1)
+            val result2 = budgetDao.getYearlyBudgetingListAdapterDO(5, 2021, timeFrom2, timeTo2).getOrAwaitValue()
+
+            val timeFrom3 = OffsetDateTime.of(2021, 6, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+            val timeTo3 = timeFrom3.plusMonths(1).minusNanos(1)
+            val result3 = budgetDao.getYearlyBudgetingListAdapterDO(6, 2021, timeFrom3, timeTo3).getOrAwaitValue()
+
+            assertThat(result1.size).isEqualTo(2)
+            assertThat(result1).contains(budgetListAdapterData1)
+            assertThat(result1).contains(budgetListAdapterData2)
+
+            assertThat(result2.size).isEqualTo(2)
+            assertThat(result2).contains(budgetListAdapterData3)
+            assertThat(result2).contains(budgetListAdapterData4)
+
+            assertThat(result3.size).isEqualTo(2)
+            assertThat(result3).contains(budgetListAdapterData5)
+            assertThat(result3).contains(budgetListAdapterData6)
         }
     }
 }

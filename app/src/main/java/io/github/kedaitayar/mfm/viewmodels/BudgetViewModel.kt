@@ -40,7 +40,14 @@ class BudgetViewModel @Inject constructor(
             Log.i(TAG, "budgetingListData: ${selectedDate.value}")
             budgetRepository.getBudgetingListAdapterDO(it.monthValue, it.year)
         }
-
+    val monthlyBudgetingListData: LiveData<List<BudgetListAdapterData>> =
+        Transformations.switchMap(selectedDate) {
+            budgetRepository.getMonthlyBudgetingListAdapterDO(it.monthValue, it.year)
+        }
+    val yearlyBudgetingListData: LiveData<List<BudgetListAdapterData>> =
+        Transformations.switchMap(selectedDate) {
+            budgetRepository.getYearlyBudgetingListAdapterDO(it.monthValue, it.year)
+        }
 
     suspend fun insert(budget: Budget): Long {
         return budgetRepository.insert(budget)

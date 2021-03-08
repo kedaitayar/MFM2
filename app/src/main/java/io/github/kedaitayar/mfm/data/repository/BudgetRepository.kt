@@ -100,4 +100,22 @@ class BudgetRepository @Inject constructor(
         Log.i(TAG, "getBudgetingListAdapterDO timeTo: $timeTo")
         return budgetDao.getBudgetingListAdapterDO(month, year, timeFrom, timeTo)
     }
+
+    fun getMonthlyBudgetingListAdapterDO(
+        month: Int,
+        year: Int
+    ): LiveData<List<BudgetListAdapterData>> {
+        val timeFrom = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+        val timeTo = timeFrom.plusMonths(1).minusNanos(1)
+        return budgetDao.getMonthlyBudgetingListAdapterDO(month, year, timeFrom, timeTo)
+    }
+
+    fun getYearlyBudgetingListAdapterDO(
+        month: Int,
+        year: Int
+    ): LiveData<List<BudgetListAdapterData>> {
+        val timeFrom = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+        val timeTo = timeFrom.plusMonths(1).minusNanos(1)
+        return budgetDao.getYearlyBudgetingListAdapterDO(month, year, timeFrom, timeTo)
+    }
 }
