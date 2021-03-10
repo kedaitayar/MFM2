@@ -7,6 +7,7 @@ import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData
 import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.entity.Budget
 import io.github.kedaitayar.mfm.data.entity.Transaction
+import io.github.kedaitayar.mfm.data.podata.TransactionGraphData
 
 @Dao
 interface TransactionDao {
@@ -24,4 +25,45 @@ interface TransactionDao {
     )
     fun getTransactionListData(): LiveData<List<TransactionListAdapterData>>
 
+    @Query("""
+        SELECT
+            STRFTIME('%W', transactionTime) AS transactionWeek,
+            Sum(transactionAmount) AS transactionAmount,
+            0 AS transactionAmountPrevYear,
+            transactionType 
+        FROM
+            `transaction` 
+        WHERE
+            transactionType != 3 
+            AND STRFTIME('%Y', transactionTime) = :year
+        GROUP BY
+            STRFTIME('%W', transactionTime),
+            transactionType 
+        UNION ALL
+        SELECT
+            '-1' AS transactionWeek,
+            0 AS transactionAmount,
+            Sum(transactionAmount) AS transactionAmountPrevYear,
+            transactionType 
+        FROM
+            (
+                SELECT
+                    STRFTIME('%W', transactionTime) AS transactionWeek,
+                    Sum(transactionAmount) AS transactionAmount,
+                    transactionType 
+                FROM
+                    `transaction` 
+                WHERE
+                    transactionType != 3 
+                    AND STRFTIME('%Y', transactionTime) < :year
+                GROUP BY
+                    STRFTIME('%W', transactionTime),
+                    transactionType 
+                ORDER BY
+                    STRFTIME('%W', transactionTime) 
+            )
+        GROUP BY
+            transactionType
+    """)
+    fun getTransactionGraphData(year: String): LiveData<List<TransactionGraphData>>
 }

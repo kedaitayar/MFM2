@@ -12,39 +12,19 @@
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_addEditAccountFragment"
-            app:destination="@id/addEditAccountFragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:destination="@id/addEditAccountFragment" />
         <action
             android:id="@+id/action_mainFragment_to_accountDetailFragment"
-            app:destination="@id/accountDetailFragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:destination="@id/accountDetailFragment" />
         <action
             android:id="@+id/action_mainFragment_to_addTransactionFragment"
-            app:destination="@id/addTransactionFragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:destination="@id/addTransactionFragment" />
         <action
             android:id="@+id/action_mainFragment_to_addBudgetFragment"
-            app:destination="@id/addBudgetFragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:destination="@id/addBudgetFragment"/>
         <action
             android:id="@+id/action_mainFragment_to_budgetingFragment"
-            app:destination="@id/budgetingFragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:destination="@id/budgetingFragment" />
     </fragment>
     <fragment
         android:id="@+id/addEditAccountFragment"

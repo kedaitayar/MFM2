@@ -12,7 +12,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout_transfer_from"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            style="@style/DropDownMenuStyle1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="From"
@@ -30,7 +30,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout_transfer_to"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            style="@style/DropDownMenuStyle1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="To"
@@ -48,7 +48,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout_amount"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/InputEditTextStyle1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Amount"

@@ -30,4 +30,28 @@
         <item name="android:textColor">#99000000</item>
         <item name="fontFamily">sans-serif</item>
     </style>
+    <style name="ButtonStyle1">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@android:color/primary_text_dark</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+    <style name="InputEditTextStyle1" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+    </style>
+    <style name="DropDownMenuStyle1" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+    </style>
+    <style name="TabLayout1" parent="Widget.MaterialComponents.TabLayout">
+        <item name="tabTextAppearance">@style/TabLayoutText1</item>
+    </style>
+    <style name="TabLayoutText1" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+        <item name="textAllCaps">false</item>
+    </style>
 </resources>

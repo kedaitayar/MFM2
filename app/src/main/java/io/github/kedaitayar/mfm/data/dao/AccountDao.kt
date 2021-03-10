@@ -28,16 +28,7 @@ interface AccountDao {
                 SUM(accountTransactionTransferOut) AS accountTransactionTransferOut,
                 (
                     SELECT
-                        SUM( 
-                        CASE
-                            WHEN
-                                transactionType = 2
-                            THEN
-                                transactionAmount 
-                            ELSE
-                                0 
-                        END
-            ) AS accountTransactionIncomePrevMonth 
+                        SUM(CASE WHEN transactionType = 2 THEN transactionAmount ELSE 0 END ) AS accountTransactionIncomePrevMonth 
                     FROM
                         `transaction` 
                     WHERE
@@ -45,20 +36,10 @@ interface AccountDao {
                         AND transactionAccountId = :accountId 
                     GROUP BY
                         transactionAccountId 
-                )
-                AS accountTransactionIncomePrevMonth, 
+                ) AS accountTransactionIncomePrevMonth, 
                 (
                     SELECT
-                        SUM( 
-                        CASE
-                            WHEN
-                                transactionType = 1
-                            THEN
-                                transactionAmount 
-                            ELSE
-                                0 
-                        END
-            ) AS accountTransactionExpensePrevMonth 
+                        SUM( CASE WHEN transactionType = 1 THEN transactionAmount ELSE 0 END ) AS accountTransactionExpensePrevMonth 
                     FROM
                         `transaction` 
                     WHERE
@@ -66,20 +47,10 @@ interface AccountDao {
                         AND transactionAccountId = :accountId 
                     GROUP BY
                         transactionAccountId 
-                )
-                AS accountTransactionExpensePrevMonth, 
+                ) AS accountTransactionExpensePrevMonth, 
                 (
                     SELECT
-                        SUM( 
-                        CASE
-                            WHEN
-                                transactionType = 3
-                            THEN
-                                transactionAmount 
-                            ELSE
-                                0 
-                        END
-            ) AS accountTransactionTransferInPrevMonth 
+                        SUM( CASE WHEN transactionType = 3 THEN transactionAmount ELSE 0 END ) AS accountTransactionTransferInPrevMonth 
                     FROM
                         `transaction` 
                     WHERE
@@ -87,20 +58,10 @@ interface AccountDao {
                         AND transactionAccountTransferTo = :accountId 
                     GROUP BY
                         transactionAccountTransferTo 
-                )
-                AS accountTransactionTransferInPrevMonth, 
+                ) AS accountTransactionTransferInPrevMonth, 
                 (
                     SELECT
-                        SUM( 
-                        CASE
-                            WHEN
-                                transactionType = 3
-                            THEN
-                                transactionAmount 
-                            ELSE
-                                0 
-                        END
-            ) AS accountTransactionTransferOutPrevMonth 
+                        SUM( CASE WHEN transactionType = 3 THEN transactionAmount ELSE 0 END ) AS accountTransactionTransferOutPrevMonth 
                     FROM
                         `transaction` 
                     WHERE
@@ -108,8 +69,7 @@ interface AccountDao {
                         AND transactionAccountId = :accountId 
                     GROUP BY
                         transactionAccountId 
-                )
-                AS accountTransactionTransferOutPrevMonth 
+                ) AS accountTransactionTransferOutPrevMonth 
             FROM
                 (
                     SELECT
@@ -121,7 +81,7 @@ interface AccountDao {
                     FROM
                         `transaction` 
                     WHERE
-                        transactionType = 1
+                        transactionType = 1 
                         AND transactionTime BETWEEN :timeFrom AND :timeTo 
                         AND transactionAccountId = :accountId 
                     GROUP BY
@@ -136,7 +96,7 @@ interface AccountDao {
                     FROM
                         `transaction` 
                     WHERE
-                        transactionType = 2
+                        transactionType = 2 
                         AND transactionTime BETWEEN :timeFrom AND :timeTo 
                         AND transactionAccountId = :accountId 
                     GROUP BY
@@ -151,7 +111,7 @@ interface AccountDao {
                     FROM
                         `transaction` 
                     WHERE
-                        transactionType = 3
+                        transactionType = 3 
                         AND transactionTime BETWEEN :timeFrom AND :timeTo 
                         AND transactionAccountId = :accountId 
                     GROUP BY
@@ -166,7 +126,7 @@ interface AccountDao {
                     FROM
                         `transaction` 
                     WHERE
-                        transactionType = 3
+                        transactionType = 3 
                         AND transactionTime BETWEEN :timeFrom AND :timeTo 
                         AND transactionAccountId = :accountId 
                     GROUP BY

@@ -40,7 +40,7 @@ class AccountBudgetChartListAdapter :
         fun bind(item: AccountTransactionBudgetData, position: Int) {
             binding.budgetColor.background.setTint(colors[position])
             binding.textViewBudget.text = item.budgetName
-            binding.textViewTransactionAmount.text = "RM ${item.transactionAmount}"
+            binding.textViewTransactionAmount.text = "${item.transactionAmount}"
             binding.textViewPercentage.text =
                 "${item.transactionAmount?.div(totalTransactionAmount)?.times(100)?.toInt() ?: 0}%"
         }

@@ -16,7 +16,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_account_name"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/InputEditTextStyle1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Account Name"
@@ -31,7 +31,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                style="@style/Widget.MaterialComponents.Button"
+                style="@style/ButtonStyle1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"

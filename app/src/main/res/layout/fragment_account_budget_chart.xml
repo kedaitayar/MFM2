@@ -37,7 +37,6 @@
                     android:id="@+id/pie_chart"
                     android:layout_width="160dp"
                     android:layout_height="160dp"
-                    android:layout_marginStart="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

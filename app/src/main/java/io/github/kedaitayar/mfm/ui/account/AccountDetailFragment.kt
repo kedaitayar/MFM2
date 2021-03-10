@@ -27,9 +27,6 @@ class AccountDetailFragment : Fragment() {
         _binding = FragmentAccountDetailBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
-        val accountId = args.accountId
-
-
         childFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container_account_budget_chart, AccountBudgetChartFragment.newInstance(args.accountId))
             replace(R.id.fragment_container_account_transaction_graph, AccountTransactionGraphFragment.newInstance(args.accountId))

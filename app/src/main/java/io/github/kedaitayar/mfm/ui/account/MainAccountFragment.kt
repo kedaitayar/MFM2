@@ -9,9 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMainAccountBinding
+import io.github.kedaitayar.mfm.ui.main.MainFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.util.NavigationResult.getNavigationResultLiveData
 import io.github.kedaitayar.mfm.viewmodels.AccountViewModel
@@ -36,6 +38,7 @@ class MainAccountFragment : Fragment(R.layout.fragment_main_account) {
 
         childFragmentManager.beginTransaction().apply {
             replace(R.id.account_list_fragment_container, AccountListFragment())
+            replace(R.id.fragment_container_transaction_trend, TransactionTrendGraphFragment())
         }.commit()
 
         setupAddAccountButton()
@@ -108,4 +111,7 @@ class MainAccountFragment : Fragment(R.layout.fragment_main_account) {
         _binding = null
     }
 
+    fun showSnackBar(text: String, length: Int) {
+        (parentFragment as MainFragment).showSnackBar(text, length)
+    }
 }

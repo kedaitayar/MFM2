@@ -9,6 +9,7 @@ import io.github.kedaitayar.mfm.data.repository.TransactionRepository
 import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.entity.Budget
 import io.github.kedaitayar.mfm.data.entity.Transaction
+import io.github.kedaitayar.mfm.data.podata.TransactionGraphData
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,6 +20,7 @@ class TransactionViewModel @Inject constructor(
     val allAccount: LiveData<List<Account>> = transactionRepository.getAllAccount()
     val allBudget: LiveData<List<Budget>> = transactionRepository.getAllBudget()
     val allTransactionListAdapterData: LiveData<List<TransactionListAdapterData>> = transactionRepository.getTransactionListData()
+    val transactionYearlyTrendGraph: LiveData<List<TransactionGraphData>> = transactionRepository.getTransactionGraphData()
 
     suspend fun insert(transaction: Transaction): Long {
         return transactionRepository.insert(transaction)

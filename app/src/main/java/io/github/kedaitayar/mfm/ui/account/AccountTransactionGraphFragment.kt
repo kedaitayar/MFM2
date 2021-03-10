@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.AccountTransactionChartData
@@ -58,8 +59,21 @@ class AccountTransactionGraphFragment : Fragment(R.layout.fragment_account_trans
             drawOrder = arrayOf(CombinedChart.DrawOrder.BAR, CombinedChart.DrawOrder.BUBBLE, CombinedChart.DrawOrder.CANDLE, CombinedChart.DrawOrder.LINE, CombinedChart.DrawOrder.SCATTER)
             setDrawGridBackground(false)
             legend.isEnabled = false
-            xAxis.setDrawGridLines(false)
             xAxis.position = XAxis.XAxisPosition.BOTH_SIDED
+            xAxis.valueFormatter = object : ValueFormatter(){
+                override fun getFormattedValue(value: Float): String {
+                    return when (value) {
+                        0f -> {
+                            ""
+                        }
+                        else -> {
+                            "day ${value.toInt()}"
+                        }
+                    }
+                }
+            }
+            extraBottomOffset = 5f
+            extraTopOffset = 5f
             axisLeft.setDrawGridLines(false)
             axisRight.setDrawGridLines(false)
             axisLeft.setDrawZeroLine(true)
@@ -120,9 +134,11 @@ class AccountTransactionGraphFragment : Fragment(R.layout.fragment_account_trans
             val lineDataSet = LineDataSet(lineEntries, "line label")
             lineDataSet.apply {
                 setDrawValues(false)
-                mode = LineDataSet.Mode.HORIZONTAL_BEZIER
+                mode = LineDataSet.Mode.LINEAR
                 color = Color.DKGRAY
                 setCircleColor(Color.DKGRAY)
+                lineWidth = 2f
+                circleRadius = 2f
             }
             val lineData = LineData(lineDataSet)
 

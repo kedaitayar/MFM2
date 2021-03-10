@@ -25,8 +25,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+//        testData()
+    }
 
-        CoroutineScope(Dispatchers.IO).launch {
+    private fun testData(){
+        runBlocking {
+            val now = OffsetDateTime.now()
+
 //            var budgetType = BudgetType(budgetTypeId = 1, budgetTypeName = "Monthly")
 //            budgetViewModel.insert(budgetType)
 //            budgetType = BudgetType(budgetTypeId = 2, budgetTypeName = "Yearly")
@@ -41,184 +46,1590 @@ class MainActivity : AppCompatActivity() {
 //            transacitonType = TransactionType(transactionTypeId = 3, transactionTypeName = "Transfer")
 //            transactionViewModel.insert(transacitonType)
 
-//            runBlocking {
-//                val account1 = Account(accountId = 1, accountName = "Cash")
-//                val account2 = Account(accountId = 2, accountName = "Bank")
-//                accountViewModel.insert(account1)
-//                accountViewModel.insert(account2)
-//                val budget1 = Budget(budgetId = 1, budgetGoal = 100.0, budgetName = "Food", budgetType = 1)
-//                val budget2 = Budget(budgetId = 2, budgetGoal = 100.0, budgetName = "Fuel", budgetType = 1)
-//                val budget3 = Budget(budgetId = 3, budgetGoal = 20.0, budgetName = "Drink", budgetType = 1)
-//                val budget4 = Budget(budgetId = 4, budgetGoal = 100.0, budgetName = "Internet", budgetType = 1)
-//                val budget5 = Budget(budgetId = 5, budgetGoal = 1000.0, budgetName = "Vacation", budgetType = 2)
-//                val budget6 = Budget(budgetId = 6, budgetGoal = 500.0, budgetName = "Car Maintenance", budgetType = 2)
-//                budgetViewModel.insert(budget1)
-//                budgetViewModel.insert(budget2)
-//                budgetViewModel.insert(budget3)
-//                budgetViewModel.insert(budget4)
-//                budgetViewModel.insert(budget5)
-//                budgetViewModel.insert(budget6)
-//
-//                //budgeting
-//                val budgetTransaction1 = BudgetTransaction(
-//                    budgetTransactionBudgetId = 1,
-//                    budgetTransactionMonth = 5,
-//                    budgetTransactionYear = 2021,
-//                    budgetTransactionAmount = 10.0
-//                )
-//                val budgetTransaction2 = BudgetTransaction(
-//                    budgetTransactionBudgetId = 1,
-//                    budgetTransactionMonth = 6,
-//                    budgetTransactionYear = 2021,
-//                    budgetTransactionAmount = 20.0
-//                )
-//                val budgetTransaction3 = BudgetTransaction(
-//                    budgetTransactionBudgetId = 2,
-//                    budgetTransactionMonth = 5,
-//                    budgetTransactionYear = 2021,
-//                    budgetTransactionAmount = 30.0
-//                )
-//                val budgetTransaction4 = BudgetTransaction(
-//                    budgetTransactionBudgetId = 2,
-//                    budgetTransactionMonth = 6,
-//                    budgetTransactionYear = 2021,
-//                    budgetTransactionAmount = 40.0
-//                )
-//                val budgetTransaction5 = BudgetTransaction(
-//                    budgetTransactionBudgetId = 3,
-//                    budgetTransactionMonth = 5,
-//                    budgetTransactionYear = 2021,
-//                    budgetTransactionAmount = 50.0
-//                )
-//                val budgetTransaction6 = BudgetTransaction(
-//                    budgetTransactionBudgetId = 5,
-//                    budgetTransactionMonth = 4,
-//                    budgetTransactionYear = 2021,
-//                    budgetTransactionAmount = 300.0
-//                )
-//                val budgetTransaction7 = BudgetTransaction(
-//                    budgetTransactionBudgetId = 5,
-//                    budgetTransactionMonth = 5,
-//                    budgetTransactionYear = 2021,
-//                    budgetTransactionAmount = 50.0
-//                )
-//                val budgetTransaction8 = BudgetTransaction(
-//                    budgetTransactionBudgetId = 5,
-//                    budgetTransactionMonth = 6,
-//                    budgetTransactionYear = 2021,
-//                    budgetTransactionAmount = 100.0
-//                )
-//                budgetViewModel.insert(budgetTransaction1)
-//                budgetViewModel.insert(budgetTransaction2)
-//                budgetViewModel.insert(budgetTransaction3)
-//                budgetViewModel.insert(budgetTransaction4)
-//                budgetViewModel.insert(budgetTransaction5)
-//                budgetViewModel.insert(budgetTransaction6)
-//                budgetViewModel.insert(budgetTransaction7)
-//                budgetViewModel.insert(budgetTransaction8)
-//
-//                //transaction
-//                //income
-//                val transaction1 = Transaction(
-//                    transactionId = 1,
-//                    transactionAmount = 1000.0,
-//                    transactionTime = OffsetDateTime.of(2021, 5, 1, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
-//                    transactionType = 2,
-//                    transactionAccountId = 1,
-//                    transactionBudgetId = null,
-//                    transactionAccountTransferTo = null
-//                )
-//                //transfer
-//                val transaction2 = Transaction(
-//                    transactionId = 2,
-//                    transactionAmount = 200.0,
-//                    transactionTime = OffsetDateTime.of(2021, 5, 2, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
-//                    transactionType = 3,
-//                    transactionAccountId = 1,
-//                    transactionBudgetId = null,
-//                    transactionAccountTransferTo = 2
-//                )
-//                //expense
-//                val transaction3 = Transaction(
-//                    transactionId = 3,
-//                    transactionAmount = 5.0,
-//                    transactionTime = OffsetDateTime.of(2021, 5, 3, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
-//                    transactionType = 1,
-//                    transactionAccountId = 1,
-//                    transactionBudgetId = 1,
-//                    transactionAccountTransferTo = null
-//                )
-//                val transaction4 = Transaction(
-//                    transactionId = 4,
-//                    transactionAmount = 30.0,
-//                    transactionTime = OffsetDateTime.of(2021, 5, 4, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
-//                    transactionType = 1,
-//                    transactionAccountId = 1,
-//                    transactionBudgetId = 2,
-//                    transactionAccountTransferTo = null
-//                )
-//                val transaction5 = Transaction(
-//                    transactionId = 5,
-//                    transactionAmount = 50.0,
-//                    transactionTime = OffsetDateTime.of(2021, 5, 4, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
-//                    transactionType = 1,
-//                    transactionAccountId = 1,
-//                    transactionBudgetId = 3,
-//                    transactionAccountTransferTo = null
-//                )
-//                val transaction6 = Transaction(
-//                    transactionId = 6,
-//                    transactionAmount = 15.0,
-//                    transactionTime = OffsetDateTime.of(2021, 6, 3, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
-//                    transactionType = 1,
-//                    transactionAccountId = 1,
-//                    transactionBudgetId = 1,
-//                    transactionAccountTransferTo = null
-//                )
-//                val transaction7 = Transaction(
-//                    transactionId = 7,
-//                    transactionAmount = 40.0,
-//                    transactionTime = OffsetDateTime.of(2021, 6, 4, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
-//                    transactionType = 1,
-//                    transactionAccountId = 1,
-//                    transactionBudgetId = 2,
-//                    transactionAccountTransferTo = null
-//                )
-//                val transaction8 = Transaction(
-//                    transactionId = 8,
-//                    transactionAmount = 50.0,
-//                    transactionTime = OffsetDateTime.of(2021, 6, 5, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
-//                    transactionType = 1,
-//                    transactionAccountId = 1,
-//                    transactionBudgetId = 5,
-//                    transactionAccountTransferTo = null
-//                )
-//                transactionViewModel.insert(transaction1)
-//                transactionViewModel.insert(transaction2)
-//                transactionViewModel.insert(transaction3)
-//                transactionViewModel.insert(transaction4)
-//                transactionViewModel.insert(transaction5)
-//                transactionViewModel.insert(transaction6)
-//                transactionViewModel.insert(transaction7)
-//                transactionViewModel.insert(transaction8)
-//            }
+            val account1 = Account(accountId = 1, accountName = "Cash")
+            val account2 = Account(accountId = 2, accountName = "Bank")
+            accountViewModel.insert(account1)
+            accountViewModel.insert(account2)
 
-//            val account1 = Account(accountId = 1, accountName = "Cash")
-//            val account2 = Account(accountId = 2, accountName = "Bank")
-//            accountViewModel.insert(account1)
-//            accountViewModel.insert(account2)
-//            val budget1 = Budget(budgetId = 1, budgetGoal = 100.0, budgetName = "Food", budgetType = 1)
-//            val budget2 = Budget(budgetId = 2, budgetGoal = 100.0, budgetName = "Fuel", budgetType = 1)
-//            val budget3 = Budget(budgetId = 3, budgetGoal = 20.0, budgetName = "Drink", budgetType = 1)
-//            val budget4 = Budget(budgetId = 4, budgetGoal = 100.0, budgetName = "Internet", budgetType = 1)
-//            val budget5 = Budget(budgetId = 5, budgetGoal = 1000.0, budgetName = "Vacation", budgetType = 2)
-//            val budget6 = Budget(budgetId = 6, budgetGoal = 500.0, budgetName = "Car Maintenance", budgetType = 2)
-//            budgetViewModel.insert(budget1)
-//            budgetViewModel.insert(budget2)
-//            budgetViewModel.insert(budget3)
-//            budgetViewModel.insert(budget4)
-//            budgetViewModel.insert(budget5)
-//            budgetViewModel.insert(budget6)
+            budgetViewModel.insert(Budget(budgetId = 1, budgetGoal = 100.0, budgetName = "Food", budgetType = 1))
+            budgetViewModel.insert(Budget(budgetId = 2, budgetGoal = 100.0, budgetName = "Grocery", budgetType = 1))
+            budgetViewModel.insert(Budget(budgetId = 3,budgetGoal = 100.0, budgetName = "Rent", budgetType = 1))
+            budgetViewModel.insert(Budget(budgetId = 4,budgetGoal = 100.0, budgetName = "House utilities", budgetType = 1))
+            budgetViewModel.insert(Budget(budgetId = 5,budgetGoal = 100.0, budgetName = "Car payment", budgetType = 1))
+            budgetViewModel.insert(Budget(budgetId = 6,budgetGoal = 100.0, budgetName = "Fuel", budgetType = 1))
+            budgetViewModel.insert(Budget(budgetId = 7,budgetGoal = 100.0, budgetName = "Phone bill", budgetType = 1))
+            budgetViewModel.insert(Budget(budgetId = 8,budgetGoal = 100.0, budgetName = "Internet", budgetType = 1))
+            budgetViewModel.insert(Budget(budgetId = 9,budgetGoal = 100.0, budgetName = "Self care", budgetType = 1))
+
+            //budgeting
+            val budgetTransaction1 = BudgetTransaction(
+                budgetTransactionBudgetId = 1,
+                budgetTransactionMonth = 5,
+                budgetTransactionYear = 2021,
+                budgetTransactionAmount = 10.0
+            )
+
+            //transaction
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 3000.0,
+                    transactionTime = now.minusDays(100),
+                    transactionType = 2,
+                    transactionAccountId = 1,
+                    transactionBudgetId = null,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(100),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 60.0,
+                    transactionTime = now.minusDays(100),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 2,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(100),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(99),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(98),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(97),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(96),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(96),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(95),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(94),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(93),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 800.0,
+                    transactionTime = now.minusDays(93),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 3,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 450.0,
+                    transactionTime = now.minusDays(93),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 5,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(93),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 7,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 100.0,
+                    transactionTime = now.minusDays(93),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 8,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 180.0,
+                    transactionTime = now.minusDays(92),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 4,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(92),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 9,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(92),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(91),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(90),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(89),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(88),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(88),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(87),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(86),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(85),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(85),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(84),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(83),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(82),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(82),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(81),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(80),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(79),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(79),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(78),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(77),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(76),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(76),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(75),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(74),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(73),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(73),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(72),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(71),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(70),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(70),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(69),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(68),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(67),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(67),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(66),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(65),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(64),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(64),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(63),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 3000.0,
+                    transactionTime = now.minusDays(62),
+                    transactionType = 2,
+                    transactionAccountId = 1,
+                    transactionBudgetId = null,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(62),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 800.0,
+                    transactionTime = now.minusDays(62),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 3,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 450.0,
+                    transactionTime = now.minusDays(62),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 5,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(61),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 7,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 100.0,
+                    transactionTime = now.minusDays(61),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 8,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 180.0,
+                    transactionTime = now.minusDays(61),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 4,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(60),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(60),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(59),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(58),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(57),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(57),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(56),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(55),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(54),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(54),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(53),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(52),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(51),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(51),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(50),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(49),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(48),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(48),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(47),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(46),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(45),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(45),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(44),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(43),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(42),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(42),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(41),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(40),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(39),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(39),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(38),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(37),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(36),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(36),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(35),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(34),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(33),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(33),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(32),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(31),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 3000.0,
+                    transactionTime = now.minusDays(31),
+                    transactionType = 2,
+                    transactionAccountId = 1,
+                    transactionBudgetId = null,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 800.0,
+                    transactionTime = now.minusDays(31),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 3,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 450.0,
+                    transactionTime = now.minusDays(31),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 5,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(31),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 7,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 100.0,
+                    transactionTime = now.minusDays(31),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 8,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 180.0,
+                    transactionTime = now.minusDays(31),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 4,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(30),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(30),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(29),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(28),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(27),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(27),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(26),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(25),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(24),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(24),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(23),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(22),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(21),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(21),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(20),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(19),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(18),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(18),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(17),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(16),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(15),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(15),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(14),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(13),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(12),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(12),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(11),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(10),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(9),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(9),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(8),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(7),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(6),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(6),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(5),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(4),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(3),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 6,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(3),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(2),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 15.0,
+                    transactionTime = now.minusDays(1),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 1,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 3000.0,
+                    transactionTime = now.minusDays(1),
+                    transactionType = 2,
+                    transactionAccountId = 1,
+                    transactionBudgetId = null,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 800.0,
+                    transactionTime = now.minusDays(1),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 3,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 450.0,
+                    transactionTime = now.minusDays(1),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 5,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(0),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 7,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 100.0,
+                    transactionTime = now.minusDays(0),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 8,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 180.0,
+                    transactionTime = now.minusDays(0),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 4,
+                    transactionAccountTransferTo = null
+                )
+            )
         }
     }
 
