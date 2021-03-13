@@ -5,12 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentAddTransactionBinding
-import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
 import java.lang.ref.WeakReference
 
 @AndroidEntryPoint
@@ -40,7 +38,7 @@ class AddTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
         }.attach()
 
         binding.buttonSave.setOnClickListener {
-            currentPage?.onButtonSaveClick()
+            currentPage?.onButtonAddClick()
         }
 
         return binding.root

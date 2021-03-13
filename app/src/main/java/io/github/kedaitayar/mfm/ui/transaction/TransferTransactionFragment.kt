@@ -19,15 +19,26 @@ import io.github.kedaitayar.mfm.data.entity.Transaction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.OffsetDateTime
 
 private const val TAG = "TransferTransactionFrag"
+private const val ARG_TRANSACTION_ID =
+    "io.github.kedaitayar.mfm.ui.transaction.TransferTransactionFragment.TransactionId"
 
 @AndroidEntryPoint
-class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transaction), AddTransactionChild {
+class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transaction), AddTransactionChild, EditTransactionChild {
     private val transactionViewModel: TransactionViewModel by viewModels()
     private var _binding: FragmentTransferTransactionBinding? = null
     private val binding get() = _binding!!
+    private var transactionId: Long = -1L
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            transactionId = it.getLong(ARG_TRANSACTION_ID, -1L)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +50,23 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
         setupAccountFromDropdown()
         setupAccountToDropdown()
 
+        if (transactionId != -1L) {
+            setupEditTransactionValue()
+        }
         return binding.root
+    }
+
+    private fun setupEditTransactionValue() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val transaction = transactionViewModel.getTransactionById(transactionId)
+            withContext(Dispatchers.Main) {
+                transactionViewModel.allAccount.observe(viewLifecycleOwner, Observer { list ->
+                    binding.autoCompleteTransferFrom.setText(list.firstOrNull { it.accountId == transaction.transactionAccountId }?.accountName)
+                    binding.autoCompleteTransferTo.setText(list.firstOrNull { it.accountId == transaction.transactionAccountTransferTo }?.accountName)
+                })
+                binding.textInputEditAmount.setText(transaction.transactionAmount.toString())
+            }
+        }
     }
 
     private fun setupAccountFromDropdown() {
@@ -72,7 +99,9 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
 
     override fun onResume() {
         super.onResume()
-        (parentFragment as AddTransactionFragment).setCurrentPage(this)
+        if (parentFragment is AddTransactionFragment) {
+            (parentFragment as AddTransactionFragment).setCurrentPage(this)
+        }
     }
 
     override fun onDestroyView() {
@@ -80,8 +109,7 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
         _binding = null
     }
 
-    override fun onButtonSaveClick() {
-        Log.i(TAG, "onButtonSaveClick: Transfer")
+    override fun onButtonAddClick() {
         val accountFromDropdown = binding.autoCompleteTransferFrom.text.toString()
         val accountToDropdown = binding.autoCompleteTransferTo.text.toString()
         val transactionAmount = binding.textInputEditAmount.text.toString()
@@ -113,5 +141,50 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
 
             }
         }
+    }
+
+    override fun onButtonSaveClick(transaction: Transaction) {
+        val accountFromDropdown = binding.autoCompleteTransferFrom.text.toString()
+        val accountToDropdown = binding.autoCompleteTransferTo.text.toString()
+        val transactionAmount = binding.textInputEditAmount.text.toString()
+        if (accountFromDropdown.isNullOrBlank() || accountToDropdown.isNullOrBlank() || transactionAmount.isNullOrBlank()) {
+            // TODO: notify user input validation error
+        } else {
+            val accountFromDropdown = transactionViewModel.allAccount.value?.let { list ->
+                list.find { it.accountName == accountFromDropdown }
+            }
+            val accountToDropdown = transactionViewModel.allAccount.value?.let { list ->
+                list.find { it.accountName == accountToDropdown }
+            }
+            if (accountFromDropdown != null) {
+                if (accountToDropdown != null) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val transaction = Transaction(
+                            transactionId = transaction.transactionId,
+                            transactionAccountId = accountFromDropdown.accountId!!,
+                            transactionAccountTransferTo = accountToDropdown.accountId,
+                            transactionAmount = binding.textInputEditAmount.text.toString()
+                                .toDouble(),
+                            transactionType = 3,
+                            transactionTime = transaction.transactionTime
+                        )
+                        transactionViewModel.update(transaction)
+                    }
+                    hideKeyboard()
+                    findNavController().navigateUp()
+                }
+
+            }
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(transactionId: Long) =
+            TransferTransactionFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(ARG_TRANSACTION_ID, transactionId)
+                }
+            }
     }
 }

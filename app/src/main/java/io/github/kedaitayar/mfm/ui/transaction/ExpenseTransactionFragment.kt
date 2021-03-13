@@ -12,6 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
+import io.github.kedaitayar.mfm.data.entity.Account
+import io.github.kedaitayar.mfm.data.entity.Budget
 import io.github.kedaitayar.mfm.databinding.FragmentExpenseTransactionBinding
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
@@ -19,16 +21,30 @@ import io.github.kedaitayar.mfm.data.entity.Transaction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.OffsetDateTime
 
 private const val TAG = "ExpenseTransactionFragm"
+private const val ARG_TRANSACTION_ID =
+    "io.github.kedaitayar.mfm.ui.transaction.ExpenseTransactionFragment.TransactionId"
 
 @AndroidEntryPoint
 class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transaction),
-    AddTransactionChild {
+    AddTransactionChild, EditTransactionChild {
     private val transactionViewModel: TransactionViewModel by viewModels()
     private var _binding: FragmentExpenseTransactionBinding? = null
     private val binding get() = _binding!!
+    private var transactionId: Long = -1L
+
+    private var accountList = listOf<Account>()
+    private var budgetList = listOf<Budget>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            transactionId = it.getLong(ARG_TRANSACTION_ID, -1L)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,12 +56,32 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
         setupAccountDropdown()
         setupBudgetDropdown()
 
+        if (transactionId != -1L) {
+            setupEditTransactionValue()
+        }
+
         return binding.root
+    }
+
+    private fun setupEditTransactionValue() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val transaction = transactionViewModel.getTransactionById(transactionId)
+            withContext(Dispatchers.Main) {
+                transactionViewModel.allAccount.observe(viewLifecycleOwner, Observer { list ->
+                    binding.autoCompleteAccount.setText(list.firstOrNull { it.accountId == transaction.transactionAccountId }?.accountName)
+                })
+                transactionViewModel.allBudget.observe(viewLifecycleOwner, Observer { list ->
+                    binding.autoCompleteBudget.setText(list.firstOrNull { it.budgetId == transaction.transactionBudgetId }?.budgetName)
+                })
+                binding.textInputEditAmount.setText(transaction.transactionAmount.toString())
+            }
+        }
     }
 
     private fun setupAccountDropdown() {
         transactionViewModel.allAccount.observe(viewLifecycleOwner, Observer { list ->
             list?.let { list2 ->
+                accountList = list2
                 val items: List<String> = list2.map { it.accountName }
                 val adapter = ArrayAdapter(
                     requireContext(),
@@ -60,6 +96,7 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
     private fun setupBudgetDropdown() {
         transactionViewModel.allBudget.observe(viewLifecycleOwner, Observer { list ->
             list?.let { list2 ->
+                budgetList = list2
                 val items: List<String> = list2.map { it.budgetName }
                 val adapter = ArrayAdapter(
                     requireContext(),
@@ -71,8 +108,7 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
         })
     }
 
-    override fun onButtonSaveClick() {
-        Log.i(TAG, "onButtonSaveClick: Expense")
+    override fun onButtonAddClick() {
         val accountName = binding.autoCompleteAccount.text.toString()
         val budgetName = binding.autoCompleteBudget.text.toString()
         val transactionAmount = binding.textInputEditAmount.text.toString()
@@ -91,8 +127,7 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
                         val transaction = Transaction(
                             transactionAccountId = account.accountId!!,
                             transactionBudgetId = budget.budgetId,
-                            transactionAmount = binding.textInputEditAmount.text.toString()
-                                .toDouble(),
+                            transactionAmount = binding.textInputEditAmount.text.toString().toDouble(),
                             transactionType = 1,
                             transactionTime = OffsetDateTime.now()
                         )
@@ -106,13 +141,59 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
         }
     }
 
+    override fun onButtonSaveClick(transaction: Transaction) {
+        val accountName = binding.autoCompleteAccount.text.toString()
+        val budgetName = binding.autoCompleteBudget.text.toString()
+        val transactionAmount = binding.textInputEditAmount.text.toString()
+        if (accountName.isNullOrBlank() || budgetName.isNullOrBlank() || transactionAmount.isNullOrBlank()) {
+            // TODO: notify user input validation error
+        } else {
+            val account = transactionViewModel.allAccount.value?.let { list ->
+                list.find { it.accountName == accountName }
+            }
+            val budget = transactionViewModel.allBudget.value?.let { list ->
+                list.find { it.budgetName == budgetName }
+            }
+            if (account != null) {
+                if (budget != null) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val transaction = Transaction(
+                            transactionId = transaction.transactionId,
+                            transactionAccountId = account.accountId!!,
+                            transactionBudgetId = budget.budgetId,
+                            transactionAmount = binding.textInputEditAmount.text.toString().toDouble(),
+                            transactionType = 1,
+                            transactionTime = transaction.transactionTime
+                        )
+                        transactionViewModel.update(transaction)
+                    }
+                    hideKeyboard()
+                    findNavController().navigateUp()
+                }
+
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
-        (parentFragment as AddTransactionFragment).setCurrentPage(this)
+        if (parentFragment is AddTransactionFragment) {
+            (parentFragment as AddTransactionFragment).setCurrentPage(this)
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(transactionId: Long) =
+            ExpenseTransactionFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(ARG_TRANSACTION_ID, transactionId)
+                }
+            }
     }
 }

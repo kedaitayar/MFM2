@@ -39,6 +39,7 @@
             android:inputType="numberDecimal"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
+            android:selectAllOnFocus="true"
             android:textAlignment="textEnd" />
 
     </com.google.android.material.textfield.TextInputLayout>

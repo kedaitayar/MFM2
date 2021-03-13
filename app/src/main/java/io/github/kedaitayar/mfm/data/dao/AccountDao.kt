@@ -232,7 +232,6 @@ interface AccountDao {
     )
     fun getUncompletedBudget(month: Int, year: Int): LiveData<BudgetedAndGoal>
 
-    // TODO: unit test
     @Query("""
         SELECT
             sum(transactionAmount) AS transactionAmount, 
@@ -245,6 +244,7 @@ interface AccountDao {
         LEFT JOIN Budget ON transactionBudgetId = budgetId
         WHERE transactionAccountId = :accountId
             AND NOT transactionType = 2
+            AND NOT transactionType = 3
             AND transactionTime BETWEEN :timeFrom AND :timeTo
         GROUP BY transactionBudgetId
     """)

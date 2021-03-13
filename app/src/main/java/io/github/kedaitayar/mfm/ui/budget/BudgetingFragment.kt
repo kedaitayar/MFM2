@@ -49,6 +49,7 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting) {
         binding.topAppBar.inflateMenu(R.menu.menu_budgeting)
         binding.topAppBar.setNavigationIcon(R.drawable.ic_baseline_close_24)
         binding.topAppBar.setNavigationOnClickListener {
+            hideKeyboard()
             findNavController().navigateUp()
         }
         binding.topAppBar.setOnMenuItemClickListener {

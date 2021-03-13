@@ -23,7 +23,7 @@ class AccountDetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAccountDetailBinding.inflate(inflater, container, false)
         context ?: return binding.root
 

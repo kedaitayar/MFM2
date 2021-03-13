@@ -50,4 +50,8 @@ class TransactionViewModel @Inject constructor(
     fun getAllTransactionType(): LiveData<List<TransactionType>> {
         return transactionRepository.getAllTransactionType()
     }
+
+    suspend fun getTransactionById(transactionId: Long) : Transaction {
+        return transactionRepository.getTransactionById(transactionId)
+    }
 }

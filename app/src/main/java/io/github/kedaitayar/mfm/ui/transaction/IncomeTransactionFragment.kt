@@ -19,16 +19,26 @@ import io.github.kedaitayar.mfm.data.entity.Transaction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.OffsetDateTime
 
 private const val TAG = "IncomeTransactionFragme"
+private const val ARG_TRANSACTION_ID = "io.github.kedaitayar.mfm.ui.transaction.IncomeTransactionFragment.TransactionId"
 
 @AndroidEntryPoint
 class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction),
-    AddTransactionChild {
+    AddTransactionChild, EditTransactionChild {
     private val transactionViewModel: TransactionViewModel by viewModels()
     private var _binding: FragmentIncomeTransactionBinding? = null
     private val binding get() = _binding!!
+    private var transactionId: Long = -1L
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            transactionId = it.getLong(ARG_TRANSACTION_ID, -1L)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,8 +48,23 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
         context ?: return binding.root
 
         setupAccountDropdown()
+        if (transactionId != -1L) {
+            setupEditTransactionValue()
+        }
 
         return binding.root
+    }
+
+    private fun setupEditTransactionValue() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val transaction = transactionViewModel.getTransactionById(transactionId)
+            withContext(Dispatchers.Main) {
+                transactionViewModel.allAccount.observe(viewLifecycleOwner, Observer { list ->
+                    binding.autoCompleteAccount.setText(list.firstOrNull { it.accountId == transaction.transactionAccountId }?.accountName)
+                })
+                binding.textInputEditAmount.setText(transaction.transactionAmount.toString())
+            }
+        }
     }
 
     private fun setupAccountDropdown() {
@@ -58,7 +83,9 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
 
     override fun onResume() {
         super.onResume()
-        (parentFragment as AddTransactionFragment).setCurrentPage(this)
+        if (parentFragment is AddTransactionFragment) {
+            (parentFragment as AddTransactionFragment).setCurrentPage(this)
+        }
     }
 
     override fun onDestroyView() {
@@ -66,8 +93,7 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
         _binding = null
     }
 
-    override fun onButtonSaveClick() {
-        Log.i(TAG, "onButtonSaveClick: Income")
+    override fun onButtonAddClick() {
         val accountName = binding.autoCompleteAccount.text.toString()
         val transactionAmount = binding.textInputEditAmount.text.toString()
         if (accountName.isNullOrBlank() || transactionAmount.isNullOrBlank()) {
@@ -91,5 +117,42 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
                 findNavController().navigateUp()
             }
         }
+    }
+
+    override fun onButtonSaveClick(transaction: Transaction) {
+        val accountName = binding.autoCompleteAccount.text.toString()
+        val transactionAmount = binding.textInputEditAmount.text.toString()
+        if (accountName.isNullOrBlank() || transactionAmount.isNullOrBlank()) {
+            // TODO: notify user input validation error
+        } else {
+            val account = transactionViewModel.allAccount.value?.let { list ->
+                list.find { it.accountName == accountName }
+            }
+            if (account != null) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val transaction = Transaction(
+                        transactionId = transaction.transactionId,
+                        transactionAccountId = account.accountId!!,
+                        transactionAmount = binding.textInputEditAmount.text.toString()
+                            .toDouble(),
+                        transactionType = 2,
+                        transactionTime = transaction.transactionTime
+                    )
+                    transactionViewModel.update(transaction)
+                }
+                hideKeyboard()
+                findNavController().navigateUp()
+            }
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(transactionId: Long) =
+            IncomeTransactionFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(ARG_TRANSACTION_ID, transactionId)
+                }
+            }
     }
 }

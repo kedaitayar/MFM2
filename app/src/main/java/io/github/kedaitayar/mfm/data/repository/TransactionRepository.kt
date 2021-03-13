@@ -31,6 +31,10 @@ class TransactionRepository @Inject constructor(
         return basicDao.update(transaction)
     }
 
+    suspend fun getTransactionById(transactionId: Long) : Transaction {
+        return basicDao.getTransactionById(transactionId)
+    }
+
     fun getAllTransaction(): LiveData<List<Transaction>> {
         return basicDao.getAllTransaction()
     }

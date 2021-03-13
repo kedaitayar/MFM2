@@ -82,6 +82,16 @@ class MainActivity : AppCompatActivity() {
             )
             transactionViewModel.insert(
                 Transaction(
+                    transactionAmount = 150.0,
+                    transactionTime = now.minusDays(100),
+                    transactionType = 3,
+                    transactionAccountId = 1,
+                    transactionBudgetId = null,
+                    transactionAccountTransferTo = 2
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
                     transactionAmount = 15.0,
                     transactionTime = now.minusDays(100),
                     transactionType = 1,
@@ -215,7 +225,7 @@ class MainActivity : AppCompatActivity() {
                     transactionAmount = 30.0,
                     transactionTime = now.minusDays(93),
                     transactionType = 1,
-                    transactionAccountId = 1,
+                    transactionAccountId = 2,
                     transactionBudgetId = 7,
                     transactionAccountTransferTo = null
                 )
@@ -225,7 +235,7 @@ class MainActivity : AppCompatActivity() {
                     transactionAmount = 100.0,
                     transactionTime = now.minusDays(93),
                     transactionType = 1,
-                    transactionAccountId = 1,
+                    transactionAccountId = 2,
                     transactionBudgetId = 8,
                     transactionAccountTransferTo = null
                 )
@@ -652,6 +662,16 @@ class MainActivity : AppCompatActivity() {
             )
             transactionViewModel.insert(
                 Transaction(
+                    transactionAmount = 150.0,
+                    transactionTime = now.minusDays(62),
+                    transactionType = 3,
+                    transactionAccountId = 1,
+                    transactionBudgetId = null,
+                    transactionAccountTransferTo = 2
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
                     transactionAmount = 15.0,
                     transactionTime = now.minusDays(62),
                     transactionType = 1,
@@ -685,7 +705,7 @@ class MainActivity : AppCompatActivity() {
                     transactionAmount = 30.0,
                     transactionTime = now.minusDays(61),
                     transactionType = 1,
-                    transactionAccountId = 1,
+                    transactionAccountId = 2,
                     transactionBudgetId = 7,
                     transactionAccountTransferTo = null
                 )
@@ -695,7 +715,7 @@ class MainActivity : AppCompatActivity() {
                     transactionAmount = 100.0,
                     transactionTime = now.minusDays(61),
                     transactionType = 1,
-                    transactionAccountId = 1,
+                    transactionAccountId = 2,
                     transactionBudgetId = 8,
                     transactionAccountTransferTo = null
                 )
@@ -1122,6 +1142,16 @@ class MainActivity : AppCompatActivity() {
             )
             transactionViewModel.insert(
                 Transaction(
+                    transactionAmount = 150.0,
+                    transactionTime = now.minusDays(31),
+                    transactionType = 3,
+                    transactionAccountId = 1,
+                    transactionBudgetId = null,
+                    transactionAccountTransferTo = 2
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
                     transactionAmount = 800.0,
                     transactionTime = now.minusDays(31),
                     transactionType = 1,
@@ -1145,7 +1175,7 @@ class MainActivity : AppCompatActivity() {
                     transactionAmount = 30.0,
                     transactionTime = now.minusDays(31),
                     transactionType = 1,
-                    transactionAccountId = 1,
+                    transactionAccountId = 2,
                     transactionBudgetId = 7,
                     transactionAccountTransferTo = null
                 )
@@ -1155,7 +1185,7 @@ class MainActivity : AppCompatActivity() {
                     transactionAmount = 100.0,
                     transactionTime = now.minusDays(31),
                     transactionType = 1,
-                    transactionAccountId = 1,
+                    transactionAccountId = 2,
                     transactionBudgetId = 8,
                     transactionAccountTransferTo = null
                 )
@@ -1532,6 +1562,76 @@ class MainActivity : AppCompatActivity() {
             )
             transactionViewModel.insert(
                 Transaction(
+                    transactionAmount = 3000.0,
+                    transactionTime = now.minusDays(4),
+                    transactionType = 2,
+                    transactionAccountId = 1,
+                    transactionBudgetId = null,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 150.0,
+                    transactionTime = now.minusDays(4),
+                    transactionType = 3,
+                    transactionAccountId = 1,
+                    transactionBudgetId = null,
+                    transactionAccountTransferTo = 2
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 800.0,
+                    transactionTime = now.minusDays(4),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 3,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 450.0,
+                    transactionTime = now.minusDays(4),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 5,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 30.0,
+                    transactionTime = now.minusDays(3),
+                    transactionType = 1,
+                    transactionAccountId = 2,
+                    transactionBudgetId = 7,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 100.0,
+                    transactionTime = now.minusDays(3),
+                    transactionType = 1,
+                    transactionAccountId = 2,
+                    transactionBudgetId = 8,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
+                    transactionAmount = 180.0,
+                    transactionTime = now.minusDays(3),
+                    transactionType = 1,
+                    transactionAccountId = 1,
+                    transactionBudgetId = 4,
+                    transactionAccountTransferTo = null
+                )
+            )
+            transactionViewModel.insert(
+                Transaction(
                     transactionAmount = 30.0,
                     transactionTime = now.minusDays(3),
                     transactionType = 1,
@@ -1572,61 +1672,21 @@ class MainActivity : AppCompatActivity() {
             )
             transactionViewModel.insert(
                 Transaction(
-                    transactionAmount = 3000.0,
-                    transactionTime = now.minusDays(1),
-                    transactionType = 2,
-                    transactionAccountId = 1,
-                    transactionBudgetId = null,
-                    transactionAccountTransferTo = null
-                )
-            )
-            transactionViewModel.insert(
-                Transaction(
-                    transactionAmount = 800.0,
-                    transactionTime = now.minusDays(1),
-                    transactionType = 1,
-                    transactionAccountId = 1,
-                    transactionBudgetId = 3,
-                    transactionAccountTransferTo = null
-                )
-            )
-            transactionViewModel.insert(
-                Transaction(
-                    transactionAmount = 450.0,
-                    transactionTime = now.minusDays(1),
-                    transactionType = 1,
-                    transactionAccountId = 1,
-                    transactionBudgetId = 5,
-                    transactionAccountTransferTo = null
-                )
-            )
-            transactionViewModel.insert(
-                Transaction(
                     transactionAmount = 30.0,
                     transactionTime = now.minusDays(0),
                     transactionType = 1,
                     transactionAccountId = 1,
-                    transactionBudgetId = 7,
+                    transactionBudgetId = 6,
                     transactionAccountTransferTo = null
                 )
             )
             transactionViewModel.insert(
                 Transaction(
-                    transactionAmount = 100.0,
+                    transactionAmount = 15.0,
                     transactionTime = now.minusDays(0),
                     transactionType = 1,
                     transactionAccountId = 1,
-                    transactionBudgetId = 8,
-                    transactionAccountTransferTo = null
-                )
-            )
-            transactionViewModel.insert(
-                Transaction(
-                    transactionAmount = 180.0,
-                    transactionTime = now.minusDays(0),
-                    transactionType = 1,
-                    transactionAccountId = 1,
-                    transactionBudgetId = 4,
+                    transactionBudgetId = 1,
                     transactionAccountTransferTo = null
                 )
             )

@@ -73,6 +73,8 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
                 popupMenu.setOnMenuItemClickListener {
                     when (it.itemId) {
                         R.id.edit -> {
+                            val action = MainFragmentDirections.actionMainFragmentToEditTransactionFragment(transactionListAdapterData.transactionId)
+                            findNavController().navigate(action)
                             true
                         }
                         R.id.delete -> {

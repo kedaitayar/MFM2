@@ -31,7 +31,7 @@
         <item name="fontFamily">sans-serif</item>
     </style>
     <style name="ButtonStyle1">
-        <item name="android:textSize">28sp</item>
+        <item name="android:textSize">24sp</item>
         <item name="android:textColor">@android:color/primary_text_dark</item>
         <item name="fontFamily">sans-serif-medium</item>
         <item name="android:layout_marginStart">4dp</item>

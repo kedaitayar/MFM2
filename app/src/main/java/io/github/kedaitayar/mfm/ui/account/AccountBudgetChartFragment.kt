@@ -1,6 +1,7 @@
 package io.github.kedaitayar.mfm.ui.account
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ import kotlinx.coroutines.withContext
 import java.util.*
 
 private const val ARG_ACCOUNT_ID = "io.github.kedaitayar.mfm.ui.account.AccountBudgetChartFragment.accountId"
+private const val TAG = "AccountBudgetChartFragm"
 
 @AndroidEntryPoint
 class AccountBudgetChartFragment : Fragment(R.layout.fragment_account_budget_chart) {
@@ -74,9 +76,10 @@ class AccountBudgetChartFragment : Fragment(R.layout.fragment_account_budget_cha
                         .sortedByDescending { it.transactionAmount }
                 for (item in accountTransactionBudget) {
                     val transactionAmount = (item.transactionAmount ?: 0L) as Float
-                    val budgetName = item.budgetName ?: item.budgetName!!
+                    val budgetName = item.budgetName
                     val pieEntry = PieEntry(transactionAmount, budgetName)
                     entries.add(pieEntry)
+                    Log.i(TAG, "setupPieChartAndBudgetList: $item")
                 }
                 val dataSet = PieDataSet(entries, "dataset label")
 

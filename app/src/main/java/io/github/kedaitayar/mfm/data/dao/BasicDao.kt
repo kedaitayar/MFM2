@@ -82,6 +82,9 @@ interface BasicDao {
     @Query("SELECT * FROM `Transaction` ORDER BY transactionId DESC")
     fun getAllTransaction(): LiveData<List<Transaction>>
 
+    @Query("SELECT * FROM `Transaction` WHERE transactionId = :transactionId")
+    suspend fun getTransactionById(transactionId: Long): Transaction
+
     @Insert
     suspend fun insert(transaction: Transaction): Long
 
