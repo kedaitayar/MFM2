@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
@@ -16,6 +18,7 @@ import io.github.kedaitayar.mfm.databinding.FragmentMainBinding
 import io.github.kedaitayar.mfm.ui.transaction.EXPENSE_PAGE_INDEX
 import io.github.kedaitayar.mfm.ui.transaction.INCOME_PAGE_INDEX
 import io.github.kedaitayar.mfm.ui.transaction.TRANSFER_PAGE_INDEX
+import io.github.kedaitayar.mfm.viewmodels.AccountViewModel
 
 private const val TAG = "MainFragment"
 
@@ -27,7 +30,7 @@ class MainFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val tabLayout = binding.tabLayout
         val viewPager = binding.viewPagerMain
@@ -44,7 +47,6 @@ class MainFragment : Fragment() {
             val action = MainFragmentDirections.actionMainFragmentToAddTransactionFragment()
             findNavController().navigate(action)
         }
-
         return binding.root
     }
 

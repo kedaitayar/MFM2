@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -17,12 +18,14 @@ import io.github.kedaitayar.mfm.ui.main.MainFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.util.NavigationResult.getNavigationResultLiveData
 import io.github.kedaitayar.mfm.viewmodels.AccountViewModel
+import io.github.kedaitayar.mfm.viewmodels.SharedViewModel
 
 private const val TAG = "MainAccountFragment"
 
 @AndroidEntryPoint
 class MainAccountFragment : Fragment(R.layout.fragment_main_account) {
     private val accountViewModel: AccountViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
     private var _binding: FragmentMainAccountBinding? = null
     private val binding get() = _binding!!
     private var totalIncome: Double = 0.0
@@ -42,7 +45,7 @@ class MainAccountFragment : Fragment(R.layout.fragment_main_account) {
         }.commit()
 
         setupAddAccountButton()
-        setupAddAccountFragmentResultObserver()
+        setupSnackbarTextObserver()
         setupDashboardInfo()
 
         return binding.root
@@ -79,13 +82,11 @@ class MainAccountFragment : Fragment(R.layout.fragment_main_account) {
         })
     }
 
-    private fun setupAddAccountFragmentResultObserver() {
-        val result = getNavigationResultLiveData<Long>(AddEditAccountFragment.ADD_ACCOUNT_RESULT_KEY)
-        result?.observe(viewLifecycleOwner) {
-            Log.i(
-                TAG,
-                "add account result: $it"
-            )   //TODO: snackbar to show outcome of account insert
+    private fun setupSnackbarTextObserver() {
+        sharedViewModel.snackbarText.observe(viewLifecycleOwner) {
+            it?.getContentIfNotHandled()?.let { text ->
+                showSnackBar(text, Snackbar.LENGTH_SHORT)
+            }
         }
     }
 
