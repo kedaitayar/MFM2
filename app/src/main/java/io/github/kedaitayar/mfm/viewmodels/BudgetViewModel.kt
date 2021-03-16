@@ -48,6 +48,8 @@ class BudgetViewModel @Inject constructor(
         Transformations.switchMap(selectedDate) {
             budgetRepository.getYearlyBudgetingListAdapterDO(it.monthValue, it.year)
         }
+    val totalBudgetedAmount: LiveData<Double> = budgetRepository.getTotalBudgetedAmount()
+    val totalIncome: LiveData<Double> = budgetRepository.getTotalIncome()
 
     suspend fun insert(budget: Budget): Long {
         return budgetRepository.insert(budget)

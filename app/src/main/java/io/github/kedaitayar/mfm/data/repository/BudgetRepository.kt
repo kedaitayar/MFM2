@@ -118,4 +118,12 @@ class BudgetRepository @Inject constructor(
         val timeTo = timeFrom.plusMonths(1).minusNanos(1)
         return budgetDao.getYearlyBudgetingListAdapterDO(month, year, timeFrom, timeTo)
     }
+
+    fun getTotalBudgetedAmount(): LiveData<Double> {
+        return budgetDao.getTotalBudgetedAmount()
+    }
+
+    fun getTotalIncome(): LiveData<Double> {
+        return budgetDao.getTotalIncome()
+    }
 }

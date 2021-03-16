@@ -5,17 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMainBinding
 import io.github.kedaitayar.mfm.databinding.FragmentMainBudgetBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
+import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
 
 @AndroidEntryPoint
 class MainBudgetFragment: Fragment(R.layout.fragment_main_budget) {
+    private val budgetViewModel: BudgetViewModel by viewModels()
     private var _binding: FragmentMainBudgetBinding? = null
     private val binding get() = _binding!!
+    private var totalIncome: Double = 0.0
+    private var totalBudgeted: Double = 0.0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +46,32 @@ class MainBudgetFragment: Fragment(R.layout.fragment_main_budget) {
             findNavController().navigate(action)
         }
 
+        setupNotBudgeted()
+
         return binding.root
+    }
+
+    private fun setupNotBudgeted(){
+        budgetViewModel.totalIncome.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                setAccountIncome(it)
+            }
+        })
+        budgetViewModel.totalBudgetedAmount.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                setTotalBudgeted(it)
+            }
+        })
+    }
+
+    private fun setAccountIncome(totalIncome: Double) {
+        this.totalIncome = totalIncome
+        binding.textViewNotBudgetedAmount.text = "RM " + (this.totalIncome - this.totalBudgeted).toString()
+    }
+
+    private fun setTotalBudgeted(totalBudgeted: Double) {
+        this.totalBudgeted = totalBudgeted
+        binding.textViewNotBudgetedAmount.text = "RM " + (this.totalIncome - this.totalBudgeted).toString()
     }
 
     override fun onDestroyView() {

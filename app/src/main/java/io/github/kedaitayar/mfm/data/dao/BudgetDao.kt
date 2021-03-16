@@ -597,4 +597,10 @@ interface BudgetDao {
         timeFrom: OffsetDateTime,
         timeTo: OffsetDateTime
     ): LiveData<List<BudgetListAdapterData>>
+
+    @Query("SELECT SUM(budgetTransactionAmount) FROM budgettransaction")
+    fun getTotalBudgetedAmount(): LiveData<Double>
+
+    @Query("SELECT SUM(transactionAmount) FROM `transaction` WHERE transactionType = 2")
+    fun getTotalIncome(): LiveData<Double>
 }

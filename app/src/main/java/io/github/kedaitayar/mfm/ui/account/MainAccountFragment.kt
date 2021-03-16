@@ -34,7 +34,7 @@ class MainAccountFragment : Fragment(R.layout.fragment_main_account) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMainAccountBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
