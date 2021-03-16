@@ -85,7 +85,7 @@ interface BasicDao {
     @Query("SELECT * FROM `Transaction` WHERE transactionId = :transactionId")
     suspend fun getTransactionById(transactionId: Long): Transaction
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(transaction: Transaction): Long
 
     @Update

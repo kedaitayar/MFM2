@@ -10,13 +10,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
-import io.github.kedaitayar.mfm.util.NavigationResult.setNavigationResult
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.viewmodels.AccountViewModel
 import io.github.kedaitayar.mfm.data.entity.Account
+import io.github.kedaitayar.mfm.data.entity.Transaction
 import io.github.kedaitayar.mfm.databinding.FragmentAddEditAccountBinding
 import io.github.kedaitayar.mfm.viewmodels.SharedViewModel
 import kotlinx.coroutines.*
@@ -38,10 +39,16 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
         _binding = FragmentAddEditAccountBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
+        binding.topAppBar.setNavigationIcon(R.drawable.ic_baseline_close_24)
+        binding.topAppBar.setNavigationOnClickListener {
+            hideKeyboard()
+            findNavController().navigateUp()
+        }
         if (args.accountId == -1L) {
             addAccountButtonSetup()
         } else {
             editAccountSetup()
+            setupDeleteToolbar()
         }
 
         return binding.root
@@ -65,8 +72,8 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
                     withContext(Dispatchers.Main) {
                         if (result.await() > 0) {
                             sharedViewModel.setSnackbarText("Account updated")
+                            findNavController().navigateUp()
                         }
-                        findNavController().navigateUp()
                     }
                 }
             } else {
@@ -86,13 +93,42 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
                     withContext(Dispatchers.Main) {
                         if (result.await() > 0) {
                             sharedViewModel.setSnackbarText("Account added")
+                            findNavController().navigateUp()
                         }
-                        findNavController().navigateUp()
                     }
                 }
 
             } else {
                 Snackbar.make(binding.root, "Account name cannot be blank", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setupDeleteToolbar() {
+        binding.topAppBar.inflateMenu(R.menu.menu_delete)
+        binding.topAppBar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.delete -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setMessage("Delete account?")
+                        .setNegativeButton("Cancel") { dialog, which -> }
+                        .setPositiveButton("Delete") { dialog, which ->
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val account = Account(accountId = args.accountId)
+                                val result = async { accountViewModel.delete(account) }
+                                withContext(Dispatchers.Main) {
+                                    if (result.await() == 1) {
+                                        sharedViewModel.setSnackbarText("Account deleted")
+                                        findNavController().navigateUp()
+                                    }
+                                }
+                            }
+                        }.show()
+                    true
+                }
+                else -> {
+                    false
+                }
             }
         }
     }

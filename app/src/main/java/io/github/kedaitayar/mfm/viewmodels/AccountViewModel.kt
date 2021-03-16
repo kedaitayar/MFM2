@@ -5,7 +5,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.kedaitayar.mfm.data.repository.AccountRepository
 import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.podata.*
-import io.github.kedaitayar.mfm.util.SnackbarEvent
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import javax.inject.Inject

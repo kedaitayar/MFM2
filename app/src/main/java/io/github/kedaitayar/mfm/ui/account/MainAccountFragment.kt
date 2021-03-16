@@ -16,7 +16,6 @@ import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMainAccountBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
-import io.github.kedaitayar.mfm.util.NavigationResult.getNavigationResultLiveData
 import io.github.kedaitayar.mfm.viewmodels.AccountViewModel
 import io.github.kedaitayar.mfm.viewmodels.SharedViewModel
 
@@ -45,7 +44,6 @@ class MainAccountFragment : Fragment(R.layout.fragment_main_account) {
         }.commit()
 
         setupAddAccountButton()
-        setupSnackbarTextObserver()
         setupDashboardInfo()
 
         return binding.root
@@ -82,14 +80,6 @@ class MainAccountFragment : Fragment(R.layout.fragment_main_account) {
         })
     }
 
-    private fun setupSnackbarTextObserver() {
-        sharedViewModel.snackbarText.observe(viewLifecycleOwner) {
-            it?.getContentIfNotHandled()?.let { text ->
-                showSnackBar(text, Snackbar.LENGTH_SHORT)
-            }
-        }
-    }
-
     private fun setupAddAccountButton() {
         binding.buttonAddAccount.setOnClickListener {
             val action = MainFragmentDirections.actionMainFragmentToAddEditAccountFragment()
@@ -110,9 +100,5 @@ class MainAccountFragment : Fragment(R.layout.fragment_main_account) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    fun showSnackBar(text: String, length: Int) {
-        (parentFragment as MainFragment).showSnackBar(text, length)
     }
 }

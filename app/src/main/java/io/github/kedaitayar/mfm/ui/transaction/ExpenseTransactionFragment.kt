@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -18,10 +19,8 @@ import io.github.kedaitayar.mfm.databinding.FragmentExpenseTransactionBinding
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
 import io.github.kedaitayar.mfm.data.entity.Transaction
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import io.github.kedaitayar.mfm.viewmodels.SharedViewModel
+import kotlinx.coroutines.*
 import java.time.OffsetDateTime
 
 private const val TAG = "ExpenseTransactionFragm"
@@ -32,6 +31,7 @@ private const val ARG_TRANSACTION_ID =
 class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transaction),
     AddTransactionChild, EditTransactionChild {
     private val transactionViewModel: TransactionViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
     private var _binding: FragmentExpenseTransactionBinding? = null
     private val binding get() = _binding!!
     private var transactionId: Long = -1L
@@ -112,8 +112,18 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
         val accountName = binding.autoCompleteAccount.text.toString()
         val budgetName = binding.autoCompleteBudget.text.toString()
         val transactionAmount = binding.textInputEditAmount.text.toString()
-        if (accountName.isNullOrBlank() || budgetName.isNullOrBlank() || transactionAmount.isNullOrBlank()) {
-            // TODO: notify user input validation error
+        if (accountName.isNullOrBlank()) {
+            if (parentFragment is AddTransactionFragment) {
+                (parentFragment as AddTransactionFragment).showSnackbar("Account cannot be empty")
+            }
+        } else if (budgetName.isNullOrBlank()) {
+            if (parentFragment is AddTransactionFragment) {
+                (parentFragment as AddTransactionFragment).showSnackbar("Budget cannot be empty")
+            }
+        } else if (transactionAmount.isNullOrBlank()) {
+            if (parentFragment is AddTransactionFragment) {
+                (parentFragment as AddTransactionFragment).showSnackbar("Amount cannot be empty")
+            }
         } else {
             val account = transactionViewModel.allAccount.value?.let { list ->
                 list.find { it.accountName == accountName }
@@ -131,12 +141,16 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
                             transactionType = 1,
                             transactionTime = OffsetDateTime.now()
                         )
-                        transactionViewModel.insert(transaction)
+                        val result = async { transactionViewModel.insert(transaction) }
+                        withContext(Dispatchers.Main) {
+                            if (result.await() > 0) {
+                                sharedViewModel.setSnackbarText("Transaction added")
+                                hideKeyboard()
+                                findNavController().navigateUp()
+                            }
+                        }
                     }
-                    hideKeyboard()
-                    findNavController().navigateUp()
                 }
-
             }
         }
     }
@@ -145,8 +159,18 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
         val accountName = binding.autoCompleteAccount.text.toString()
         val budgetName = binding.autoCompleteBudget.text.toString()
         val transactionAmount = binding.textInputEditAmount.text.toString()
-        if (accountName.isNullOrBlank() || budgetName.isNullOrBlank() || transactionAmount.isNullOrBlank()) {
-            // TODO: notify user input validation error
+        if (accountName.isNullOrBlank()) {
+            if (parentFragment is EditTransactionFragment) {
+                (parentFragment as EditTransactionFragment).showSnackbar("Account cannot be empty")
+            }
+        } else if (budgetName.isNullOrBlank()) {
+            if (parentFragment is EditTransactionFragment) {
+                (parentFragment as EditTransactionFragment).showSnackbar("Budget cannot be empty")
+            }
+        } else if (transactionAmount.isNullOrBlank()) {
+            if (parentFragment is EditTransactionFragment) {
+                (parentFragment as EditTransactionFragment).showSnackbar("Amount cannot be empty")
+            }
         } else {
             val account = transactionViewModel.allAccount.value?.let { list ->
                 list.find { it.accountName == accountName }

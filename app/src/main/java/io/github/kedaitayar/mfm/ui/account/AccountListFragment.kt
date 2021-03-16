@@ -12,19 +12,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
-import io.github.kedaitayar.mfm.data.entity.Account
-import io.github.kedaitayar.mfm.data.entity.Budget
 import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentAccountListBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.viewmodels.AccountViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 private const val TAG = "AccountListFragment"
 
@@ -81,18 +74,6 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
                             val action =
                                 MainFragmentDirections.actionMainFragmentToAddEditAccountFragment(accountListAdapterData.accountId)
                             findNavController().navigate(action)
-                            true
-                        }
-                        R.id.delete -> {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                val account = Account(accountId = accountListAdapterData.accountId)
-                                val result = accountViewModel.delete(account)
-                                if (result == 1) {
-                                    withContext(Dispatchers.Main) {
-                                        (parentFragment as MainAccountFragment).showSnackBar("Account deleted", Snackbar.LENGTH_SHORT)
-                                    }
-                                }
-                            }
                             true
                         }
                         else -> false

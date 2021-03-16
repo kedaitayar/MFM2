@@ -11,11 +11,13 @@ import android.widget.PopupMenu
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentBudgetListBinding
+import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
 
 private const val TAG = "BudgetListFragment"
@@ -88,10 +90,12 @@ class BudgetListFragment : Fragment() {
                 popupMenu.inflate(R.menu.menu_budget_list_item)
                 popupMenu.setOnMenuItemClickListener {
                     when (it.itemId) {
-                        R.id.edit -> {
+                        R.id.detail -> {
                             true
                         }
-                        R.id.detail -> {
+                        R.id.edit -> {
+                            val action = MainFragmentDirections.actionMainFragmentToEditBudgetFragment(budgetListAdapterData)
+                            findNavController().navigate(action)
                             true
                         }
                         else -> false

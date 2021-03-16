@@ -21,7 +21,7 @@ class MainBudgetFragment: Fragment(R.layout.fragment_main_budget) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMainBudgetBinding.inflate(inflater, container, false)
         context ?: return binding.root
 

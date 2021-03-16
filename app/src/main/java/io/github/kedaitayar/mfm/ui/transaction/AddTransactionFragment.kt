@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
@@ -57,6 +58,12 @@ class AddTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
     // to set the ref to current page
     fun setCurrentPage(page: AddTransactionChild) {
         _currentPage = WeakReference(page)
+    }
+
+    fun showSnackbar(text: String) {
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
+            .setAnchorView(binding.buttonSave)
+            .show()
     }
 
     override fun onDestroyView() {

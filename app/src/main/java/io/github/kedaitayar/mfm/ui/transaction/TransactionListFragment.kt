@@ -77,15 +77,15 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
                             findNavController().navigate(action)
                             true
                         }
-                        R.id.delete -> {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                val account =
-                                    Transaction(transactionId = transactionListAdapterData.transactionId)
-                                val result = transactionViewModel.delete(account)
-                                Log.i(TAG, "onPopupMenuButtonClick: delete result: $result")
-                            }
-                            true
-                        }
+//                        R.id.delete -> {
+//                            CoroutineScope(Dispatchers.IO).launch {
+//                                val account =
+//                                    Transaction(transactionId = transactionListAdapterData.transactionId)
+//                                val result = transactionViewModel.delete(account)
+//                                Log.i(TAG, "onPopupMenuButtonClick: delete result: $result")
+//                            }
+//                            true
+//                        }
                         else -> false
                     }
                 }

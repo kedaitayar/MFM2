@@ -1,5 +1,9 @@
 package io.github.kedaitayar.mfm.data.podata
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class BudgetListAdapterData(
     var budgetId: Long = 0,
     var budgetName: String = "",
@@ -9,4 +13,4 @@ data class BudgetListAdapterData(
     var budgetTypeId: Long = 0,
     var budgetTypeName: String = "",
     var budgetTotalPrevAllocation: Double = 0.0
-)
+) : Parcelable
