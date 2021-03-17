@@ -1,15 +1,19 @@
 package io.github.kedaitayar.mfm.ui.budget
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.BudgetTransaction
@@ -26,10 +30,16 @@ import java.util.*
 private const val TAG = "BudgetingFragment"
 
 @AndroidEntryPoint
-class BudgetingFragment : Fragment(R.layout.fragment_budgeting) {
+class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAdapter.OnBudgetingListAdapterListener {
     private val budgetViewModel: BudgetViewModel by viewModels()
     private var _binding: FragmentBudgetingBinding? = null
     private val binding get() = _binding!!
+    private var totalIncome: Double = 0.0
+    private var totalBudgeted: Double = 0.0
+    private var totalMonthlyBudgetedThisMonth: Double = 0.0
+    private var totalYearlyBudgetedThisMonth: Double = 0.0
+    private var budgetingAmountListMonthly = mutableMapOf<Long, String>()
+    private var budgetingAmountListYearly = mutableMapOf<Long, String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,10 +47,12 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting) {
     ): View {
         _binding = FragmentBudgetingBinding.inflate(inflater, container, false)
         context ?: return binding.root
-        val adapter1 = BudgetingListAdapter()
-        val adapter2 = BudgetingListAdapter()
+        val adapter1 = BudgetingListAdapter(this)
+        val adapter2 = BudgetingListAdapter(this)
         setupToolbar(adapter1, adapter2)
         setupBudgetingListRecyclerView(adapter1, adapter2)
+
+        setupNotBudgeted()
 
         return binding.root
     }
@@ -56,11 +68,11 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting) {
             when (it.itemId) {
                 R.id.save_budgeting -> {
                     val monthlyBudgetingList = monthlyAdapter.currentList
-                    val monthlyBudgetingAmountList = monthlyAdapter.getBudgetingAmountList()
                     val date = budgetViewModel.selectedDate.value!!
-                    for ((index, budgeting) in monthlyBudgetingList.withIndex()) {
+                    for (budgeting in monthlyBudgetingList) {
                         val budgetTransaction = BudgetTransaction(
-                            budgetTransactionAmount = ((monthlyBudgetingAmountList[index])?.toDouble() ?: 0.0),
+                            budgetTransactionAmount = ((budgetingAmountListMonthly[budgeting.budgetId])?.toDouble()
+                                ?: 0.0),
                             budgetTransactionBudgetId = budgeting.budgetId,
                             budgetTransactionMonth = date.monthValue,
                             budgetTransactionYear = date.year
@@ -70,10 +82,10 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting) {
                         }
                     }
                     val yearlyBudgetingList = yearlyAdapter.currentList
-                    val yearlyBudgetingAmountList = yearlyAdapter.getBudgetingAmountList()
-                    for ((index, budgeting) in yearlyBudgetingList.withIndex()) {
+                    for (budgeting in yearlyBudgetingList) {
                         val budgetTransaction = BudgetTransaction(
-                            budgetTransactionAmount = ((yearlyBudgetingAmountList[index])?.toDouble() ?: 0.0),
+                            budgetTransactionAmount = ((budgetingAmountListYearly[budgeting.budgetId])?.toDouble()
+                                ?: 0.0),
                             budgetTransactionBudgetId = budgeting.budgetId,
                             budgetTransactionMonth = date.monthValue,
                             budgetTransactionYear = date.year
@@ -113,6 +125,8 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting) {
         budgetViewModel.monthlyBudgetingListData.observe(viewLifecycleOwner) {
             it?.let {
                 monthlyAdapter.submitList(it)
+                totalMonthlyBudgetedThisMonth = it.map { item -> item.budgetAllocation }.sum()
+                monthlyAdapter.submitTotalBudgetedThisMonth(totalMonthlyBudgetedThisMonth + totalYearlyBudgetedThisMonth)
             }
         }
 
@@ -121,12 +135,59 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting) {
         budgetViewModel.yearlyBudgetingListData.observe(viewLifecycleOwner) {
             it?.let {
                 yearlyAdapter.submitList(it)
+                totalYearlyBudgetedThisMonth = it.map { item -> item.budgetAllocation }.sum()
+                monthlyAdapter.submitTotalBudgetedThisMonth(totalMonthlyBudgetedThisMonth + totalYearlyBudgetedThisMonth)
             }
         }
+    }
+
+    private fun setupNotBudgeted() {
+        budgetViewModel.totalIncome.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                setAccountIncome(it)
+            }
+        })
+        budgetViewModel.totalBudgetedAmount.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                setTotalBudgeted(it)
+            }
+        })
+    }
+
+    private fun setAccountIncome(totalIncome: Double) {
+        this.totalIncome = totalIncome
+        binding.textViewNotBudgetedAmount.text = "RM " + (this.totalIncome - this.totalBudgeted).toString()
+    }
+
+    private fun setTotalBudgeted(totalBudgeted: Double) {
+        this.totalBudgeted = totalBudgeted
+        binding.textViewNotBudgetedAmount.text = "RM " + (this.totalIncome - this.totalBudgeted).toString()
+    }
+
+    private fun updateNotBudgetedValue() {
+        val budgetingAmountMonthly =
+            budgetingAmountListMonthly.map { it.value.toDoubleOrNull() ?: 0.0 }.sumByDouble { it }
+        val budgetingAmountYearly =
+            budgetingAmountListYearly.map { it.value.toDoubleOrNull() ?: 0.0 }.sumByDouble { it }
+        val totalUnbudgeted =
+            totalIncome - totalBudgeted - (budgetingAmountMonthly - totalMonthlyBudgetedThisMonth) - (budgetingAmountYearly - totalYearlyBudgetedThisMonth)
+        binding.textViewNotBudgetedAmount.text = "RM $totalUnbudgeted"
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onAfterTextChanged(item: BudgetListAdapterData, editable: Editable?) {
+        when (item.budgetTypeId) {
+            1L -> {
+                budgetingAmountListMonthly[item.budgetId] = editable.toString()
+            }
+            2L -> {
+                budgetingAmountListYearly[item.budgetId] = editable.toString()
+            }
+        }
+        updateNotBudgetedValue()
     }
 }

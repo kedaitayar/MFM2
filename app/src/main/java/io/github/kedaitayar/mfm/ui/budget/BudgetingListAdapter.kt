@@ -1,43 +1,36 @@
 package io.github.kedaitayar.mfm.ui.budget
 
 import android.text.Editable
-import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.RecyclerViewItemBudgetingListBinding
 
-class BudgetingListAdapter :
+private const val TAG = "BudgetingListAdapter"
+
+class BudgetingListAdapter(private var listener: OnBudgetingListAdapterListener) :
     ListAdapter<BudgetListAdapterData, BudgetingListAdapter.BudgetingListViewHolder>(
         BudgetingListDiffCallback()
     ) {
-    private var budgetingAmountList = mutableMapOf<Int, String>()
+    private var totalBudgeted = 0.0
+
+    interface OnBudgetingListAdapterListener {
+        fun onAfterTextChanged(item: BudgetListAdapterData, editable: Editable?)
+    }
 
     inner class BudgetingListViewHolder(private val binding: RecyclerViewItemBudgetingListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.textInputEditAmount.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                    //not use
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    //not use
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    budgetingAmountList[adapterPosition] = s.toString()
-                }
-            })
+            binding.textInputEditAmount.doAfterTextChanged {
+                listener.onAfterTextChanged(getItem(adapterPosition), it)
+            }
         }
 
         fun bind(item: BudgetListAdapterData?) {
@@ -65,8 +58,8 @@ class BudgetingListAdapter :
         holder.bind(item)
     }
 
-    fun getBudgetingAmountList(): Map<Int, String> {
-        return budgetingAmountList
+    fun submitTotalBudgetedThisMonth(total: Double) {
+        totalBudgeted = total
     }
 }
 

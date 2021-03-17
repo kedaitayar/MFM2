@@ -166,7 +166,6 @@ interface AccountDao {
     @Query("SELECT SUM(transactionAmount) FROM `transaction` WHERE transactionType = 2")
     fun getTotalIncome(): LiveData<Double>
 
-    //TODO: unit test
     @Query(
         """
         SELECT SUM(transactionAmount) as transactionAmount
