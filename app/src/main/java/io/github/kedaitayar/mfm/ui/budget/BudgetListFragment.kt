@@ -102,9 +102,9 @@ class BudgetListFragment : Fragment() {
                 popupMenu.inflate(R.menu.menu_budget_list_item)
                 popupMenu.setOnMenuItemClickListener {
                     when (it.itemId) {
-                        R.id.detail -> {
-                            true
-                        }
+//                        R.id.detail -> {
+//                            true
+//                        }
                         R.id.edit -> {
                             val action =
                                 MainFragmentDirections.actionMainFragmentToEditBudgetFragment(budgetListAdapterData)

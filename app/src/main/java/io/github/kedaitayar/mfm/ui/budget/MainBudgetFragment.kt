@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -16,7 +17,7 @@ import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
 
 @AndroidEntryPoint
-class MainBudgetFragment: Fragment(R.layout.fragment_main_budget) {
+class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
     private val budgetViewModel: BudgetViewModel by viewModels()
     private var _binding: FragmentMainBudgetBinding? = null
     private val binding get() = _binding!!
@@ -51,7 +52,7 @@ class MainBudgetFragment: Fragment(R.layout.fragment_main_budget) {
         return binding.root
     }
 
-    private fun setupNotBudgeted(){
+    private fun setupNotBudgeted() {
         budgetViewModel.totalIncome.observe(viewLifecycleOwner, Observer {
             it?.let {
                 setAccountIncome(it)
@@ -66,12 +67,24 @@ class MainBudgetFragment: Fragment(R.layout.fragment_main_budget) {
 
     private fun setAccountIncome(totalIncome: Double) {
         this.totalIncome = totalIncome
-        binding.textViewNotBudgetedAmount.text = "RM " + (this.totalIncome - this.totalBudgeted).toString()
+        val amount = totalIncome - totalBudgeted
+        binding.textViewNotBudgetedAmount.text = "RM $amount"
+        if (amount < 0) {
+            binding.constraintLayoutNotBudgeted.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gRed))
+        } else {
+            binding.constraintLayoutNotBudgeted.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gGreen))
+        }
     }
 
     private fun setTotalBudgeted(totalBudgeted: Double) {
         this.totalBudgeted = totalBudgeted
-        binding.textViewNotBudgetedAmount.text = "RM " + (this.totalIncome - this.totalBudgeted).toString()
+        val amount = totalIncome - totalBudgeted
+        binding.textViewNotBudgetedAmount.text = "RM $amount"
+        if (amount < 0) {
+            binding.constraintLayoutNotBudgeted.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gRed))
+        } else {
+            binding.constraintLayoutNotBudgeted.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gGreen))
+        }
     }
 
     override fun onDestroyView() {
