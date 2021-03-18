@@ -24,7 +24,7 @@
             app:icon="@drawable/ic_baseline_chevron_left_24"
             app:iconPadding="0dp"
             app:iconSize="30dp"
-            app:iconTint="@android:color/black"
+            app:iconTint="?colorOnSurface"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,7 +42,7 @@
             app:icon="@drawable/ic_baseline_chevron_right_24"
             app:iconPadding="0dp"
             app:iconSize="30dp"
-            app:iconTint="@android:color/black"
+            app:iconTint="?colorOnSurface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:textAllCaps="false"
-            android:textColor="@android:color/black"
+            android:textColor="?colorOnSurface"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/button_left"
             app:layout_constraintEnd_toEndOf="parent"

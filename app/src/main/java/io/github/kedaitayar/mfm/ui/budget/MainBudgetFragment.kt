@@ -1,6 +1,7 @@
 package io.github.kedaitayar.mfm.ui.budget
 
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,8 @@ class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
     private val binding get() = _binding!!
     private var totalIncome: Double = 0.0
     private var totalBudgeted: Double = 0.0
+    private var green = 0
+    private var red = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,6 +33,8 @@ class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
     ): View {
         _binding = FragmentMainBudgetBinding.inflate(inflater, container, false)
         context ?: return binding.root
+
+        initColor()
 
         childFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container_date, MonthYearScrollFragment())
@@ -51,6 +56,14 @@ class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
         return binding.root
     }
 
+    private fun initColor() {
+        val typedValue = TypedValue()
+        requireContext().theme.resolveAttribute(R.attr.gGreen, typedValue, true)
+        green = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+        requireContext().theme.resolveAttribute(R.attr.gRed, typedValue, true)
+        red = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+    }
+
     private fun setupNotBudgeted() {
         budgetViewModel.totalIncome.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -69,9 +82,9 @@ class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
         val amount = totalIncome - totalBudgeted
         binding.textViewNotBudgetedAmount.text = "RM $amount"
         if (amount < 0) {
-            binding.constraintLayoutNotBudgeted.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gRed))
+            binding.constraintLayoutNotBudgeted.setBackgroundColor(red)
         } else {
-            binding.constraintLayoutNotBudgeted.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gGreen))
+            binding.constraintLayoutNotBudgeted.setBackgroundColor(green)
         }
     }
 
@@ -80,9 +93,9 @@ class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
         val amount = totalIncome - totalBudgeted
         binding.textViewNotBudgetedAmount.text = "RM $amount"
         if (amount < 0) {
-            binding.constraintLayoutNotBudgeted.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gRed))
+            binding.constraintLayoutNotBudgeted.setBackgroundColor(red)
         } else {
-            binding.constraintLayoutNotBudgeted.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gGreen))
+            binding.constraintLayoutNotBudgeted.setBackgroundColor(green)
         }
     }
 

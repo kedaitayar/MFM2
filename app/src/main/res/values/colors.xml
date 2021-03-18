@@ -8,7 +8,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="notWhite">#E1E2E1</color>
-    <color name="gGreen">#4CAF50</color>
-    <color name="gYellow">#F7941D</color>
-    <color name="gRed">#E53935</color>
+    <color name="gGreenLight">#4caf50</color>
+    <color name="gGreenDark">#2e7d32</color>
+    <color name="gYellowLight">#fbc02d</color>
+    <color name="gYellowDark">#ffa000</color>
+<!--    <color name="gYellow">#F7941D</color>-->
+    <color name="gRedLight">#e53935</color>
+    <color name="gRedDark">#d50000</color>
+<!--    <color name="gRed">#E53935</color>-->
+    <color name="customBackgroundColorLight">#E1E2E1</color>
+    <color name="customBackgroundColorDark">#212121</color>
 </resources>

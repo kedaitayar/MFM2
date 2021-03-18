@@ -35,7 +35,6 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:text="Account"
-                        android:textColor="@android:color/primary_text_light"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,7 +50,7 @@
                         app:icon="@drawable/ic_round_add_24"
                         app:iconPadding="0dp"
                         app:iconSize="32dp"
-                        app:iconTint="@android:color/primary_text_light"
+                        app:iconTint="?colorOnSurface"
                         app:layout_constraintBottom_toBottomOf="@+id/text_view_account"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/text_view_account" />

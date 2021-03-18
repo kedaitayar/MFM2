@@ -56,7 +56,8 @@ class AccountBudgetChartFragment : Fragment(R.layout.fragment_account_budget_cha
 
         binding.pieChart.apply {
             setDrawEntryLabels(false)
-            holeRadius = 60f
+//            holeRadius = 60f
+            isDrawHoleEnabled = false
             setTouchEnabled(false)
             description.isEnabled = false
         }

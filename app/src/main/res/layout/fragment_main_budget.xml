@@ -10,7 +10,7 @@
         android:id="@+id/constraint_layout_not_budgeted"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/gGreen"
+        android:background="?gGreen"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -71,7 +71,7 @@
         app:icon="@drawable/ic_round_add_24"
         app:iconPadding="0dp"
         app:iconSize="32dp"
-        app:iconTint="@android:color/primary_text_light"
+        app:iconTint="?colorOnSurface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/button_budgeting" />
 

@@ -1,5 +1,6 @@
 package io.github.kedaitayar.mfm.ui.budget
 
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
@@ -17,6 +18,20 @@ class BudgetListAdapter :
     ) {
     private var budgetType = 0
     private var listener: OnItemClickListener? = null
+    private var green = 0
+    private var yellow = 0
+    private var red = 0
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        val typedValue = TypedValue()
+        recyclerView.context.theme.resolveAttribute(R.attr.gGreen, typedValue, true)
+        green = ContextCompat.getColor(recyclerView.context, typedValue.resourceId)
+        recyclerView.context.theme.resolveAttribute(R.attr.gYellow, typedValue, true)
+        yellow = ContextCompat.getColor(recyclerView.context, typedValue.resourceId)
+        recyclerView.context.theme.resolveAttribute(R.attr.gRed, typedValue, true)
+        red = ContextCompat.getColor(recyclerView.context, typedValue.resourceId)
+    }
 
     interface OnItemClickListener {
         fun onPopupMenuButtonClick(
@@ -43,14 +58,14 @@ class BudgetListAdapter :
                 val goalPercentage = ((item.budgetAllocation / item.budgetGoal) * 100).toInt()
                 textViewBudgeted.piePercent = goalPercentage
                 if (goalPercentage >= 100) {
-                    textViewBudgeted.bgColor = ContextCompat.getColor(textViewBudgeted.context, R.color.gGreen)
+                    textViewBudgeted.bgColor = green
                 } else {
-                    textViewBudgeted.bgColor = ContextCompat.getColor(textViewBudgeted.context, R.color.gYellow)
+                    textViewBudgeted.bgColor = yellow
                 }
                 if (item.budgetUsed <= item.budgetAllocation) {
-                    textViewAvailable.background.setTint(ContextCompat.getColor(textViewBudgeted.context, R.color.gGreen))
+                    textViewAvailable.background.setTint(green)
                 } else {
-                    textViewAvailable.background.setTint(ContextCompat.getColor(textViewBudgeted.context, R.color.gRed))
+                    textViewAvailable.background.setTint(red)
                 }
                 when (budgetType) {
                     1 -> {

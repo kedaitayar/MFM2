@@ -2,6 +2,7 @@ package io.github.kedaitayar.mfm.ui.budget
 
 import android.os.Bundle
 import android.text.Editable
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -167,10 +168,16 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAd
             totalIncome - totalBudgeted - (budgetingAmountMonthly - totalMonthlyBudgetedThisMonth) - (budgetingAmountYearly - totalYearlyBudgetedThisMonth)
         binding.textViewNotBudgetedAmount.text = "RM $totalUnbudgeted"
 
+        val typedValue = TypedValue()
+        requireContext().theme.resolveAttribute(R.attr.gGreen, typedValue, true)
+        val green = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+        requireContext().theme.resolveAttribute(R.attr.gRed, typedValue, true)
+        val red = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+
         if (totalUnbudgeted < 0) {
-            binding.constraintLayoutNotBudgeted.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gRed))
+            binding.constraintLayoutNotBudgeted.setBackgroundColor(red)
         } else {
-            binding.constraintLayoutNotBudgeted.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gGreen))
+            binding.constraintLayoutNotBudgeted.setBackgroundColor(green)
         }
     }
 

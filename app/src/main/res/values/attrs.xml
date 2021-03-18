@@ -9,4 +9,8 @@
         <attr name="ringStrokeWidth" format="integer" />
         <attr name="ringColor" format="color" />
     </declare-styleable>
+    <attr name="customBackgroundColor" format="color"/>
+    <attr name="gGreen" format="color"/>
+    <attr name="gYellow" format="color"/>
+    <attr name="gRed" format="color"/>
 </resources>

@@ -2,6 +2,7 @@ package io.github.kedaitayar.mfm.ui.account
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -51,12 +52,21 @@ class AccountTransactionGraphFragment : Fragment(R.layout.fragment_account_trans
     }
 
     private fun setupCombinedGraph() {
+        val typedValue = TypedValue()
+        requireContext().theme.resolveAttribute(R.attr.gGreen, typedValue, true)
+        val green = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+        requireContext().theme.resolveAttribute(R.attr.gRed, typedValue, true)
+        val red = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+        requireContext().theme.resolveAttribute(R.attr.colorOnSurface, typedValue, true)
+        val colorOnSurface = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+
         binding.combinedChart.apply {
             description.isEnabled = false
             drawOrder = arrayOf(CombinedChart.DrawOrder.BAR, CombinedChart.DrawOrder.BUBBLE, CombinedChart.DrawOrder.CANDLE, CombinedChart.DrawOrder.LINE, CombinedChart.DrawOrder.SCATTER)
             setDrawGridBackground(false)
             legend.isEnabled = false
             xAxis.position = XAxis.XAxisPosition.BOTH_SIDED
+            xAxis.textColor = colorOnSurface
             xAxis.valueFormatter = object : ValueFormatter(){
                 override fun getFormattedValue(value: Float): String {
                     return when (value) {
@@ -72,8 +82,10 @@ class AccountTransactionGraphFragment : Fragment(R.layout.fragment_account_trans
             extraBottomOffset = 5f
             extraTopOffset = 5f
             axisLeft.setDrawGridLines(false)
-            axisRight.setDrawGridLines(false)
             axisLeft.setDrawZeroLine(true)
+            axisLeft.textColor = colorOnSurface
+            axisRight.setDrawGridLines(false)
+            axisRight.textColor = colorOnSurface
         }
 
         val dataMap: MutableMap<Int, AccountTransactionChartData> = mutableMapOf()
@@ -121,8 +133,8 @@ class AccountTransactionGraphFragment : Fragment(R.layout.fragment_account_trans
 
             val barDataSet = BarDataSet(barEntries, "bar label")
             barDataSet.colors = arrayListOf(
-                ContextCompat.getColor(requireContext(), R.color.gGreen),
-                ContextCompat.getColor(requireContext(), R.color.gRed)
+                green,
+                red
             )
             barDataSet.setDrawValues(false)
             val barData = BarData(barDataSet)
@@ -131,8 +143,8 @@ class AccountTransactionGraphFragment : Fragment(R.layout.fragment_account_trans
             lineDataSet.apply {
                 setDrawValues(false)
                 mode = LineDataSet.Mode.LINEAR
-                color = Color.DKGRAY
-                setCircleColor(Color.DKGRAY)
+                color = colorOnSurface
+                setCircleColor(colorOnSurface)
                 lineWidth = 2f
                 circleRadius = 2f
             }

@@ -68,7 +68,7 @@ class PillPieCustomView @JvmOverloads constructor(context: Context, attrs: Attri
         canvas?.drawRoundRect(rect01, radius * 0.7f, radius * 0.7f, paint)
         canvas?.restore()
 
-        paint.color = Color.GRAY
+        paint.color = Color.parseColor("#777777")
         val rect02 = RectF(height * 0.2f, height * 0.2f, height * 0.8f, height * 0.8f)
         canvas?.drawArc(rect02, -90f, piePercent.toPiePercentageDiscrete(), true, paint)
     }

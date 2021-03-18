@@ -1,13 +1,17 @@
 package io.github.kedaitayar.mfm.ui.transaction
 
+import android.content.Context
 import android.graphics.Color
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData
 import io.github.kedaitayar.mfm.databinding.RecyclerViewItemTransctionListBinding
 
@@ -16,6 +20,14 @@ class TransactionListAdapter :
         TransactionListDiffCallback()
     ) {
     private var listener: OnItemClickListener? = null
+    private var colorOnSurface = 0
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        val typedValue = TypedValue()
+        recyclerView.context.theme.resolveAttribute(R.attr.colorOnSurface, typedValue, true)
+        colorOnSurface = ContextCompat.getColor(recyclerView.context, typedValue.resourceId)
+    }
 
     interface OnItemClickListener {
         fun onPopupMenuButtonClick(
@@ -55,7 +67,7 @@ class TransactionListAdapter :
                             textViewTransactionBudget.text = item.transactionTypeName
                             textViewTransactionAccountTo.text = item.transactionAccountTransferToName
                             textViewTransactionAccountTo.visibility = View.VISIBLE
-                            textViewTransactionAmount.setTextColor(Color.parseColor("#000000"))
+                            textViewTransactionAmount.setTextColor(colorOnSurface)
                         }
                     }
                 }
