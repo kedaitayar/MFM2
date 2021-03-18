@@ -1,11 +1,9 @@
 package io.github.kedaitayar.mfm.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.kedaitayar.mfm.data.podata.SelectedDate
 import io.github.kedaitayar.mfm.data.entity.BudgetType
 import io.github.kedaitayar.mfm.data.repository.BudgetRepository
 import io.github.kedaitayar.mfm.data.repository.SelectedDateRepository
@@ -14,8 +12,6 @@ import io.github.kedaitayar.mfm.data.entity.BudgetTransaction
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import java.time.LocalDateTime
 import javax.inject.Inject
-
-private const val TAG = "BudgetViewModel"
 
 @HiltViewModel
 class BudgetViewModel @Inject constructor(
@@ -27,17 +23,14 @@ class BudgetViewModel @Inject constructor(
     val selectedDate: LiveData<LocalDateTime> = selectedDateRepository.selectedDate
     val monthlyBudgetListData: LiveData<List<BudgetListAdapterData>> =
         Transformations.switchMap(selectedDate) {
-            Log.i(TAG, "monthlyBudgetListData: ${selectedDate.value}")
             budgetRepository.getBudgetMonthlyListAdapter(it.monthValue, it.year)
         }
     val yearlyBudgetListData: LiveData<List<BudgetListAdapterData>> =
         Transformations.switchMap(selectedDate) {
-            Log.i(TAG, "yearlyBudgetListData: ${selectedDate.value}")
             budgetRepository.getBudgetYearlyListAdapter(it.monthValue, it.year)
         }
     val budgetingListData: LiveData<List<BudgetListAdapterData>> =
         Transformations.switchMap(selectedDate) {
-            Log.i(TAG, "budgetingListData: ${selectedDate.value}")
             budgetRepository.getBudgetingListAdapterDO(it.monthValue, it.year)
         }
     val monthlyBudgetingListData: LiveData<List<BudgetListAdapterData>> =

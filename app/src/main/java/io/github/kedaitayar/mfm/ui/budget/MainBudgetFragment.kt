@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
-import io.github.kedaitayar.mfm.databinding.FragmentMainBinding
 import io.github.kedaitayar.mfm.databinding.FragmentMainBudgetBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel

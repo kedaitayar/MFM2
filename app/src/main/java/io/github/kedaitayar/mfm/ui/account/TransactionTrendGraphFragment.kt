@@ -2,7 +2,6 @@ package io.github.kedaitayar.mfm.ui.account
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,20 +14,12 @@ import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
-import io.github.kedaitayar.mfm.data.podata.AccountTransactionChartData
 import io.github.kedaitayar.mfm.data.podata.TransactionGraphData
-import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentTransactionTrendGraphBinding
 import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
 import java.time.temporal.WeekFields
 import java.util.*
-import kotlin.math.roundToInt
-
-private const val TAG = "TransactionTrendGraphFr"
 
 @AndroidEntryPoint
 class TransactionTrendGraphFragment : Fragment(R.layout.fragment_transaction_trend_graph) {

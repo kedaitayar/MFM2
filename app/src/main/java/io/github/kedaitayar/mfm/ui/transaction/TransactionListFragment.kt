@@ -1,7 +1,6 @@
 package io.github.kedaitayar.mfm.ui.transaction
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,19 +13,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
-import io.github.kedaitayar.mfm.data.entity.Account
-import io.github.kedaitayar.mfm.data.entity.Transaction
-import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentTransactionListBinding
-import io.github.kedaitayar.mfm.ui.account.AccountListAdapter
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
-private const val TAG = "TransactionListFragment"
 
 @AndroidEntryPoint
 class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {

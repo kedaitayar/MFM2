@@ -1,7 +1,6 @@
 package io.github.kedaitayar.mfm.ui.account
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,8 +18,6 @@ import io.github.kedaitayar.mfm.databinding.FragmentAccountListBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.viewmodels.AccountViewModel
 
-private const val TAG = "AccountListFragment"
-
 @AndroidEntryPoint
 class AccountListFragment : Fragment(R.layout.fragment_account_list) {
     private val accountViewModel: AccountViewModel by viewModels()
@@ -30,7 +27,7 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAccountListBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
@@ -56,13 +53,11 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
     }
 
     private fun popupMenuSetup(adapter: AccountListAdapter) {
-        Log.i(TAG, "popupMenuSetup: ")
         adapter.setOnItemClickListener(object : AccountListAdapter.OnItemClickListener {
             override fun onPopupMenuButtonClick(
                 accountListAdapterData: AccountListAdapterData,
                 popupMenuButton: Button
             ) {
-                Log.i(TAG, "onPopupMenuButtonClick: ")
                 val popupMenu = PopupMenu(this@AccountListFragment.context, popupMenuButton)
                 popupMenu.inflate(R.menu.menu_account_list_item)
                 popupMenu.setOnMenuItemClickListener {

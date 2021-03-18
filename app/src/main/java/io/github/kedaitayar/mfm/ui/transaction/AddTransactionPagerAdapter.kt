@@ -2,11 +2,6 @@ package io.github.kedaitayar.mfm.ui.transaction
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import io.github.kedaitayar.mfm.ui.account.MainAccountFragment
-import io.github.kedaitayar.mfm.ui.budget.MainBudgetFragment
-import io.github.kedaitayar.mfm.ui.main.ACCOUNT_PAGE_INDEX
-import io.github.kedaitayar.mfm.ui.main.BUDGET_PAGE_INDEX
-import io.github.kedaitayar.mfm.ui.main.TRANSACTION_PAGE_INDEX
 import java.lang.IndexOutOfBoundsException
 
 const val EXPENSE_PAGE_INDEX = 0

@@ -1,6 +1,5 @@
 package io.github.kedaitayar.mfm.ui.budget
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
@@ -10,10 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
-import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData
 import io.github.kedaitayar.mfm.databinding.RecyclerViewItemBudgetListBinding
-
-private const val TAG = "BudgetListAdapter"
 
 class BudgetListAdapter :
     ListAdapter<BudgetListAdapterData, BudgetListAdapter.BudgetListViewHolder>(
@@ -41,7 +37,6 @@ class BudgetListAdapter :
         }
 
         fun bind(item: BudgetListAdapterData) {
-            Log.i(TAG, "bind: $item")
             binding.apply {
                 textViewBudgetName.text = item.budgetName
                 textViewBudgeted.text = item.budgetAllocation.toString()

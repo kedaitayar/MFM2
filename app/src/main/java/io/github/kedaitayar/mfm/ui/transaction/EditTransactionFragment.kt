@@ -1,7 +1,6 @@
 package io.github.kedaitayar.mfm.ui.transaction
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,13 +15,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.Transaction
 import io.github.kedaitayar.mfm.databinding.FragmentEditTransactionBinding
-import io.github.kedaitayar.mfm.ui.account.MainAccountFragment
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.viewmodels.SharedViewModel
 import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
 import kotlinx.coroutines.*
-
-private const val TAG = "EditTransactionFragment"
 
 @AndroidEntryPoint
 class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
@@ -47,7 +43,6 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
     private fun setupFragment() {
         CoroutineScope(Dispatchers.IO).launch {
             val transaction = transactionViewModel.getTransactionById(args.transactionId)
-            Log.i(TAG, "setupFragment: $transaction")
             val fragment = when (transaction.transactionType) {
                 1 -> {
                     ExpenseTransactionFragment.newInstance(args.transactionId)

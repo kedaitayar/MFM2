@@ -2,7 +2,6 @@ package io.github.kedaitayar.mfm.ui.account
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,13 +19,11 @@ import io.github.kedaitayar.mfm.databinding.FragmentAccountTransactionGraphBindi
 import io.github.kedaitayar.mfm.viewmodels.AccountViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
 
 private const val ARG_ACCOUNT_ID =
     "io.github.kedaitayar.mfm.ui.account.AccountTransactionGraphFragment.accountId"
-private const val TAG = "AccountTransactionGraph"
 
 @AndroidEntryPoint
 class AccountTransactionGraphFragment : Fragment(R.layout.fragment_account_transaction_graph) {
@@ -89,7 +86,6 @@ class AccountTransactionGraphFragment : Fragment(R.layout.fragment_account_trans
                 OffsetDateTime.now().monthValue,
                 OffsetDateTime.now().year
             )
-            Log.i(TAG, "setupCombinedGraph: ${accountTransactionChartData}")
 
             //map data to its day
             for (item in accountTransactionChartData) {

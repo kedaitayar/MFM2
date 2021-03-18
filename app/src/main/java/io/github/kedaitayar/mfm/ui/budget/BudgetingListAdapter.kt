@@ -1,18 +1,14 @@
 package io.github.kedaitayar.mfm.ui.budget
 
 import android.text.Editable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.RecyclerViewItemBudgetingListBinding
-
-private const val TAG = "BudgetingListAdapter"
 
 class BudgetingListAdapter(private var listener: OnBudgetingListAdapterListener) :
     ListAdapter<BudgetListAdapterData, BudgetingListAdapter.BudgetingListViewHolder>(
@@ -33,11 +29,19 @@ class BudgetingListAdapter(private var listener: OnBudgetingListAdapterListener)
             }
         }
 
-        fun bind(item: BudgetListAdapterData?) {
+        fun bind(item: BudgetListAdapterData) {
             binding.apply {
-                textViewBudget.text = item?.budgetName
-                textViewGoal.text = item?.budgetGoal.toString()
-                textInputEditAmount.setText(item?.budgetAllocation.toString())
+                textViewBudget.text = item.budgetName
+                textInputEditAmount.setText(item.budgetAllocation.toString())
+                when (item.budgetTypeId) {
+                    1L -> {
+                        textViewGoal.text = item.budgetGoal.toString()
+                    }
+                    2L -> {
+                        val remainingGoal = item.budgetGoal - item.budgetTotalPrevAllocation
+                        textViewGoal.text = remainingGoal.toString()
+                    }
+                }
             }
         }
 

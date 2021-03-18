@@ -1,6 +1,5 @@
 package io.github.kedaitayar.mfm.ui.account
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -10,8 +9,6 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import io.github.kedaitayar.mfm.data.podata.AccountTransactionBudgetData
 import io.github.kedaitayar.mfm.databinding.RecyclerViewItemAccountBudgetChartListBinding
 import java.util.ArrayList
-
-private const val TAG = "AccountBudgetChartListA"
 
 class AccountBudgetChartListAdapter :
     ListAdapter<AccountTransactionBudgetData, AccountBudgetChartListAdapter.AccountBudgetChartListViewHolder>(

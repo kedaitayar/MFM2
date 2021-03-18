@@ -2,19 +2,15 @@ package io.github.kedaitayar.mfm.ui.budget
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.BudgetTransaction
@@ -27,8 +23,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.format.TextStyle
 import java.util.*
-
-private const val TAG = "BudgetingFragment"
 
 @AndroidEntryPoint
 class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAdapter.OnBudgetingListAdapterListener {
@@ -108,7 +102,6 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAd
 
         budgetViewModel.selectedDate.observe(viewLifecycleOwner, Observer {
             it?.let {
-                Log.i(TAG, "setupToolbar selectedDate: $it")
                 binding.topAppBar.title = it.month.getDisplayName(
                     TextStyle.FULL,
                     Locale.ENGLISH

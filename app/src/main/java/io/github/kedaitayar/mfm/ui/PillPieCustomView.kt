@@ -3,13 +3,8 @@ package io.github.kedaitayar.mfm.ui
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
-import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.ContextCompat
 import io.github.kedaitayar.mfm.R
-
-private const val TAG = "PillPieCustomView"
 
 class PillPieCustomView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0): AppCompatTextView(context, attrs, defStyleAttr) {
     private val path = Path()

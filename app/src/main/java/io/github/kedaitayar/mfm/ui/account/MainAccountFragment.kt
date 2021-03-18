@@ -1,7 +1,6 @@
 package io.github.kedaitayar.mfm.ui.account
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,16 +9,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMainAccountBinding
-import io.github.kedaitayar.mfm.ui.main.MainFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.viewmodels.AccountViewModel
 import io.github.kedaitayar.mfm.viewmodels.SharedViewModel
-
-private const val TAG = "MainAccountFragment"
 
 @AndroidEntryPoint
 class MainAccountFragment : Fragment(R.layout.fragment_main_account) {

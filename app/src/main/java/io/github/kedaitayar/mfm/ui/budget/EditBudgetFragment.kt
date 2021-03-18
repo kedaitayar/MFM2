@@ -1,7 +1,6 @@
 package io.github.kedaitayar.mfm.ui.budget
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,18 +16,12 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.Budget
-import io.github.kedaitayar.mfm.data.entity.Transaction
 import io.github.kedaitayar.mfm.data.podata.BudgetTypeDropdownData
-import io.github.kedaitayar.mfm.databinding.FragmentAddBudgetBinding
 import io.github.kedaitayar.mfm.databinding.FragmentEditBudgetBinding
-import io.github.kedaitayar.mfm.ui.transaction.EditTransactionFragment
-import io.github.kedaitayar.mfm.ui.transaction.EditTransactionFragmentArgs
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
 import io.github.kedaitayar.mfm.viewmodels.SharedViewModel
 import kotlinx.coroutines.*
-
-private const val TAG = "EditBudgetFragment"
 
 @AndroidEntryPoint
 class EditBudgetFragment : Fragment(R.layout.fragment_edit_budget) {

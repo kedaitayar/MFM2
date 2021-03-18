@@ -1,7 +1,6 @@
 package io.github.kedaitayar.mfm.ui.budget
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,10 +17,8 @@ import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentBudgetListBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
-import io.github.kedaitayar.mfm.ui.transaction.MainTransactionFragment
 import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
 
-private const val TAG = "BudgetListFragment"
 private const val ARG_BUDGET_TYPE =
     "io.github.kedaitayar.mfm.ui.budget.BudgetListFragment.budgetType"
 
