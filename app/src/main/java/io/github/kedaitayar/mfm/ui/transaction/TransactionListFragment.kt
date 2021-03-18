@@ -51,11 +51,15 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         transactionViewModel.allTransactionListAdapterData.observe(viewLifecycleOwner, Observer {
-            it?.let { list ->
-                for (item in list) {
-                    Log.i(TAG, "setupRecyclerView: $item")
+            if (it == null || it.isEmpty()) {
+                if (parentFragment is MainTransactionFragment) {
+                    (parentFragment as MainTransactionFragment).showEmptyView()
                 }
-                adapter.submitList(list)
+            } else {
+                if (parentFragment is MainTransactionFragment) {
+                    (parentFragment as MainTransactionFragment).hideEmptyView()
+                }
+                adapter.submitList(it)
             }
         })
         popupMenuSetup(adapter)

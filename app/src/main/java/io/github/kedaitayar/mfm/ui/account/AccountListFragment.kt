@@ -45,7 +45,10 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
         binding.recyclerViewAccountList.adapter = adapter
         binding.recyclerViewAccountList.layoutManager = GridLayoutManager(requireContext(), 2)
         accountViewModel.accountListAdapterData.observe(viewLifecycleOwner, Observer {
-            it?.let {
+            if (it == null || it.isEmpty()) {
+                binding.linearLayoutEmptyView.visibility = View.VISIBLE
+            } else {
+                binding.linearLayoutEmptyView.visibility = View.GONE
                 adapter.submitList(it)
             }
         })

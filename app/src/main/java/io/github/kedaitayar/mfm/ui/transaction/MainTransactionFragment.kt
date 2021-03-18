@@ -29,6 +29,14 @@ class MainTransactionFragment: Fragment(R.layout.fragment_main_transaction) {
         return binding.root
     }
 
+    fun showEmptyView() {
+        binding.linearLayoutEmptyView.visibility = View.VISIBLE
+    }
+
+    fun hideEmptyView() {
+        binding.linearLayoutEmptyView.visibility = View.GONE
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

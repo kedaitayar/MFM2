@@ -18,6 +18,7 @@ import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentBudgetListBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
+import io.github.kedaitayar.mfm.ui.transaction.MainTransactionFragment
 import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
 
 private const val TAG = "BudgetListFragment"
@@ -69,10 +70,21 @@ class BudgetListFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         livedata.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                for (item in it) {
-                    Log.i(TAG, "setupRecyclerViewData: $it")
+            if (it == null || it.isEmpty()) {
+                when (budgetType) {
+                    1 -> {
+                        binding.textViewEmptyViewTopText.text = "Monthly budget is empty"
+                    }
+                    2 -> {
+                        binding.textViewEmptyViewTopText.text = "Yearly budget is empty"
+                    }
+                    else -> {
+
+                    }
                 }
+                binding.linearLayoutEmptyView.visibility = View.VISIBLE
+            } else {
+                binding.linearLayoutEmptyView.visibility = View.GONE
                 adapter.submitList(it)
             }
         })
@@ -94,7 +106,8 @@ class BudgetListFragment : Fragment() {
                             true
                         }
                         R.id.edit -> {
-                            val action = MainFragmentDirections.actionMainFragmentToEditBudgetFragment(budgetListAdapterData)
+                            val action =
+                                MainFragmentDirections.actionMainFragmentToEditBudgetFragment(budgetListAdapterData)
                             findNavController().navigate(action)
                             true
                         }

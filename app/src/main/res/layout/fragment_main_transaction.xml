@@ -6,6 +6,36 @@
     android:layout_height="match_parent"
     tools:context="ui.transaction.MainTransactionFragment">
 
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linear_layout_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:visibility="visible">
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextStyle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.5"
+            android:text="Transaction is empty" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextStyle5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="64dp"
+            android:alpha="0.5"
+            android:gravity="center"
+            android:text="Click plus icon button at the bottom right to add transaction" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_view_transaction_list"
         android:layout_width="match_parent"
