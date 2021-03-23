@@ -58,7 +58,7 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
             val transaction = transactionViewModel.getTransactionById(transactionId)
             withContext(Dispatchers.Main) {
                 transactionViewModel.allAccount.observe(viewLifecycleOwner, Observer { list ->
-                    binding.autoCompleteAccount.setText(list.firstOrNull { it.accountId == transaction.transactionAccountId }?.accountName)
+                    binding.autoCompleteAccount.setText(list.firstOrNull { it.accountId == transaction.transactionAccountId }?.accountName, false)
                 })
                 binding.textInputEditAmount.setText(transaction.transactionAmount.toString())
             }
@@ -94,11 +94,11 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
     override fun onButtonAddClick() {
         val accountName = binding.autoCompleteAccount.text.toString()
         val transactionAmount = binding.textInputEditAmount.text.toString()
-        if (accountName.isNullOrBlank()) {
+        if (accountName.isBlank()) {
             if (parentFragment is AddTransactionFragment) {
                 (parentFragment as AddTransactionFragment).showSnackbar("Account cannot be empty")
             }
-        } else if (transactionAmount.isNullOrBlank()) {
+        } else if (transactionAmount.isBlank()) {
             if (parentFragment is AddTransactionFragment) {
                 (parentFragment as AddTransactionFragment).showSnackbar("Amount cannot be empty")
             }
@@ -131,11 +131,11 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
     override fun onButtonSaveClick(transaction: Transaction) {
         val accountName = binding.autoCompleteAccount.text.toString()
         val transactionAmount = binding.textInputEditAmount.text.toString()
-        if (accountName.isNullOrBlank()) {
+        if (accountName.isBlank()) {
             if (parentFragment is EditTransactionFragment) {
                 (parentFragment as EditTransactionFragment).showSnackbar("Account cannot be empty")
             }
-        } else if (transactionAmount.isNullOrBlank()) {
+        } else if (transactionAmount.isBlank()) {
             if (parentFragment is EditTransactionFragment) {
                 (parentFragment as EditTransactionFragment).showSnackbar("Amount cannot be empty")
             }

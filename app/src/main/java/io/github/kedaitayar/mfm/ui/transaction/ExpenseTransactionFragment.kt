@@ -1,6 +1,8 @@
 package io.github.kedaitayar.mfm.ui.transaction
 
 import android.os.Bundle
+import android.text.Editable
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -66,10 +68,14 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
             val transaction = transactionViewModel.getTransactionById(transactionId)
             withContext(Dispatchers.Main) {
                 transactionViewModel.allAccount.observe(viewLifecycleOwner, Observer { list ->
-                    binding.autoCompleteAccount.setText(list.firstOrNull { it.accountId == transaction.transactionAccountId }?.accountName)
+                    list?.let {
+                        binding.autoCompleteAccount.setText(list.firstOrNull { it.accountId == transaction.transactionAccountId }?.accountName, false)
+                    }
                 })
                 transactionViewModel.allBudget.observe(viewLifecycleOwner, Observer { list ->
-                    binding.autoCompleteBudget.setText(list.firstOrNull { it.budgetId == transaction.transactionBudgetId }?.budgetName)
+                    list?.let {
+                        binding.autoCompleteBudget.setText(list.firstOrNull { it.budgetId == transaction.transactionBudgetId }?.budgetName, false)
+                    }
                 })
                 binding.textInputEditAmount.setText(transaction.transactionAmount.toString())
             }
@@ -110,15 +116,15 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
         val accountName = binding.autoCompleteAccount.text.toString()
         val budgetName = binding.autoCompleteBudget.text.toString()
         val transactionAmount = binding.textInputEditAmount.text.toString()
-        if (accountName.isNullOrBlank()) {
+        if (accountName.isBlank()) {
             if (parentFragment is AddTransactionFragment) {
                 (parentFragment as AddTransactionFragment).showSnackbar("Account cannot be empty")
             }
-        } else if (budgetName.isNullOrBlank()) {
+        } else if (budgetName.isBlank()) {
             if (parentFragment is AddTransactionFragment) {
                 (parentFragment as AddTransactionFragment).showSnackbar("Budget cannot be empty")
             }
-        } else if (transactionAmount.isNullOrBlank()) {
+        } else if (transactionAmount.isBlank()) {
             if (parentFragment is AddTransactionFragment) {
                 (parentFragment as AddTransactionFragment).showSnackbar("Amount cannot be empty")
             }
@@ -157,15 +163,15 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
         val accountName = binding.autoCompleteAccount.text.toString()
         val budgetName = binding.autoCompleteBudget.text.toString()
         val transactionAmount = binding.textInputEditAmount.text.toString()
-        if (accountName.isNullOrBlank()) {
+        if (accountName.isBlank()) {
             if (parentFragment is EditTransactionFragment) {
                 (parentFragment as EditTransactionFragment).showSnackbar("Account cannot be empty")
             }
-        } else if (budgetName.isNullOrBlank()) {
+        } else if (budgetName.isBlank()) {
             if (parentFragment is EditTransactionFragment) {
                 (parentFragment as EditTransactionFragment).showSnackbar("Budget cannot be empty")
             }
-        } else if (transactionAmount.isNullOrBlank()) {
+        } else if (transactionAmount.isBlank()) {
             if (parentFragment is EditTransactionFragment) {
                 (parentFragment as EditTransactionFragment).showSnackbar("Amount cannot be empty")
             }

@@ -60,8 +60,8 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
             val transaction = transactionViewModel.getTransactionById(transactionId)
             withContext(Dispatchers.Main) {
                 transactionViewModel.allAccount.observe(viewLifecycleOwner, Observer { list ->
-                    binding.autoCompleteTransferFrom.setText(list.firstOrNull { it.accountId == transaction.transactionAccountId }?.accountName)
-                    binding.autoCompleteTransferTo.setText(list.firstOrNull { it.accountId == transaction.transactionAccountTransferTo }?.accountName)
+                    binding.autoCompleteTransferFrom.setText(list.firstOrNull { it.accountId == transaction.transactionAccountId }?.accountName, false)
+                    binding.autoCompleteTransferTo.setText(list.firstOrNull { it.accountId == transaction.transactionAccountTransferTo }?.accountName, false)
                 })
                 binding.textInputEditAmount.setText(transaction.transactionAmount.toString())
             }
@@ -112,15 +112,15 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
         val accountFromDropdown = binding.autoCompleteTransferFrom.text.toString()
         val accountToDropdown = binding.autoCompleteTransferTo.text.toString()
         val transactionAmount = binding.textInputEditAmount.text.toString()
-        if (accountFromDropdown.isNullOrBlank()) {
+        if (accountFromDropdown.isBlank()) {
             if (parentFragment is AddTransactionFragment) {
                 (parentFragment as AddTransactionFragment).showSnackbar("Account cannot be empty")
             }
-        } else if (accountToDropdown.isNullOrBlank()) {
+        } else if (accountToDropdown.isBlank()) {
             if (parentFragment is AddTransactionFragment) {
                 (parentFragment as AddTransactionFragment).showSnackbar("Budget cannot be empty")
             }
-        } else if (transactionAmount.isNullOrBlank()) {
+        } else if (transactionAmount.isBlank()) {
             if (parentFragment is AddTransactionFragment) {
                 (parentFragment as AddTransactionFragment).showSnackbar("Amount cannot be empty")
             }
@@ -161,15 +161,15 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
         val accountFromDropdown = binding.autoCompleteTransferFrom.text.toString()
         val accountToDropdown = binding.autoCompleteTransferTo.text.toString()
         val transactionAmount = binding.textInputEditAmount.text.toString()
-        if (accountFromDropdown.isNullOrBlank()) {
+        if (accountFromDropdown.isBlank()) {
             if (parentFragment is EditTransactionFragment) {
                 (parentFragment as EditTransactionFragment).showSnackbar("Account cannot be empty")
             }
-        } else if (accountToDropdown.isNullOrBlank()) {
+        } else if (accountToDropdown.isBlank()) {
             if (parentFragment is EditTransactionFragment) {
                 (parentFragment as EditTransactionFragment).showSnackbar("Budget cannot be empty")
             }
-        } else if (transactionAmount.isNullOrBlank()) {
+        } else if (transactionAmount.isBlank()) {
             if (parentFragment is EditTransactionFragment) {
                 (parentFragment as EditTransactionFragment).showSnackbar("Amount cannot be empty")
             }
