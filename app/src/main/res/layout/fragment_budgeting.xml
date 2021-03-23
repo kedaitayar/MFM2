@@ -84,12 +84,13 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/text_view_budget"
                             style="@style/TextStyle2"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="4dp"
                             android:text="Monthly Budget"
-                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/text_view_budgeted"
+                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <com.google.android.material.textview.MaterialTextView
@@ -105,12 +106,21 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/text_view_available"
                             style="@style/TextStyle2"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="18dp"
                             android:text="Goal"
+                            android:textAlignment="textEnd"
                             app:layout_constraintBaseline_toBaselineOf="@+id/text_view_budget"
-                            app:layout_constraintRight_toRightOf="parent" />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/text_view_budgeted" />
+
+                        <androidx.constraintlayout.widget.Barrier
+                            android:id="@+id/barrier"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:barrierDirection="bottom"
+                            app:constraint_referenced_ids="text_view_budget, text_view_budgeted, text_view_available"/>
 
                         <View
                             android:id="@+id/divider"
@@ -118,7 +128,7 @@
                             android:layout_height="1dp"
                             android:layout_marginTop="4dp"
                             android:background="?android:attr/listDivider"
-                            app:layout_constraintTop_toBottomOf="@+id/text_view_budget" />
+                            app:layout_constraintTop_toBottomOf="@+id/barrier" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recycler_view_budgeting"
@@ -141,21 +151,23 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/text_view_budget2"
                             style="@style/TextStyle2"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:text="Yearly Budget"
-                            app:layout_constraintBottom_toBottomOf="@+id/text_view_available2"
-                            app:layout_constraintLeft_toLeftOf="parent" />
+                            android:layout_marginTop="4dp"
+                            android:text="Monthly Budget"
+                            app:layout_constraintEnd_toStartOf="@+id/text_view_budgeted2"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/text_view_budgeted2"
                             style="@style/TextStyle2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="116dp"
+                            android:layout_marginEnd="116dp"
                             android:text="Budgeted"
-                            app:layout_constraintBottom_toBottomOf="@+id/text_view_available2"
+                            app:layout_constraintBaseline_toBaselineOf="@+id/text_view_budget2"
                             app:layout_constraintRight_toRightOf="parent" />
 
                         <com.google.android.material.textview.MaterialTextView
@@ -163,22 +175,19 @@
                             style="@style/TextStyle2"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginTop="4dp"
                             android:layout_marginEnd="18dp"
-                            android:layout_marginBottom="4dp"
                             android:text="Remaining Goal"
                             android:textAlignment="textEnd"
+                            app:layout_constraintBaseline_toBaselineOf="@+id/text_view_budget2"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/text_view_budgeted2"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintStart_toEndOf="@+id/text_view_budgeted2" />
 
                         <androidx.constraintlayout.widget.Barrier
                             android:id="@+id/barrier2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:barrierDirection="bottom"
-                            app:constraint_referenced_ids="text_view_budget2, text_view_budgeted2, text_view_available2" />
+                            app:constraint_referenced_ids="text_view_budget2, text_view_budgeted2, text_view_available2"/>
 
                         <View
                             android:id="@+id/divider2"

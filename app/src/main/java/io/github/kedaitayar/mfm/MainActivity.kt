@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        testData()
+//        testData()
 //        runBlocking {
 //            var budgetType = BudgetType(budgetTypeId = 1, budgetTypeName = "Monthly")
 //            budgetViewModel.insert(budgetType)

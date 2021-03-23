@@ -1,6 +1,7 @@
 package io.github.kedaitayar.mfm.ui.account
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
@@ -40,7 +42,14 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
 
     private fun recyclerViewSetup(adapter: AccountListAdapter) {
         binding.recyclerViewAccountList.adapter = adapter
-        binding.recyclerViewAccountList.layoutManager = GridLayoutManager(requireContext(), 2)
+        // to half the recycler itemview width - https://stackoverflow.com/a/51224889
+//        binding.recyclerViewAccountList.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.recyclerViewAccountList.layoutManager = object : GridLayoutManager(requireContext(), 2) {
+            override fun checkLayoutParams(lp: RecyclerView.LayoutParams?): Boolean {
+                lp?.width = width / 2
+                return true
+            }
+        }
         accountViewModel.accountListAdapterData.observe(viewLifecycleOwner, Observer {
             if (it == null || it.isEmpty()) {
                 binding.linearLayoutEmptyView.visibility = View.VISIBLE

@@ -21,8 +21,6 @@ import io.github.kedaitayar.mfm.ui.main.MainFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
 
-private const val TAG = "TransactionListFragment"
-
 @AndroidEntryPoint
 class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
     private val transactionViewModel: TransactionViewModel by viewModels()
@@ -57,11 +55,6 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
                 adapter.submitList(it)
             }
         })
-
-        if (parentFragment is MainTransactionFragment) {
-            Log.i(TAG, "parentFragment is MainTransactionFragment")
-            Log.i(TAG, "${parentFragment?.parentFragment}")
-        }
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val mainFragment = parentFragment?.parentFragment

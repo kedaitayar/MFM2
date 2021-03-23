@@ -129,25 +129,27 @@
 
                     <io.github.kedaitayar.mfm.ui.RingCustomView
                         android:id="@+id/ring_view"
-                        android:layout_width="180dp"
-                        android:layout_height="180dp"
-                        android:layout_margin="0dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintDimensionRatio="W,1:1"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/barrier"
-                        app:layout_constraintTop_toTopOf="@+id/text_view_not_budgeted_amount"
+                        app:layout_constraintStart_toEndOf="@+id/barrier"
                         app:layout_constraintBottom_toBottomOf="@+id/text_view_budgeted_next_month"
+                        app:layout_constraintTop_toTopOf="@+id/text_view_account"
                         app:ringColor="@color/design_default_color_primary"
                         app:ringStrokeWidth="20" />
 
                     <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="vertical"
+                        app:layout_constraintDimensionRatio="1"
+                        app:layout_constraintTop_toTopOf="@+id/ring_view"
                         app:layout_constraintBottom_toBottomOf="@+id/ring_view"
-                        app:layout_constraintEnd_toEndOf="@+id/ring_view"
                         app:layout_constraintStart_toStartOf="@+id/ring_view"
-                        app:layout_constraintTop_toTopOf="@+id/ring_view">
+                        app:layout_constraintEnd_toEndOf="@+id/ring_view">
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/text_view_uncompleted_budget"
@@ -166,17 +168,22 @@
 
                     </LinearLayout>
 
+                    <androidx.constraintlayout.widget.Barrier
+                        android:id="@+id/barrier2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:barrierDirection="bottom"
+                        app:constraint_referenced_ids="ring_view, text_view_budgeted_next_month"/>
+
                     <FrameLayout
                         android:id="@+id/account_list_fragment_container"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
                         android:layout_marginTop="16dp"
-                        android:layout_marginEnd="8dp"
                         android:paddingBottom="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ring_view" />
+                        app:layout_constraintTop_toBottomOf="@+id/barrier2" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 

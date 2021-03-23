@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="180dp"
-    android:layout_margin="8dp"
+    android:paddingBottom="8dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="8dp"
+        android:layout_margin="16dp"
         app:cardElevation="2dp"
         app:strokeColor="?colorPrimary"
         app:strokeWidth="1dp">
@@ -24,10 +24,11 @@
             android:layout_marginBottom="6dp">
 
             <com.google.android.material.textview.MaterialTextView
-                style="@style/TextStyle2"
                 android:id="@+id/text_view_account_balance"
-                android:layout_width="wrap_content"
+                style="@style/TextStyle2"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/button_more"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Name" />
@@ -35,8 +36,9 @@
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/text_view_account_name"
                 style="@style/TextStyle5"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/button_more"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_view_account_balance"
                 tools:text="Name" />

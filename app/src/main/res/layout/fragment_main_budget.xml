@@ -109,13 +109,14 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/text_view_budget"
                         style="@style/TextStyle2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
                         android:text="Monthly Budget"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/text_view_budgeted"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -175,11 +176,12 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/text_view_budget2"
                         style="@style/TextStyle2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
+                        app:layout_constraintEnd_toStartOf="@+id/text_view_budgeted2"
                         android:text="Yearly Budget"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
