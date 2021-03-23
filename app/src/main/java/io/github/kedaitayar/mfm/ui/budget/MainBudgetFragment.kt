@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMainBudgetBinding
+import io.github.kedaitayar.mfm.ui.main.MainFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
 
@@ -52,8 +54,26 @@ class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
         }
 
         setupNotBudgeted()
+        setupHideFABOnScroll()
 
         return binding.root
+    }
+
+    private fun setupHideFABOnScroll() {
+        if (parentFragment is MainFragment) {
+            val parentFragment = (parentFragment as MainFragment)
+            binding.nestedScrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                if (scrollY > oldScrollY + 12 && parentFragment.isFABShown()) {
+                    parentFragment.hideFAB()
+                }
+                if (scrollY < oldScrollY - 12 && !parentFragment.isFABShown()) {
+                    parentFragment.showFAB()
+                }
+                if (scrollY == 0) {
+                    parentFragment.showFAB()
+                }
+            })
+        }
     }
 
     private fun initColor() {

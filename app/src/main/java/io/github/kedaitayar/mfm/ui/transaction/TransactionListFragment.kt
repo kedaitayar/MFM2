@@ -1,6 +1,7 @@
 package io.github.kedaitayar.mfm.ui.transaction
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +12,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentTransactionListBinding
+import io.github.kedaitayar.mfm.ui.main.MainFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
+
+private const val TAG = "TransactionListFragment"
 
 @AndroidEntryPoint
 class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
@@ -27,7 +32,7 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentTransactionListBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
@@ -52,6 +57,27 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
                 adapter.submitList(it)
             }
         })
+
+        if (parentFragment is MainTransactionFragment) {
+            Log.i(TAG, "parentFragment is MainTransactionFragment")
+            Log.i(TAG, "${parentFragment?.parentFragment}")
+        }
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val mainFragment = parentFragment?.parentFragment
+                if (mainFragment is MainFragment) {
+                    if (dy > 12 && mainFragment.isFABShown()) {
+                        mainFragment.hideFAB()
+                    }
+                    if (dy < -12 && !mainFragment.isFABShown()) {
+                        mainFragment.showFAB()
+                    }
+                    if (dy == 0) {
+                        mainFragment.showFAB()
+                    }
+                }
+            }
+        })
         popupMenuSetup(adapter)
     }
 
@@ -67,7 +93,9 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
                 popupMenu.setOnMenuItemClickListener {
                     when (it.itemId) {
                         R.id.edit -> {
-                            val action = MainFragmentDirections.actionMainFragmentToEditTransactionFragment(transactionListAdapterData.transactionId)
+                            val action = MainFragmentDirections.actionMainFragmentToEditTransactionFragment(
+                                transactionListAdapterData.transactionId
+                            )
                             findNavController().navigate(action)
                             true
                         }

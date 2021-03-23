@@ -44,6 +44,8 @@
         android:id="@+id/recycler_view_account_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
         tools:listitem="@layout/recycler_view_item_account_list" />
 
 </FrameLayout>

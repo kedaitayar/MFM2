@@ -7,6 +7,7 @@
     tools:context=".ui.account.MainAccountFragment">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        testData()
+        testData()
 //        runBlocking {
 //            var budgetType = BudgetType(budgetTypeId = 1, budgetTypeName = "Monthly")
 //            budgetViewModel.insert(budgetType)
@@ -64,25 +64,25 @@ class MainActivity : AppCompatActivity() {
 
             val account1 = Account(accountId = 1, accountName = "Cash")
             val account2 = Account(accountId = 2, accountName = "Bank")
-            accountViewModel.insert(account1)
+//            accountViewModel.insert(account1)
             accountViewModel.insert(account2)
 
-            budgetViewModel.insert(Budget(budgetId = 1, budgetGoal = 100.0, budgetName = "Food", budgetType = 1))
-            budgetViewModel.insert(Budget(budgetId = 2, budgetGoal = 100.0, budgetName = "Grocery", budgetType = 1))
-            budgetViewModel.insert(Budget(budgetId = 3, budgetGoal = 100.0, budgetName = "Rent", budgetType = 1))
-            budgetViewModel.insert(
-                Budget(
-                    budgetId = 4,
-                    budgetGoal = 100.0,
-                    budgetName = "House utilities",
-                    budgetType = 1
-                )
-            )
-            budgetViewModel.insert(Budget(budgetId = 5, budgetGoal = 100.0, budgetName = "Car payment", budgetType = 1))
-            budgetViewModel.insert(Budget(budgetId = 6, budgetGoal = 100.0, budgetName = "Fuel", budgetType = 1))
-            budgetViewModel.insert(Budget(budgetId = 7, budgetGoal = 100.0, budgetName = "Phone bill", budgetType = 1))
-            budgetViewModel.insert(Budget(budgetId = 8, budgetGoal = 100.0, budgetName = "Internet", budgetType = 1))
-            budgetViewModel.insert(Budget(budgetId = 9, budgetGoal = 100.0, budgetName = "Self care", budgetType = 1))
+//            budgetViewModel.insert(Budget(budgetId = 1, budgetGoal = 100.0, budgetName = "Food", budgetType = 1))
+//            budgetViewModel.insert(Budget(budgetId = 2, budgetGoal = 100.0, budgetName = "Grocery", budgetType = 1))
+//            budgetViewModel.insert(Budget(budgetId = 3, budgetGoal = 100.0, budgetName = "Rent", budgetType = 1))
+//            budgetViewModel.insert(
+//                Budget(
+//                    budgetId = 4,
+//                    budgetGoal = 100.0,
+//                    budgetName = "House utilities",
+//                    budgetType = 1
+//                )
+//            )
+//            budgetViewModel.insert(Budget(budgetId = 5, budgetGoal = 100.0, budgetName = "Car payment", budgetType = 1))
+//            budgetViewModel.insert(Budget(budgetId = 6, budgetGoal = 100.0, budgetName = "Fuel", budgetType = 1))
+//            budgetViewModel.insert(Budget(budgetId = 7, budgetGoal = 100.0, budgetName = "Phone bill", budgetType = 1))
+//            budgetViewModel.insert(Budget(budgetId = 8, budgetGoal = 100.0, budgetName = "Internet", budgetType = 1))
+//            budgetViewModel.insert(Budget(budgetId = 9, budgetGoal = 100.0, budgetName = "Self care", budgetType = 1))
 
             //budgeting
             val budgetTransaction1 = BudgetTransaction(
