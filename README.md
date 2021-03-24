@@ -10,10 +10,14 @@ Currently the project has implemented the following:
  - 
  - Hilt (Dependency injection)
  - Navigation Component (Single Activity design)
+ - ViewModel (MVVM architecture)
+ - LiveData (Observer pattern - MVVM)
  - Room (Local database)
  - Dao instrument test (Automated testing)
+ - ViewBinding
  - Custom view (UI)
  - Material Design (UI and Theme)
+ - [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart) (Chart and Graph view)
   
 
 [Previous version](https://github.com/kedaitayar/MFM)
