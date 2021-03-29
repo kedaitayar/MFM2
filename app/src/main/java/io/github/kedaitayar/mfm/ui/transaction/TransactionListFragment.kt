@@ -1,7 +1,6 @@
 package io.github.kedaitayar.mfm.ui.transaction
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,8 +19,6 @@ import io.github.kedaitayar.mfm.databinding.FragmentTransactionListBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
-
-private const val TAG = "TransactionListFragment"
 
 @AndroidEntryPoint
 class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
@@ -53,9 +50,6 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
             } else {
                 if (parentFragment is MainTransactionFragment) {
                     (parentFragment as MainTransactionFragment).hideEmptyView()
-                }
-                for (item in it) {
-                    Log.i(TAG, "setupRecyclerView: $item")
                 }
                 adapter.submitList(it)
             }

@@ -7,6 +7,7 @@ import io.github.kedaitayar.mfm.data.entity.Budget
 import io.github.kedaitayar.mfm.data.entity.BudgetTransaction
 import io.github.kedaitayar.mfm.data.entity.BudgetType
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
+import io.github.kedaitayar.mfm.data.podata.BudgetTransactionJoinTransaction
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import javax.inject.Inject
@@ -115,5 +116,9 @@ class BudgetRepository @Inject constructor(
 
     fun getTotalIncome(): LiveData<Double> {
         return budgetDao.getTotalIncome()
+    }
+
+    fun getBudgetTransactionJoinTransaction(): LiveData<List<BudgetTransactionJoinTransaction>> {
+        return budgetDao.getBudgetTransactionJoinTransaction()
     }
 }

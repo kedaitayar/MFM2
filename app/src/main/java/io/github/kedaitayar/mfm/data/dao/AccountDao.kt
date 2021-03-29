@@ -7,6 +7,7 @@ import io.github.kedaitayar.mfm.data.podata.AccountTransactionChartData
 import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.podata.AccountTransactionBudgetData
 import io.github.kedaitayar.mfm.data.podata.BudgetedAndGoal
+import kotlinx.coroutines.flow.Flow
 import java.time.OffsetDateTime
 
 @Dao
@@ -161,10 +162,10 @@ interface AccountDao {
     fun getAccountListData(): LiveData<List<AccountListAdapterData>>
 
     @Query("SELECT SUM(budgetTransactionAmount) FROM budgettransaction")
-    fun getTotalBudgetedAmount(): LiveData<Double>
+    fun getTotalBudgetedAmount(): Flow<Double>
 
     @Query("SELECT SUM(transactionAmount) FROM `transaction` WHERE transactionType = 2")
-    fun getTotalIncome(): LiveData<Double>
+    fun getTotalIncome(): Flow<Double>
 
     @Query(
         """
@@ -174,7 +175,7 @@ interface AccountDao {
         AND transactionType = 1
     """
     )
-    fun getMonthSpending(timeFrom: OffsetDateTime, timeTo: OffsetDateTime): LiveData<Double>
+    fun getMonthSpending(timeFrom: OffsetDateTime, timeTo: OffsetDateTime): Flow<Double>
 
     @Query(
         """
@@ -201,7 +202,7 @@ interface AccountDao {
             )
     """
     )
-    fun getMonthBudgeted(month: Int, year: Int): LiveData<Double>
+    fun getMonthBudgeted(month: Int, year: Int): Flow<Double>
 
     @Query(
         """
@@ -229,7 +230,7 @@ interface AccountDao {
             )
     """
     )
-    fun getUncompletedBudget(month: Int, year: Int): LiveData<BudgetedAndGoal>
+    fun getUncompletedBudget(month: Int, year: Int): Flow<BudgetedAndGoal>
 
     @Query("""
         SELECT

@@ -1,4 +1,4 @@
-package io.github.kedaitayar.mfm.ui.account
+package io.github.kedaitayar.mfm.ui.dashboard.account.addeditaccount
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

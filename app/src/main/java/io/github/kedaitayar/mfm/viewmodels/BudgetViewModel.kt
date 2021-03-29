@@ -10,6 +10,7 @@ import io.github.kedaitayar.mfm.data.repository.SelectedDateRepository
 import io.github.kedaitayar.mfm.data.entity.Budget
 import io.github.kedaitayar.mfm.data.entity.BudgetTransaction
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
+import io.github.kedaitayar.mfm.data.podata.BudgetTransactionJoinTransaction
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -18,6 +19,7 @@ class BudgetViewModel @Inject constructor(
     private val budgetRepository: BudgetRepository,
     private val selectedDateRepository: SelectedDateRepository
 ) : ViewModel() {
+    val allBudgetTransactions: LiveData<List<BudgetTransaction>> = budgetRepository.getAllBudgetTransaction()
     val allBudgetType: LiveData<List<BudgetType>> = budgetRepository.getAllBudgetType()
     val allBudget: LiveData<List<Budget>> = budgetRepository.getAllBudget()
     val selectedDate: LiveData<LocalDateTime> = selectedDateRepository.selectedDate
@@ -43,6 +45,7 @@ class BudgetViewModel @Inject constructor(
         }
     val totalBudgetedAmount: LiveData<Double> = budgetRepository.getTotalBudgetedAmount()
     val totalIncome: LiveData<Double> = budgetRepository.getTotalIncome()
+    val allBudgetTransactionJoinTransaction: LiveData<List<BudgetTransactionJoinTransaction>> = budgetRepository.getBudgetTransactionJoinTransaction()
 
     suspend fun insert(budget: Budget): Long {
         return budgetRepository.insert(budget)

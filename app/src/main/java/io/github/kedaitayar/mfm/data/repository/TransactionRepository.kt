@@ -9,6 +9,7 @@ import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.entity.Budget
 import io.github.kedaitayar.mfm.data.entity.Transaction
 import io.github.kedaitayar.mfm.data.podata.TransactionGraphData
+import kotlinx.coroutines.flow.Flow
 import java.time.OffsetDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -51,8 +52,8 @@ class TransactionRepository @Inject constructor(
         return transactionDao.getTransactionListData()
     }
 
-    fun getTransactionGraphData(): LiveData<List<TransactionGraphData>> {
-        return transactionDao.getTransactionGraphData(OffsetDateTime.now().year.toString())
+    fun getTransactionGraphData(year: String): Flow<List<TransactionGraphData>> {
+        return transactionDao.getTransactionGraphData(year)
     }
 
     // transactionType

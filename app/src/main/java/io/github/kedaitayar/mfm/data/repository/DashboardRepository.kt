@@ -8,13 +8,14 @@ import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.podata.AccountTransactionBudgetData
 import io.github.kedaitayar.mfm.data.podata.AccountTransactionChartData
 import io.github.kedaitayar.mfm.data.podata.BudgetedAndGoal
+import kotlinx.coroutines.flow.Flow
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AccountRepository @Inject constructor(
+class DashboardRepository @Inject constructor(
     private val accountDao: AccountDao,
     private val basicDao: BasicDao
 ) {
@@ -39,23 +40,23 @@ class AccountRepository @Inject constructor(
         return accountDao.getAccountListData()
     }
 
-    fun getTotalBudgetedAmount(): LiveData<Double> {
+    fun getTotalBudgetedAmount(): Flow<Double> {
         return accountDao.getTotalBudgetedAmount()
     }
 
-    fun getTotalIncome(): LiveData<Double> {
+    fun getTotalIncome(): Flow<Double> {
         return accountDao.getTotalIncome()
     }
 
-    fun getMonthSpending(timeFrom: OffsetDateTime, timeTo: OffsetDateTime): LiveData<Double> {
+    fun getMonthSpending(timeFrom: OffsetDateTime, timeTo: OffsetDateTime): Flow<Double> {
         return accountDao.getMonthSpending(timeFrom, timeTo)
     }
 
-    fun getMonthBudgeted(month: Int, year: Int): LiveData<Double> {
+    fun getMonthBudgeted(month: Int, year: Int): Flow<Double> {
         return accountDao.getMonthBudgeted(month, year)
     }
 
-    fun getUncompletedBudget(month: Int, year: Int): LiveData<BudgetedAndGoal> {
+    fun getUncompletedBudget(month: Int, year: Int): Flow<BudgetedAndGoal> {
         return accountDao.getUncompletedBudget(month, year)
     }
 

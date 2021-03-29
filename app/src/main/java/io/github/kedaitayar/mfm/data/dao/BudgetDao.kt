@@ -3,6 +3,7 @@ package io.github.kedaitayar.mfm.data.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
+import io.github.kedaitayar.mfm.data.podata.BudgetTransactionJoinTransaction
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -597,6 +598,28 @@ interface BudgetDao {
         timeFrom: OffsetDateTime,
         timeTo: OffsetDateTime
     ): LiveData<List<BudgetListAdapterData>>
+
+    @Query("""
+        SELECT budgetId, budgetName, budgetType, budgetTransactionMonth, budgetTransactionYear, budgetTransactionAmount, transactionAmount
+        FROM Budget
+        LEFT JOIN
+            budgettype
+            ON budgetType = budgetTypeId
+        LEFT JOIN
+            budgettransaction
+            ON budgetId = budgetTransactionBudgetId
+        LEFT JOIN (
+            SELECT transactionBudgetId, transactionType, sum(transactionAmount) as transactionAmount, strftime('%m', transactionTime) as month, strftime('%Y', transactionTime) as year
+            FROM `Transaction`
+            WHERE transactionBudgetId != ''
+            GROUP BY transactionBudgetId, month, year
+            ORDER BY year DESC, month DESC, transactionBudgetId
+        ) as tbl
+            ON BudgetTransaction.budgetTransactionMonth = tbl.month
+            AND BudgetTransaction.budgetTransactionYear = tbl.year
+            AND Budget.budgetId = tbl.transactionBudgetId
+    """)
+    fun getBudgetTransactionJoinTransaction(): LiveData<List<BudgetTransactionJoinTransaction>>
 
     @Query("SELECT SUM(budgetTransactionAmount) FROM budgettransaction")
     fun getTotalBudgetedAmount(): LiveData<Double>

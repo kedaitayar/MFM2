@@ -12,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.databinding.FragmentMainBinding
+import io.github.kedaitayar.mfm.util.EventObserver
 import io.github.kedaitayar.mfm.viewmodels.SharedViewModel
 
 @AndroidEntryPoint
@@ -62,16 +63,14 @@ class MainFragment : Fragment() {
     fun isFABShown(): Boolean = binding.fab.isShown
 
     private fun setupSnackbarTextObserver() {
-        sharedViewModel.snackbarText.observe(viewLifecycleOwner) {
-            it?.getContentIfNotHandled()?.let { text ->
-                showSnackBar(text, Snackbar.LENGTH_SHORT)
-            }
-        }
+        sharedViewModel.snackbarText.observe(viewLifecycleOwner, EventObserver{
+            showSnackBar(it, Snackbar.LENGTH_SHORT)
+        })
     }
 
     private fun getTabTitle(position: Int): String? {
         return when (position) {
-            ACCOUNT_PAGE_INDEX -> "Dashboard"
+            DASHBOARD_PAGE_INDEX -> "Dashboard"
             TRANSACTION_PAGE_INDEX -> "Transaction"
             BUDGET_PAGE_INDEX -> "Budget"
             else -> null

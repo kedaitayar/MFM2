@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import io.github.kedaitayar.mfm.data.entity.*
 import io.github.kedaitayar.mfm.data.entity.Transaction
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BasicDao {
@@ -20,6 +21,9 @@ interface BasicDao {
 
     @Delete
     suspend fun delete(account: Account): Int
+
+    @Query("SELECT * FROM account")
+    fun getAllAccountFlow(): Flow<List<Account>>
 
     //budget
 

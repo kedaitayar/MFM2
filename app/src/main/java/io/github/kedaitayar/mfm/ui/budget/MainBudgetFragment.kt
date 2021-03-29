@@ -1,6 +1,7 @@
 package io.github.kedaitayar.mfm.ui.budget
 
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +14,14 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
+import io.github.kedaitayar.mfm.data.podata.BudgetTransactionJoinTransaction
 import io.github.kedaitayar.mfm.databinding.FragmentMainBudgetBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
+import java.time.OffsetDateTime
+
+private const val TAG = "MainBudgetFragment"
 
 @AndroidEntryPoint
 class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
@@ -25,6 +30,7 @@ class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
     private val binding get() = _binding!!
     private var totalIncome: Double = 0.0
     private var totalBudgeted: Double = 0.0
+    private var allBudgetTransactionJoinTransaction = listOf<BudgetTransactionJoinTransaction>()
     private var green = 0
     private var red = 0
 
@@ -54,9 +60,26 @@ class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
         }
 
         setupNotBudgeted()
+        setupReclaimUnusedBudgetButton()
         setupHideFABOnScroll()
 
         return binding.root
+    }
+
+    private fun setupReclaimUnusedBudgetButton() {
+        budgetViewModel.allBudgetTransactionJoinTransaction.observe(viewLifecycleOwner) {
+            it?.let {
+                allBudgetTransactionJoinTransaction = it
+            }
+        }
+        binding.buttonReclaimUnused.setOnClickListener {
+            val now = OffsetDateTime.now()
+            for (item in allBudgetTransactionJoinTransaction) {
+                if (item.budgetType == 1 && item.budgetTransactionYear <= now.year && item.budgetTransactionMonth < now.monthValue && item.budgetTransactionAmount > item.transactionAmount) {
+                    Log.i(TAG, "setupReclaimUnusedBudgetButton: $item")
+                }
+            }
+        }
     }
 
     private fun setupHideFABOnScroll() {

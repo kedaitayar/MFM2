@@ -8,6 +8,7 @@ import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.entity.Budget
 import io.github.kedaitayar.mfm.data.entity.Transaction
 import io.github.kedaitayar.mfm.data.podata.TransactionGraphData
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TransactionDao {
@@ -20,7 +21,7 @@ interface TransactionDao {
         LEFT JOIN budget ON transactionBudgetId = budget.budgetId 
         LEFT JOIN account AS account2 ON transactionAccountTransferTo = account2.accountId 
         LEFT JOIN transactiontype ON transactionTypeId = transactionType
-        ORDER BY transactionId DESC
+        ORDER BY transactionTime DESC
     """
     )
     fun getTransactionListData(): LiveData<List<TransactionListAdapterData>>
@@ -65,5 +66,5 @@ interface TransactionDao {
         GROUP BY
             transactionType
     """)
-    fun getTransactionGraphData(year: String): LiveData<List<TransactionGraphData>>
+    fun getTransactionGraphData(year: String): Flow<List<TransactionGraphData>> // year as string is because of the STRFTIME function return string
 }

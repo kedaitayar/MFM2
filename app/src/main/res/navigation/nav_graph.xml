@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/addEditAccountFragment"
-        android:name="io.github.kedaitayar.mfm.ui.account.AddEditAccountFragment"
+        android:name="io.github.kedaitayar.mfm.ui.dashboard.account.addeditaccount.AddEditAccountFragment"
         android:label="fragment_add_account"
         tools:layout="@layout/fragment_add_edit_account">
         <argument
