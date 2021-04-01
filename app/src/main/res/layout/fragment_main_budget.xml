@@ -6,62 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".ui.budget.MainBudgetFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraint_layout_not_budgeted"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?gGreen"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
-            android:paddingStart="8dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:text="Not budgeted"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/text_view_not_budgeted_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
-            android:paddingTop="4dp"
-            android:paddingEnd="8dp"
-            android:paddingBottom="4dp"
-            android:text="RM 0.0"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraint_layout_not_budgeted">
+        android:layout_height="match_parent">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <FrameLayout
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragment_container_not_budgeted"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragment_container_date"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraint_layout_not_budgeted" />
+                android:layout_height="wrap_content" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -74,7 +37,7 @@
                     android:layout_marginStart="4dp"
                     android:text="budgeting"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_reclaim_unused"
@@ -83,7 +46,7 @@
                     android:layout_marginStart="4dp"
                     android:text="reclaim unused"
                     app:layout_constraintStart_toEndOf="@+id/button_budgeting"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_add_budget"
@@ -124,8 +87,8 @@
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
                         android:text="Monthly Budget"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/text_view_budgeted"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -158,7 +121,7 @@
                         android:background="?android:attr/listDivider"
                         app:layout_constraintTop_toBottomOf="@+id/text_view_budget" />
 
-                    <FrameLayout
+                    <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/fragment_container_budget_list_type1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -190,8 +153,8 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
-                        app:layout_constraintEnd_toStartOf="@+id/text_view_budgeted2"
                         android:text="Yearly Budget"
+                        app:layout_constraintEnd_toStartOf="@+id/text_view_budgeted2"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -225,7 +188,7 @@
                         android:background="?android:attr/listDivider"
                         app:layout_constraintTop_toBottomOf="@+id/text_view_budget2" />
 
-                    <FrameLayout
+                    <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/fragment_container_budget_list_type2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

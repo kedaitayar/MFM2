@@ -8,6 +8,7 @@ import io.github.kedaitayar.mfm.data.entity.BudgetTransaction
 import io.github.kedaitayar.mfm.data.entity.BudgetType
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.data.podata.BudgetTransactionJoinTransaction
+import kotlinx.coroutines.flow.Flow
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import javax.inject.Inject
@@ -110,11 +111,11 @@ class BudgetRepository @Inject constructor(
         return budgetDao.getYearlyBudgetingListAdapterDO(month, year, timeFrom, timeTo)
     }
 
-    fun getTotalBudgetedAmount(): LiveData<Double> {
+    fun getTotalBudgetedAmount(): Flow<Double> {
         return budgetDao.getTotalBudgetedAmount()
     }
 
-    fun getTotalIncome(): LiveData<Double> {
+    fun getTotalIncome(): Flow<Double> {
         return budgetDao.getTotalIncome()
     }
 

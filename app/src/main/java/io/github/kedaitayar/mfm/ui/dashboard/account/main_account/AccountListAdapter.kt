@@ -1,4 +1,4 @@
-package io.github.kedaitayar.mfm.ui.account
+package io.github.kedaitayar.mfm.ui.dashboard.account.main_account
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

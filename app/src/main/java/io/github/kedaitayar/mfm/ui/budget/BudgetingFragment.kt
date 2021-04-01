@@ -48,7 +48,7 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAd
         setupToolbar(adapter1, adapter2)
         setupBudgetingListRecyclerView(adapter1, adapter2)
 
-        setupNotBudgeted()
+//        setupNotBudgeted()
 
         return binding.root
     }
@@ -136,18 +136,18 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAd
         }
     }
 
-    private fun setupNotBudgeted() {
-        budgetViewModel.totalIncome.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                setAccountIncome(it)
-            }
-        })
-        budgetViewModel.totalBudgetedAmount.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                setTotalBudgeted(it)
-            }
-        })
-    }
+//    private fun setupNotBudgeted() {
+//        budgetViewModel.totalIncome.observe(viewLifecycleOwner, Observer {
+//            it?.let {
+//                setAccountIncome(it)
+//            }
+//        })
+//        budgetViewModel.totalBudgetedAmount.observe(viewLifecycleOwner, Observer {
+//            it?.let {
+//                setTotalBudgeted(it)
+//            }
+//        })
+//    }
 
     private fun setAccountIncome(totalIncome: Double) {
         this.totalIncome = totalIncome

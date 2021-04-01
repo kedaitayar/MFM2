@@ -60,19 +60,19 @@ class DashboardRepository @Inject constructor(
         return accountDao.getUncompletedBudget(month, year)
     }
 
-    suspend fun getAccountTransactionBudget(
+    fun getAccountTransactionBudget(
         accountId: Long,
         timeFrom: OffsetDateTime,
         timeTo: OffsetDateTime
-    ): List<AccountTransactionBudgetData> {
+    ): Flow<List<AccountTransactionBudgetData>> {
         return accountDao.getAccountTransactionBudget(accountId, timeFrom, timeTo)
     }
 
-    suspend fun getAccountTransactionChartData(
+    fun getAccountTransactionChartData(
         accountId: Long,
         month: Int,
         year: Int
-    ): List<AccountTransactionChartData> {
+    ): Flow<List<AccountTransactionChartData>> {
         val timeFrom = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
         val timeTo = timeFrom.plusMonths(1).minusNanos(1)
         val timeToPrevMonth = timeFrom.minusNanos(1)

@@ -19,7 +19,7 @@ class TransactionViewModel @Inject constructor(
 //    val allTransaction: LiveData<List<Transaction>> = transactionRepository.getAllTransaction()
     val allAccount: LiveData<List<Account>> = transactionRepository.getAllAccount()
     val allBudget: LiveData<List<Budget>> = transactionRepository.getAllBudget()
-    val allTransactionListAdapterData: LiveData<List<TransactionListAdapterData>> = transactionRepository.getTransactionListData()
+//    val allTransactionListAdapterData: LiveData<List<TransactionListAdapterData>> = transactionRepository.getTransactionListData()
 //    val transactionYearlyTrendGraph: LiveData<List<TransactionGraphData>> = transactionRepository.getTransactionGraphData()
 
     suspend fun insert(transaction: Transaction): Long {

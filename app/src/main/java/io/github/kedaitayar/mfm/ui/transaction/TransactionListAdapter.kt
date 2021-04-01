@@ -2,12 +2,14 @@ package io.github.kedaitayar.mfm.ui.transaction
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.content.ContextCompat
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +18,7 @@ import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData
 import io.github.kedaitayar.mfm.databinding.RecyclerViewItemTransctionListBinding
 
 class TransactionListAdapter :
-    ListAdapter<TransactionListAdapterData, TransactionListAdapter.TransactionListViewHolder>(
+    PagingDataAdapter<TransactionListAdapterData, TransactionListAdapter.TransactionListViewHolder>(
         TransactionListDiffCallback()
     ) {
     private var listener: OnItemClickListener? = null
@@ -40,37 +42,41 @@ class TransactionListAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.buttonPopupMenu.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    listener?.onPopupMenuButtonClick(getItem(adapterPosition), it as Button)
+            binding.buttonPopupMenu.setOnClickListener { view ->
+                if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
+                    val currentItem = getItem(bindingAdapterPosition)
+                    currentItem?.let { item ->
+                        listener?.onPopupMenuButtonClick(item, view as Button)
+                    }
                 }
             }
         }
 
         fun bind(item: TransactionListAdapterData) {
-                binding.apply {
-                    textViewTransactionAccount.text = item.transactionAccountName
-                    textViewTransactionAmount.text = "RM ${item.transactionAmount}"
-                    textViewTransactionDate.text = "${item.transactionTime?.dayOfMonth ?: 0}/${item.transactionTime?.monthValue ?: 0}/${item.transactionTime?.year ?: 0}"
-                    when (item.transactionTypeId) {
-                        1 -> {
-                            textViewTransactionBudget.text = item.transactionBudgetName
-                            textViewTransactionAccountTo.visibility = View.GONE
-                            textViewTransactionAmount.setTextColor(Color.parseColor("#d50000"))
-                        }
-                        2 -> {
-                            textViewTransactionBudget.text = item.transactionTypeName
-                            textViewTransactionAccountTo.visibility = View.GONE
-                            textViewTransactionAmount.setTextColor(Color.parseColor("#00c853"))
-                        }
-                        3 -> {
-                            textViewTransactionBudget.text = item.transactionTypeName
-                            textViewTransactionAccountTo.text = item.transactionAccountTransferToName
-                            textViewTransactionAccountTo.visibility = View.VISIBLE
-                            textViewTransactionAmount.setTextColor(colorOnSurface)
-                        }
+            binding.apply {
+                textViewTransactionAccount.text = item.transactionAccountName
+                textViewTransactionAmount.text = "RM ${item.transactionAmount}"
+                textViewTransactionDate.text =
+                    "${item.transactionTime?.dayOfMonth ?: 0}/${item.transactionTime?.monthValue ?: 0}/${item.transactionTime?.year ?: 0}"
+                when (item.transactionTypeId) {
+                    1 -> {
+                        textViewTransactionBudget.text = item.transactionBudgetName
+                        textViewTransactionAccountTo.visibility = View.GONE
+                        textViewTransactionAmount.setTextColor(Color.parseColor("#d50000"))
+                    }
+                    2 -> {
+                        textViewTransactionBudget.text = item.transactionTypeName
+                        textViewTransactionAccountTo.visibility = View.GONE
+                        textViewTransactionAmount.setTextColor(Color.parseColor("#00c853"))
+                    }
+                    3 -> {
+                        textViewTransactionBudget.text = item.transactionTypeName
+                        textViewTransactionAccountTo.text = item.transactionAccountTransferToName
+                        textViewTransactionAccountTo.visibility = View.VISIBLE
+                        textViewTransactionAmount.setTextColor(colorOnSurface)
                     }
                 }
+            }
         }
     }
 
@@ -85,7 +91,10 @@ class TransactionListAdapter :
     }
 
     override fun onBindViewHolder(holder: TransactionListViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val currentItem = getItem(position)
+        currentItem?.let {
+            holder.bind(currentItem)
+        }
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {

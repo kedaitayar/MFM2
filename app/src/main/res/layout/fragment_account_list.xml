@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.account.AccountListFragment">
+    tools:context=".ui.dashboard.account.main_account.AccountListFragment">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linear_layout_empty_view"

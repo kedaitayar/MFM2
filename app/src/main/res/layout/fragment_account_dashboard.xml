@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ui.dashboard.account.AccountDashboardFragment">
+    tools:context=".ui.dashboard.account.main_account.AccountDashboardFragment">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_view_account_list"

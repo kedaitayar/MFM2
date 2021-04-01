@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.data.podata.BudgetTransactionJoinTransaction
+import kotlinx.coroutines.flow.Flow
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -622,8 +623,8 @@ interface BudgetDao {
     fun getBudgetTransactionJoinTransaction(): LiveData<List<BudgetTransactionJoinTransaction>>
 
     @Query("SELECT SUM(budgetTransactionAmount) FROM budgettransaction")
-    fun getTotalBudgetedAmount(): LiveData<Double>
+    fun getTotalBudgetedAmount(): Flow<Double>
 
     @Query("SELECT SUM(transactionAmount) FROM `transaction` WHERE transactionType = 2")
-    fun getTotalIncome(): LiveData<Double>
+    fun getTotalIncome(): Flow<Double>
 }

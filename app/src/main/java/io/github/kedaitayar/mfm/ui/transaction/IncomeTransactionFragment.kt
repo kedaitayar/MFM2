@@ -16,7 +16,7 @@ import io.github.kedaitayar.mfm.databinding.FragmentIncomeTransactionBinding
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
 import io.github.kedaitayar.mfm.data.entity.Transaction
-import io.github.kedaitayar.mfm.viewmodels.SharedViewModel
+import io.github.kedaitayar.mfm.ui.main.MainViewModel
 import kotlinx.coroutines.*
 import java.time.OffsetDateTime
 
@@ -26,7 +26,7 @@ private const val ARG_TRANSACTION_ID = "io.github.kedaitayar.mfm.ui.transaction.
 class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction),
     AddTransactionChild, EditTransactionChild {
     private val transactionViewModel: TransactionViewModel by viewModels()
-    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private var _binding: FragmentIncomeTransactionBinding? = null
     private val binding get() = _binding!!
     private var transactionId: Long = -1L
@@ -118,7 +118,7 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
                     val result = async { transactionViewModel.insert(transaction) }
                     withContext(Dispatchers.Main) {
                         if (result.await() > 0) {
-                            sharedViewModel.setSnackbarText("Transaction added")
+                            mainViewModel.setSnackbarText("Transaction added")
                             hideKeyboard()
                             findNavController().navigateUp()
                         }

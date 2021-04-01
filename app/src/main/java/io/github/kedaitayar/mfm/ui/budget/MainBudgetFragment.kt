@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetTransactionJoinTransaction
 import io.github.kedaitayar.mfm.databinding.FragmentMainBudgetBinding
+import io.github.kedaitayar.mfm.ui.budget.not_budgeted.NotBudgetedFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
@@ -45,6 +46,7 @@ class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
         initColor()
 
         childFragmentManager.beginTransaction().apply {
+            replace(R.id.fragment_container_not_budgeted, NotBudgetedFragment())
             replace(R.id.fragment_container_date, MonthYearScrollFragment())
             replace(R.id.fragment_container_budget_list_type1, BudgetListFragment.newInstance(1))
             replace(R.id.fragment_container_budget_list_type2, BudgetListFragment.newInstance(2))
@@ -59,7 +61,7 @@ class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
             findNavController().navigate(action)
         }
 
-        setupNotBudgeted()
+//        setupNotBudgeted()
         setupReclaimUnusedBudgetButton()
         setupHideFABOnScroll()
 
@@ -107,40 +109,40 @@ class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
         red = ContextCompat.getColor(requireContext(), typedValue.resourceId)
     }
 
-    private fun setupNotBudgeted() {
-        budgetViewModel.totalIncome.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                setAccountIncome(it)
-            }
-        })
-        budgetViewModel.totalBudgetedAmount.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                setTotalBudgeted(it)
-            }
-        })
-    }
-
-    private fun setAccountIncome(totalIncome: Double) {
-        this.totalIncome = totalIncome
-        val amount = totalIncome - totalBudgeted
-        binding.textViewNotBudgetedAmount.text = "RM $amount"
-        if (amount < 0) {
-            binding.constraintLayoutNotBudgeted.setBackgroundColor(red)
-        } else {
-            binding.constraintLayoutNotBudgeted.setBackgroundColor(green)
-        }
-    }
-
-    private fun setTotalBudgeted(totalBudgeted: Double) {
-        this.totalBudgeted = totalBudgeted
-        val amount = totalIncome - totalBudgeted
-        binding.textViewNotBudgetedAmount.text = "RM $amount"
-        if (amount < 0) {
-            binding.constraintLayoutNotBudgeted.setBackgroundColor(red)
-        } else {
-            binding.constraintLayoutNotBudgeted.setBackgroundColor(green)
-        }
-    }
+//    private fun setupNotBudgeted() {
+//        budgetViewModel.totalIncome.observe(viewLifecycleOwner, Observer {
+//            it?.let {
+//                setAccountIncome(it)
+//            }
+//        })
+//        budgetViewModel.totalBudgetedAmount.observe(viewLifecycleOwner, Observer {
+//            it?.let {
+//                setTotalBudgeted(it)
+//            }
+//        })
+//    }
+//
+//    private fun setAccountIncome(totalIncome: Double) {
+//        this.totalIncome = totalIncome
+//        val amount = totalIncome - totalBudgeted
+//        binding.textViewNotBudgetedAmount.text = "RM $amount"
+//        if (amount < 0) {
+//            binding.constraintLayoutNotBudgeted.setBackgroundColor(red)
+//        } else {
+//            binding.constraintLayoutNotBudgeted.setBackgroundColor(green)
+//        }
+//    }
+//
+//    private fun setTotalBudgeted(totalBudgeted: Double) {
+//        this.totalBudgeted = totalBudgeted
+//        val amount = totalIncome - totalBudgeted
+//        binding.textViewNotBudgetedAmount.text = "RM $amount"
+//        if (amount < 0) {
+//            binding.constraintLayoutNotBudgeted.setBackgroundColor(red)
+//        } else {
+//            binding.constraintLayoutNotBudgeted.setBackgroundColor(green)
+//        }
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

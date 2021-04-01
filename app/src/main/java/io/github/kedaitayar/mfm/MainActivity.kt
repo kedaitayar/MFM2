@@ -2,21 +2,15 @@ package io.github.kedaitayar.mfm
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
-
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.*
 import io.github.kedaitayar.mfm.viewmodels.AccountViewModel
 import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
 import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.time.OffsetDateTime
-import java.time.ZoneOffset
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

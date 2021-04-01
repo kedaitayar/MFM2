@@ -18,13 +18,13 @@ import io.github.kedaitayar.mfm.databinding.FragmentAddBudgetBinding
 import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
 import io.github.kedaitayar.mfm.data.entity.Budget
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
-import io.github.kedaitayar.mfm.viewmodels.SharedViewModel
+import io.github.kedaitayar.mfm.ui.main.MainViewModel
 import kotlinx.coroutines.*
 
 @AndroidEntryPoint
 class AddBudgetFragment : Fragment(R.layout.fragment_add_budget) {
     private val budgetViewModel: BudgetViewModel by viewModels()
-    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private var _binding: FragmentAddBudgetBinding? = null
     private val binding get() = _binding!!
     private var dropDownPos = -1 //pos of selected budget type dropdown
@@ -67,7 +67,7 @@ class AddBudgetFragment : Fragment(R.layout.fragment_add_budget) {
                             val result = async { budgetViewModel.insert(budget) }
                             withContext(Dispatchers.Main) {
                                 if (result.await() > 0) {
-                                    sharedViewModel.setSnackbarText("Budget added")
+                                    mainViewModel.setSnackbarText("Budget added")
                                     hideKeyboard()
                                     findNavController().navigateUp()
                                 }

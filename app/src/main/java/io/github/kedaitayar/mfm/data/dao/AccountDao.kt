@@ -137,12 +137,12 @@ interface AccountDao {
                 accountTransactionDate
         """
     )
-    suspend fun getAccountTransactionChartData(
+    fun getAccountTransactionChartData(
         accountId: Long,
         timeFrom: OffsetDateTime,
         timeTo: OffsetDateTime,
         timeToPrevMonth: OffsetDateTime
-    ): List<AccountTransactionChartData>
+    ): Flow<List<AccountTransactionChartData>>
 
     @Query(
         """
@@ -248,6 +248,5 @@ interface AccountDao {
             AND transactionTime BETWEEN :timeFrom AND :timeTo
         GROUP BY transactionBudgetId
     """)
-    suspend fun getAccountTransactionBudget(accountId: Long, timeFrom: OffsetDateTime, timeTo: OffsetDateTime): List<AccountTransactionBudgetData>
-
+    fun getAccountTransactionBudget(accountId: Long, timeFrom: OffsetDateTime, timeTo: OffsetDateTime): Flow<List<AccountTransactionBudgetData>>
 }

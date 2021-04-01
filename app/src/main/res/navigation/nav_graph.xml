@@ -34,22 +34,23 @@
     </fragment>
     <fragment
         android:id="@+id/addEditAccountFragment"
-        android:name="io.github.kedaitayar.mfm.ui.dashboard.account.addeditaccount.AddEditAccountFragment"
+        android:name="io.github.kedaitayar.mfm.ui.dashboard.account.add_edit_account.AddEditAccountFragment"
         android:label="fragment_add_account"
         tools:layout="@layout/fragment_add_edit_account">
         <argument
-            android:name="accountId"
-            android:defaultValue="-1L"
-            app:argType="long" />
+            android:name="account"
+            android:defaultValue="@null"
+            app:argType="io.github.kedaitayar.mfm.data.entity.Account"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/accountDetailFragment"
-        android:name="io.github.kedaitayar.mfm.ui.account.AccountDetailFragment"
+        android:name="io.github.kedaitayar.mfm.ui.dashboard.account.account_detail.AccountDetailFragment"
         android:label="fragment_account_detail"
         tools:layout="@layout/fragment_account_detail">
         <argument
-            android:name="accountId"
-            app:argType="long" />
+            android:name="account"
+            app:argType="io.github.kedaitayar.mfm.data.entity.Account" />
     </fragment>
     <fragment
         android:id="@+id/addTransactionFragment"

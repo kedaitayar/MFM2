@@ -1,4 +1,4 @@
-package io.github.kedaitayar.mfm.ui.account
+package io.github.kedaitayar.mfm.ui.dashboard.account.account_detail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -14,7 +14,7 @@ class AccountBudgetChartListAdapter :
     ListAdapter<AccountTransactionBudgetData, AccountBudgetChartListAdapter.AccountBudgetChartListViewHolder>(
         AccountBudgetChartListDiffCallback()
     ) {
-    private var totalTransactionAmount = 0f
+    private var totalTransactionAmount = 0.0
     private val colors = ArrayList<Int>()
 
     init {
@@ -60,7 +60,7 @@ class AccountBudgetChartListAdapter :
         holder.bind(getItem(position), position)
     }
 
-    fun setTotalTransactionAmount(amount: Float) {
+    fun setTotalTransactionAmount(amount: Double) {
         this.totalTransactionAmount = amount
     }
 }

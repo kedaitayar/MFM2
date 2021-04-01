@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMainDashboardBinding
-import io.github.kedaitayar.mfm.ui.dashboard.account.AccountDashboardFragment
+import io.github.kedaitayar.mfm.ui.dashboard.account.main_account.AccountDashboardFragment
 import io.github.kedaitayar.mfm.ui.dashboard.transaction_trend_graph.TransactionTrendGraphFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragment
 

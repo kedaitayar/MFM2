@@ -16,14 +16,14 @@ import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.Transaction
 import io.github.kedaitayar.mfm.databinding.FragmentEditTransactionBinding
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
-import io.github.kedaitayar.mfm.viewmodels.SharedViewModel
+import io.github.kedaitayar.mfm.ui.main.MainViewModel
 import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
 import kotlinx.coroutines.*
 
 @AndroidEntryPoint
 class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
     private val transactionViewModel: TransactionViewModel by viewModels()
-    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private var _binding: FragmentEditTransactionBinding? = null
     private val binding get() = _binding!!
     private val args: EditTransactionFragmentArgs by navArgs()
@@ -85,7 +85,7 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
                                 val result = async { transactionViewModel.delete(transaction) }
                                 withContext(Dispatchers.Main) {
                                     if (result.await() > 0) {
-                                        sharedViewModel.setSnackbarText("Transaction deleted")
+                                        mainViewModel.setSnackbarText("Transaction deleted")
                                         findNavController().navigateUp()
                                     }
                                 }

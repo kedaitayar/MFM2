@@ -20,13 +20,13 @@ import io.github.kedaitayar.mfm.data.podata.BudgetTypeDropdownData
 import io.github.kedaitayar.mfm.databinding.FragmentEditBudgetBinding
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
-import io.github.kedaitayar.mfm.viewmodels.SharedViewModel
+import io.github.kedaitayar.mfm.ui.main.MainViewModel
 import kotlinx.coroutines.*
 
 @AndroidEntryPoint
 class EditBudgetFragment : Fragment(R.layout.fragment_edit_budget) {
     private val budgetViewModel: BudgetViewModel by viewModels()
-    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private var _binding: FragmentEditBudgetBinding? = null
     private val binding get() = _binding!!
     private var dropDownPos = -1 //pos of selected budget type dropdown
@@ -75,7 +75,7 @@ class EditBudgetFragment : Fragment(R.layout.fragment_edit_budget) {
                             val result = async { budgetViewModel.update(budget) }
                             withContext(Dispatchers.Main) {
                                 if (result.await() > 0) {
-                                    sharedViewModel.setSnackbarText("Budget updated")
+                                    mainViewModel.setSnackbarText("Budget updated")
                                     hideKeyboard()
                                     findNavController().navigateUp()
                                 }
@@ -106,7 +106,7 @@ class EditBudgetFragment : Fragment(R.layout.fragment_edit_budget) {
                                 val result = async { budgetViewModel.delete(budget) }
                                 withContext(Dispatchers.Main) {
                                     if (result.await() > 0) {
-                                        sharedViewModel.setSnackbarText("Budget deleted")
+                                        mainViewModel.setSnackbarText("Budget deleted")
                                         findNavController().navigateUp()
                                     }
                                 }

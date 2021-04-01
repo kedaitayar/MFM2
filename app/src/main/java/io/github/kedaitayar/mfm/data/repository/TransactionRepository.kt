@@ -1,6 +1,9 @@
 package io.github.kedaitayar.mfm.data.repository
 
 import androidx.lifecycle.LiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import io.github.kedaitayar.mfm.data.dao.BasicDao
 import io.github.kedaitayar.mfm.data.dao.TransactionDao
 import io.github.kedaitayar.mfm.data.entity.TransactionType
@@ -19,6 +22,13 @@ class TransactionRepository @Inject constructor(
     private val transactionDao: TransactionDao,
     private val basicDao: BasicDao
 ) {
+
+    fun getTransactionListData(): Flow<PagingData<TransactionListAdapterData>> {
+        return Pager(
+            config = PagingConfig(pageSize = 30, enablePlaceholders = false),
+            pagingSourceFactory = {transactionDao.getTransactionListData()}
+        ).flow
+    }
 
     suspend fun insert(transaction: Transaction): Long {
         return basicDao.insert(transaction)
@@ -46,10 +56,6 @@ class TransactionRepository @Inject constructor(
 
     fun getAllBudget(): LiveData<List<Budget>> {
         return basicDao.getAllBudget()
-    }
-
-    fun getTransactionListData(): LiveData<List<TransactionListAdapterData>> {
-        return transactionDao.getTransactionListData()
     }
 
     fun getTransactionGraphData(year: String): Flow<List<TransactionGraphData>> {

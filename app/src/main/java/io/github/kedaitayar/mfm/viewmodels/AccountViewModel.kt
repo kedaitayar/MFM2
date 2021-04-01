@@ -21,21 +21,21 @@ class AccountViewModel @Inject constructor(
 //    val nextMonthBudgeted: LiveData<Double> = getMonthBudgeted()
 //    val totalBudgetedAndGoal: LiveData<BudgetedAndGoal> = getUncompletedBudget()
 
-    suspend fun getAccountTransactionBudget(accountId: Long): List<AccountTransactionBudgetData> {
-        val now = OffsetDateTime.now()
-        val timeFrom =
-            OffsetDateTime.of(now.year, now.monthValue, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
-        val timeTo = timeFrom.plusMonths(1).minusNanos(1)
-        return dashboardRepository.getAccountTransactionBudget(accountId, timeFrom, timeTo)
-    }
+//    suspend fun getAccountTransactionBudget(accountId: Long): List<AccountTransactionBudgetData> {
+//        val now = OffsetDateTime.now()
+//        val timeFrom =
+//            OffsetDateTime.of(now.year, now.monthValue, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+//        val timeTo = timeFrom.plusMonths(1).minusNanos(1)
+//        return dashboardRepository.getAccountTransactionBudget(accountId, timeFrom, timeTo)
+//    }
 
-    suspend fun getAccountTransactionChartData(
-        accountId: Long,
-        month: Int,
-        year: Int
-    ): List<AccountTransactionChartData> {
-        return dashboardRepository.getAccountTransactionChartData(accountId, month, year)
-    }
+//    suspend fun getAccountTransactionChartData(
+//        accountId: Long,
+//        month: Int,
+//        year: Int
+//    ): List<AccountTransactionChartData> {
+//        return dashboardRepository.getAccountTransactionChartData(accountId, month, year)
+//    }
 
 //    private fun getThisMonthSpendingData(): LiveData<Double> {
 //        val now = OffsetDateTime.now()

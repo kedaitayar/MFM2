@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.snackbar.Snackbar
@@ -13,11 +14,12 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.databinding.FragmentMainBinding
 import io.github.kedaitayar.mfm.util.EventObserver
-import io.github.kedaitayar.mfm.viewmodels.SharedViewModel
+import io.github.kedaitayar.mfm.util.exhaustive
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
-    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
@@ -49,8 +51,25 @@ class MainFragment : Fragment() {
             val action = MainFragmentDirections.actionMainFragmentToAddTransactionFragment()
             findNavController().navigate(action)
         }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            mainViewModel.mainEvent.collect { event ->
+                when (event) {
+                    is MainViewModel.MainEvent.ShowSnackbar -> {
+                        showSnackBar(event.msg, event.length)
+                    }
+                }.exhaustive
+            }
+        }
+
         return binding.root
     }
+
+//    private fun setupAddEditAccountFragmentResultListener() {
+//        setFragmentResultListener(AddEditAccountFragment.NAVIGATE_BACK_EDIT_RESULT) { _: String, bundle: Bundle ->
+//            val result = bundle.getInt(AddEditAccountFragment.RESULT_KEY)
+//        }
+//    }
 
     fun hideFAB() {
         binding.fab.hide()
@@ -63,7 +82,7 @@ class MainFragment : Fragment() {
     fun isFABShown(): Boolean = binding.fab.isShown
 
     private fun setupSnackbarTextObserver() {
-        sharedViewModel.snackbarText.observe(viewLifecycleOwner, EventObserver{
+        mainViewModel.snackbarText.observe(viewLifecycleOwner, EventObserver{
             showSnackBar(it, Snackbar.LENGTH_SHORT)
         })
     }
