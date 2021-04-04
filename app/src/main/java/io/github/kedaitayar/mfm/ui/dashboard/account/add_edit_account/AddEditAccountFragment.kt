@@ -19,6 +19,8 @@ import io.github.kedaitayar.mfm.util.exhaustive
 import io.github.kedaitayar.mfm.ui.main.MainViewModel
 import kotlinx.coroutines.flow.collect
 
+private const val TAG = "AddEditAccountFragment"
+
 @AndroidEntryPoint
 class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
     private val addEditAccountViewModel: AddEditAccountViewModel by viewModels()
@@ -42,7 +44,7 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
         } else {
             addAccountSetup()
         }
-        setupDeleteToolbar()
+        setupToolbar()
         setupEventListener()
     }
 
@@ -51,7 +53,7 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
             addEditAccountViewModel.addEditAccountEvent.collect { event ->
                 when (event) {
                     is AddEditAccountViewModel.AddEditAccountEvent.NavigateBackWithAddResult -> {
-                        if (event.result == 1) {
+                        if (event.result == 1L) {
                             mainViewModel.showSnackbar("Account added", Snackbar.LENGTH_SHORT)
                         } else {
                             mainViewModel.showSnackbar("Account add failed", Snackbar.LENGTH_SHORT)
@@ -88,27 +90,32 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
     }
 
     private fun editAccountSetup() {
-        binding.buttonAddAccount.text = "Save"
-        binding.textInputEditAccountName.setText(args.account!!.accountName)
-        binding.textInputEditAccountName.addTextChangedListener { editable ->
-            addEditAccountViewModel.account?.accountName = editable.toString()
-        }
-
-        binding.buttonAddAccount.setOnClickListener {
-            addEditAccountViewModel.onSaveClick()
+        binding.apply {
+            buttonAddAccount.text = "Save"
+            topAppBar.title = "Edit Account"
+            textInputEditAccountName.setText(args.account!!.accountName)
+            textInputEditAccountName.addTextChangedListener { editable ->
+                addEditAccountViewModel.account?.accountName = editable.toString()
+            }
+            buttonAddAccount.setOnClickListener {
+                addEditAccountViewModel.onSaveClick()
+            }
         }
     }
 
     private fun addAccountSetup() {
-        binding.textInputEditAccountName.addTextChangedListener { editable ->
-            addEditAccountViewModel.account?.accountName = editable.toString()
-        }
-        binding.buttonAddAccount.setOnClickListener {
-            addEditAccountViewModel.onAddClick()
+        binding.apply {
+            topAppBar.title = "Add Account"
+            textInputEditAccountName.addTextChangedListener { editable ->
+                addEditAccountViewModel.account?.accountName = editable.toString()
+            }
+            buttonAddAccount.setOnClickListener {
+                addEditAccountViewModel.onAddClick()
+            }
         }
     }
 
-    private fun setupDeleteToolbar() {
+    private fun setupToolbar() {
         binding.topAppBar.inflateMenu(R.menu.menu_delete)
         binding.topAppBar.setOnMenuItemClickListener {
             when (it.itemId) {

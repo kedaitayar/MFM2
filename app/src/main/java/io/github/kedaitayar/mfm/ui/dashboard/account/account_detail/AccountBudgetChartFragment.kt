@@ -28,7 +28,6 @@ import java.util.*
 
 private const val ARG_ACCOUNT =
     "io.github.kedaitayar.mfm.ui.dashboard.account.account_detail.AccountBudgetChartFragment.account"
-private const val TAG = "AccountBudgetChartFragm"
 
 @AndroidEntryPoint
 class AccountBudgetChartFragment : Fragment(R.layout.fragment_account_budget_chart) {
@@ -40,7 +39,6 @@ class AccountBudgetChartFragment : Fragment(R.layout.fragment_account_budget_cha
         super.onCreate(savedInstanceState)
         arguments?.let {
             accountBudgetChartViewModel.account.value = it.getParcelable(ARG_ACCOUNT) ?: Account(accountId = -1)
-            Log.i(TAG, "onCreate: ${accountBudgetChartViewModel.account.value}")
         }
     }
 

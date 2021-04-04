@@ -25,6 +25,12 @@ interface BasicDao {
     @Query("SELECT * FROM account")
     fun getAllAccountFlow(): Flow<List<Account>>
 
+    @Query("SELECT * FROM account WHERE accountId = :accountId")
+    fun getAccountByIdFlow(accountId : Long): Flow<Account>
+
+    @Query("SELECT * FROM account WHERE accountId = :accountId")
+    suspend fun getAccountById(accountId : Long): Account
+
     //budget
 
     @Query("SELECT * FROM budget")
@@ -38,6 +44,15 @@ interface BasicDao {
 
     @Delete
     suspend fun delete(budget: Budget): Int
+
+    @Query("SELECT * FROM budget")
+    fun getAllBudgetFlow(): Flow<List<Budget>>
+
+    @Query("SELECT * FROM budget WHERE budgetId = :budgetId")
+    fun getBudgetByIdFlow(budgetId: Long): Flow<Budget>
+
+    @Query("SELECT * FROM budget WHERE budgetId = :budgetId")
+    suspend fun getBudgetById(budgetId: Long): Budget
 
     //budget deadline
 

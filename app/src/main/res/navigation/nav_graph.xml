@@ -54,7 +54,7 @@
     </fragment>
     <fragment
         android:id="@+id/addTransactionFragment"
-        android:name="io.github.kedaitayar.mfm.ui.transaction.AddTransactionFragment"
+        android:name="io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transaction.AddTransactionFragment"
         android:label="fragment_add_transaction"
         tools:layout="@layout/fragment_add_transaction" />
     <fragment
@@ -69,12 +69,12 @@
         tools:layout="@layout/fragment_budgeting" />
     <fragment
         android:id="@+id/editTransactionFragment"
-        android:name="io.github.kedaitayar.mfm.ui.transaction.EditTransactionFragment"
+        android:name="io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.edit_transaction.EditTransactionFragment"
         android:label="fragment_edit_transaction"
         tools:layout="@layout/fragment_edit_transaction" >
         <argument
-            android:name="transactionId"
-            app:argType="long" />
+            android:name="transaction"
+            app:argType="io.github.kedaitayar.mfm.data.entity.Transaction" />
     </fragment>
     <fragment
         android:id="@+id/editBudgetFragment"

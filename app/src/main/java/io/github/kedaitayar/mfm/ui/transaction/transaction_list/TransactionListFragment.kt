@@ -3,14 +3,12 @@ package io.github.kedaitayar.mfm.ui.transaction.transaction_list
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.PopupMenu
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -18,17 +16,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
+import io.github.kedaitayar.mfm.data.entity.Transaction
 import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentTransactionListBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.ui.transaction.MainTransactionFragment
-import io.github.kedaitayar.mfm.ui.transaction.TransactionListAdapter
-import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
-private const val TAG = "TransactionListFragment"
 
 @AndroidEntryPoint
 class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
@@ -46,10 +41,9 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
 
     private fun setupAdapter(adapter: TransactionListAdapter) {
         adapter.addLoadStateListener { loadState ->
-            val isLoading = loadState.mediator?.refresh is LoadState.Loading
+//            val isLoading = loadState.mediator?.refresh is LoadState.Loading
+            val isLoading = loadState.refresh is LoadState.Loading
             val isListEmpty = loadState.refresh is LoadState.NotLoading && adapter.itemCount == 0
-
-
             if (parentFragment is MainTransactionFragment) {
                 val mainTransactionFragment = parentFragment as MainTransactionFragment
                 if (isLoading) {
@@ -72,7 +66,6 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         viewLifecycleOwner.lifecycleScope.launch {
-
             transactionListViewModel.allTransactionListAdapterData.collectLatest {
                 adapter.submitData(it)
             }
@@ -98,7 +91,6 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
 
     private fun popupMenuSetup(adapter: TransactionListAdapter) {
         adapter.setOnItemClickListener(object : TransactionListAdapter.OnItemClickListener {
-
             override fun onPopupMenuButtonClick(
                 transactionListAdapterData: TransactionListAdapterData,
                 popupMenuButton: Button
@@ -109,7 +101,7 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
                     when (it.itemId) {
                         R.id.edit -> {
                             val action = MainFragmentDirections.actionMainFragmentToEditTransactionFragment(
-                                transactionListAdapterData.transactionId
+                                transactionListAdapterData.toTransaction()
                             )
                             findNavController().navigate(action)
                             true
@@ -120,6 +112,18 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
                 popupMenu.show()
             }
         })
+    }
+
+    private fun TransactionListAdapterData.toTransaction() : Transaction {
+        return Transaction(
+            transactionId = transactionId,
+            transactionAmount = transactionAmount,
+            transactionTime = transactionTime,
+            transactionType = transactionTypeId,
+            transactionAccountId = transactionAccountId,
+            transactionBudgetId = transactionBudgetId,
+            transactionAccountTransferTo = transactionAccountTransferTo
+        )
     }
 
     override fun onDestroyView() {

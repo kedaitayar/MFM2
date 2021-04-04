@@ -1,11 +1,14 @@
 package io.github.kedaitayar.mfm.data.entity
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 import java.time.OffsetDateTime
 
+@Parcelize
 @Entity(
     indices = [Index(value = ["transactionAccountId", "transactionBudgetId", "transactionAccountTransferTo"])],
     foreignKeys = [ForeignKey(
@@ -34,4 +37,4 @@ data class Transaction(
     var transactionAccountId: Long = 0,
     var transactionBudgetId: Long? = null,
     var transactionAccountTransferTo: Long? = null
-)
+): Parcelable

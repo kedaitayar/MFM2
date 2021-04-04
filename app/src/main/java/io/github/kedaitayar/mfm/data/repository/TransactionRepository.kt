@@ -26,7 +26,7 @@ class TransactionRepository @Inject constructor(
     fun getTransactionListData(): Flow<PagingData<TransactionListAdapterData>> {
         return Pager(
             config = PagingConfig(pageSize = 30, enablePlaceholders = false),
-            pagingSourceFactory = {transactionDao.getTransactionListData()}
+            pagingSourceFactory = { transactionDao.getTransactionListData() }
         ).flow
     }
 
@@ -42,7 +42,7 @@ class TransactionRepository @Inject constructor(
         return basicDao.update(transaction)
     }
 
-    suspend fun getTransactionById(transactionId: Long) : Transaction {
+    suspend fun getTransactionById(transactionId: Long): Transaction {
         return basicDao.getTransactionById(transactionId)
     }
 
@@ -56,6 +56,30 @@ class TransactionRepository @Inject constructor(
 
     fun getAllBudget(): LiveData<List<Budget>> {
         return basicDao.getAllBudget()
+    }
+
+    fun getAllAccountFlow(): Flow<List<Account>> {
+        return basicDao.getAllAccountFlow()
+    }
+
+    fun getAllBudgetFlow(): Flow<List<Budget>> {
+        return basicDao.getAllBudgetFlow()
+    }
+
+    fun getAccountByIdFlow(accountId: Long): Flow<Account> {
+        return basicDao.getAccountByIdFlow(accountId)
+    }
+
+    suspend fun getAccountById(accountId: Long): Account {
+        return basicDao.getAccountById(accountId)
+    }
+
+    fun getBudgetByIdFlow(budgetId: Long): Flow<Budget> {
+        return basicDao.getBudgetByIdFlow(budgetId)
+    }
+
+    suspend fun getBudgetById(budgetId: Long): Budget {
+        return basicDao.getBudgetById(budgetId)
     }
 
     fun getTransactionGraphData(year: String): Flow<List<TransactionGraphData>> {

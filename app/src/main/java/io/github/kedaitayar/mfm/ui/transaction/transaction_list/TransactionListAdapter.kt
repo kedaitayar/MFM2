@@ -1,8 +1,6 @@
-package io.github.kedaitayar.mfm.ui.transaction
+package io.github.kedaitayar.mfm.ui.transaction.transaction_list
 
-import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +9,6 @@ import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData

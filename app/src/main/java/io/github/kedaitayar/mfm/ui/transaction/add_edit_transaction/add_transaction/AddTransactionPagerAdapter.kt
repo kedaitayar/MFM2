@@ -1,7 +1,10 @@
-package io.github.kedaitayar.mfm.ui.transaction
+package io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transaction
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.common.ExpenseTransactionFragment
+import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.common.IncomeTransactionFragment
+import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.common.TransferTransactionFragment
 import java.lang.IndexOutOfBoundsException
 
 const val EXPENSE_PAGE_INDEX = 0

@@ -3,10 +3,12 @@ package io.github.kedaitayar.mfm.ui.dashboard.account.account_detail
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentAccountDetailBinding
+import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 
 @AndroidEntryPoint
 class AccountDetailFragment : Fragment(R.layout.fragment_account_detail) {
@@ -17,6 +19,14 @@ class AccountDetailFragment : Fragment(R.layout.fragment_account_detail) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAccountDetailBinding.bind(view)
+
+        binding.topAppBar.apply {
+            setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+            setNavigationOnClickListener {
+                findNavController().navigateUp()
+            }
+            title = "${args.account.accountName} Detail"
+        }
 
         childFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container_account_budget_chart,

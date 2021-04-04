@@ -41,8 +41,8 @@ class AddEditAccountViewModel @Inject constructor(
     fun onAddClick() {
         viewModelScope.launch {
             if (account?.accountName?.isBlank() == true) {
-//                val result = dashboardRepository.update(Account(accountId = accountId, accountName = accountName))
-                addEditAccountEventChannel.send(AddEditAccountEvent.NavigateBackWithAddResult(99))
+                val result = dashboardRepository.insert(Account(accountId = account.accountId, accountName = account.accountName))
+                addEditAccountEventChannel.send(AddEditAccountEvent.NavigateBackWithAddResult(result))
             } else {
                 addEditAccountEventChannel.send(
                     AddEditAccountEvent.ShowSnackbar(
@@ -56,14 +56,14 @@ class AddEditAccountViewModel @Inject constructor(
 
     fun onDeleteClick() {
         viewModelScope.launch {
-//            val result = dashboardRepository.delete(Account(accountId = accountId, accountName = accountName))
-            addEditAccountEventChannel.send(AddEditAccountEvent.NavigateBackWithDeleteResult(99))
+            val result = dashboardRepository.delete(Account(accountId = account!!.accountId, accountName = account.accountName))
+            addEditAccountEventChannel.send(AddEditAccountEvent.NavigateBackWithDeleteResult(result))
         }
     }
 
     sealed class AddEditAccountEvent {
         data class ShowSnackbar(val msg: String, val length: Int) : AddEditAccountEvent()
-        data class NavigateBackWithAddResult(val result: Int) : AddEditAccountEvent()
+        data class NavigateBackWithAddResult(val result: Long) : AddEditAccountEvent()
         data class NavigateBackWithEditResult(val result: Int) : AddEditAccountEvent()
         data class NavigateBackWithDeleteResult(val result: Int) : AddEditAccountEvent()
     }
