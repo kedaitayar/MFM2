@@ -6,6 +6,7 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMainBudgetBinding
@@ -13,6 +14,7 @@ import io.github.kedaitayar.mfm.ui.budget.budget_list.BudgetListFragment
 import io.github.kedaitayar.mfm.ui.budget.not_budgeted.NotBudgetedFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
+
 
 @AndroidEntryPoint
 class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
@@ -46,7 +48,13 @@ class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
 
     private fun setupReclaimUnusedBudgetButton() {
         binding.buttonReclaimUnused.setOnClickListener {
-            mainBudgetViewModel.onReclaimUnusedBudgetClick()
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Reclaim Unused Budget")
+                .setMessage("Reclaim unused budget from previous month?")
+                .setNegativeButton("Cancel") { dialog, which -> }
+                .setPositiveButton("Ok") { dialog, which ->
+                    mainBudgetViewModel.onReclaimUnusedBudgetClick()
+                }.show()
         }
     }
 

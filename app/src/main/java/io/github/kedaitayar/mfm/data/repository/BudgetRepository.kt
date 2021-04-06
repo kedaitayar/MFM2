@@ -148,4 +148,8 @@ class BudgetRepository @Inject constructor(
     fun getBudgetTransactionJoinTransactionFlow(): Flow<List<BudgetTransactionJoinTransaction>> {
         return budgetDao.getBudgetTransactionJoinTransactionFlow()
     }
+
+    suspend fun getBudgetTransactionJoinTransactionSuspend(): List<BudgetTransactionJoinTransaction> {
+        return budgetDao.getBudgetTransactionJoinTransactionSuspend()
+    }
 }

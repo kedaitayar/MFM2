@@ -875,6 +875,28 @@ interface BudgetDao {
     """)
     fun getBudgetTransactionJoinTransactionFlow(): Flow<List<BudgetTransactionJoinTransaction>>
 
+    @Query("""
+        SELECT budgetId, budgetName, budgetType, budgetTransactionMonth, budgetTransactionYear, budgetTransactionAmount, transactionAmount
+        FROM Budget
+        LEFT JOIN
+            budgettype
+            ON budgetType = budgetTypeId
+        LEFT JOIN
+            budgettransaction
+            ON budgetId = budgetTransactionBudgetId
+        LEFT JOIN (
+            SELECT transactionBudgetId, transactionType, sum(transactionAmount) as transactionAmount, strftime('%m', transactionTime) as month, strftime('%Y', transactionTime) as year
+            FROM `Transaction`
+            WHERE transactionBudgetId != ''
+            GROUP BY transactionBudgetId, month, year
+            ORDER BY year DESC, month DESC, transactionBudgetId
+        ) as tbl
+            ON BudgetTransaction.budgetTransactionMonth = tbl.month
+            AND BudgetTransaction.budgetTransactionYear = tbl.year
+            AND Budget.budgetId = tbl.transactionBudgetId
+    """)
+    suspend fun getBudgetTransactionJoinTransactionSuspend(): List<BudgetTransactionJoinTransaction>
+
     @Query("SELECT SUM(budgetTransactionAmount) FROM budgettransaction")
     fun getTotalBudgetedAmount(): Flow<Double>
 

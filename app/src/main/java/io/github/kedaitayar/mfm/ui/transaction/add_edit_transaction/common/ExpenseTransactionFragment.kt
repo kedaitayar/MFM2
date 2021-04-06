@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.Account
@@ -20,7 +21,11 @@ import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.AddEditTrans
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transaction.AddTransactionChild
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transaction.AddTransactionFragment
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.edit_transaction.EditTransactionChild
+import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import kotlinx.coroutines.*
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 
 private const val ARG_TRANSACTION =
     "io.github.kedaitayar.mfm.ui.transaction.ExpenseTransactionFragment.Transaction"
@@ -32,24 +37,39 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
     private var _binding: FragmentExpenseTransactionBinding? = null
     private val binding get() = _binding!!
 
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        arguments?.let {
-////            addEditTransactionViewModel.transactionStateFlow.value =
-////                it.getParcelable(ARG_TRANSACTION) ?: Transaction(transactionId = -1L)
-//        }
-//    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentExpenseTransactionBinding.bind(view)
 
         setupAccountDropdown()
         setupBudgetDropdown()
+        setupDateInput()
         setupInputListener()
 
         if (addEditTransactionViewModel.transaction != null) {
             setupEditTransactionValue()
+        }
+    }
+
+    private fun setupDateInput() {
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .build()
+
+        val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        binding.textInputEditDate.setText(addEditTransactionViewModel.inputDate.format(dateFormatter))
+
+        binding.textInputEditDate.setOnClickListener {
+            hideKeyboard()
+            datePicker.show(parentFragmentManager, "date_picker_01")
+        }
+        datePicker.addOnPositiveButtonClickListener {
+            val instant = Instant.ofEpochMilli(it)
+            val date = instant.atOffset(ZoneOffset.UTC)
+            addEditTransactionViewModel.inputDate = date
+            binding.textInputEditDate.setText(date.format(dateFormatter))
         }
     }
 
@@ -201,95 +221,10 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
 
     override fun onButtonAddClick() {
         addEditTransactionViewModel.onButtonAddClick(AddEditTransactionViewModel.TransactionType.EXPENSE)
-//        val accountName = binding.autoCompleteAccount.text.toString()
-//        val budgetName = binding.autoCompleteBudget.text.toString()
-//        val transactionAmount = binding.textInputEditAmount.text.toString()
-//        if (accountName.isBlank()) {
-//            if (parentFragment is AddTransactionFragment) {
-//                (parentFragment as AddTransactionFragment).showSnackbar("Account cannot be empty")
-//            }
-//        } else if (budgetName.isBlank()) {
-//            if (parentFragment is AddTransactionFragment) {
-//                (parentFragment as AddTransactionFragment).showSnackbar("Budget cannot be empty")
-//            }
-//        } else if (transactionAmount.isBlank()) {
-//            if (parentFragment is AddTransactionFragment) {
-//                (parentFragment as AddTransactionFragment).showSnackbar("Amount cannot be empty")
-//            }
-//        } else {
-//            val account = transactionViewModel.allAccount.value?.let { list ->
-//                list.find { it.accountName == accountName }
-//            }
-//            val budget = transactionViewModel.allBudget.value?.let { list ->
-//                list.find { it.budgetName == budgetName }
-//            }
-//            if (account != null) {
-//                if (budget != null) {
-//                    CoroutineScope(Dispatchers.IO).launch {
-//                        val transaction = Transaction(
-//                            transactionAccountId = account.accountId!!,
-//                            transactionBudgetId = budget.budgetId,
-//                            transactionAmount = binding.textInputEditAmount.text.toString().toDouble(),
-//                            transactionType = 1,
-//                            transactionTime = OffsetDateTime.now()
-//                        )
-//                        val result = async { transactionViewModel.insert(transaction) }
-//                        withContext(Dispatchers.Main) {
-//                            if (result.await() > 0) {
-//                                mainViewModel.setSnackbarText("Transaction added")
-//                                hideKeyboard()
-//                                findNavController().navigateUp()
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
     }
 
     override fun onButtonSaveClick() {
         addEditTransactionViewModel.onButtonSaveClick(AddEditTransactionViewModel.TransactionType.EXPENSE)
-//        val accountName = binding.autoCompleteAccount.text.toString()
-//        val budgetName = binding.autoCompleteBudget.text.toString()
-//        val transactionAmount = binding.textInputEditAmount.text.toString()
-//        if (accountName.isBlank()) {
-//            if (parentFragment is EditTransactionFragment) {
-//                (parentFragment as EditTransactionFragment).showSnackbar("Account cannot be empty")
-//            }
-//        } else if (budgetName.isBlank()) {
-//            if (parentFragment is EditTransactionFragment) {
-//                (parentFragment as EditTransactionFragment).showSnackbar("Budget cannot be empty")
-//            }
-//        } else if (transactionAmount.isBlank()) {
-//            if (parentFragment is EditTransactionFragment) {
-//                (parentFragment as EditTransactionFragment).showSnackbar("Amount cannot be empty")
-//            }
-//        } else {
-//            val account = transactionViewModel.allAccount.value?.let { list ->
-//                list.find { it.accountName == accountName }
-//            }
-//            val budget = transactionViewModel.allBudget.value?.let { list ->
-//                list.find { it.budgetName == budgetName }
-//            }
-//            if (account != null) {
-//                if (budget != null) {
-//                    CoroutineScope(Dispatchers.IO).launch {
-//                        val transaction = Transaction(
-//                            transactionId = transaction.transactionId,
-//                            transactionAccountId = account.accountId!!,
-//                            transactionBudgetId = budget.budgetId,
-//                            transactionAmount = binding.textInputEditAmount.text.toString().toDouble(),
-//                            transactionType = 1,
-//                            transactionTime = transaction.transactionTime
-//                        )
-//                        transactionViewModel.update(transaction)
-//                    }
-//                    hideKeyboard()
-//                    findNavController().navigateUp()
-//                }
-//
-//            }
-//        }
     }
 
     override fun onResume() {

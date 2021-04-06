@@ -35,6 +35,7 @@ constructor(
     var inputBudget: Budget? = null
     var inputAccountTo: Account? = null
     var inputAmount: Double? = null
+    var inputDate: OffsetDateTime = OffsetDateTime.now()
 
     private fun getAccountFromLivedata(): LiveData<Account?> {
         return when (transaction) {
@@ -121,7 +122,7 @@ constructor(
                                     transactionAccountId = inputAccountFrom!!.accountId!!,
                                     transactionBudgetId = inputBudget!!.budgetId,
                                     transactionAmount = inputAmount!!,
-
+                                    transactionTime = inputDate
                                     )
                             transaction?.let {
                                 val result = update(transaction)
@@ -157,7 +158,8 @@ constructor(
                             val transaction =
                                 transaction?.copy(
                                     transactionAccountId = inputAccountFrom!!.accountId!!,
-                                    transactionAmount = inputAmount!!
+                                    transactionAmount = inputAmount!!,
+                                    transactionTime = inputDate
                                 )
                             transaction?.let {
                                 val result = update(transaction)
@@ -201,7 +203,8 @@ constructor(
                                 transaction?.copy(
                                     transactionAccountId = inputAccountFrom!!.accountId!!,
                                     transactionAccountTransferTo = inputAccountTo!!.accountId,
-                                    transactionAmount = inputAmount!!
+                                    transactionAmount = inputAmount!!,
+                                    transactionTime = inputDate
                                 )
                             transaction?.let {
                                 val result = update(transaction)
@@ -253,7 +256,7 @@ constructor(
                                 transactionBudgetId = inputBudget!!.budgetId,
                                 transactionAmount = inputAmount ?: 0.0,
                                 transactionType = 1,
-                                transactionTime = OffsetDateTime.now()
+                                transactionTime = inputDate
                             )
                             val result = insert(transaction)
                             addEditTransactionEventChannel.send(
@@ -287,7 +290,7 @@ constructor(
                                 transactionAccountId = inputAccountFrom!!.accountId!!,
                                 transactionAmount = inputAmount ?: 0.0,
                                 transactionType = 2,
-                                transactionTime = OffsetDateTime.now()
+                                transactionTime = inputDate
                             )
                             val result = insert(transaction)
                             addEditTransactionEventChannel.send(
@@ -330,7 +333,7 @@ constructor(
                                 transactionAmount = inputAmount ?: 0.0,
                                 transactionAccountTransferTo = inputAccountTo!!.accountId,
                                 transactionType = 3,
-                                transactionTime = OffsetDateTime.now()
+                                transactionTime = inputDate
                             )
                             val result = insert(transaction)
                             addEditTransactionEventChannel.send(
@@ -348,7 +351,7 @@ constructor(
     fun onDeleteClick() {
         viewModelScope.launch {
             if (transaction != null) {
-                val result = transactionRepository.delete(Transaction(transactionId = transaction!!.transactionId))
+                val result = transactionRepository.delete(Transaction(transactionId = transaction.transactionId))
                 addEditTransactionEventChannel.send(AddEditTransactionEvent.NavigateBackWithDeleteResult(result))
             }
         }

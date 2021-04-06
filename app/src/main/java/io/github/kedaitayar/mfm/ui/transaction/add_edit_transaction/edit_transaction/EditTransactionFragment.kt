@@ -21,7 +21,6 @@ import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.common.Expen
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.common.IncomeTransactionFragment
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.common.TransferTransactionFragment
 import io.github.kedaitayar.mfm.util.exhaustive
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
@@ -126,23 +125,7 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
                             .setMessage("Delete transaction?")
                             .setNegativeButton("Cancel") { dialog, which -> }
                             .setPositiveButton("Delete") { dialog, which ->
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    addEditTransactionViewModel.onDeleteClick()
-//                                val transaction = Transaction(transactionId = args.transaction.transactionId)
-//                                    val result = async { addEditTransactionViewModel.delete(args.transaction) }
-//                                    if (result.await() > 0) {
-//                                        mainViewModel.showSnackbar("Transaction deleted", Snackbar.LENGTH_SHORT)
-//                                        withContext(Dispatchers.Main) {
-//                                            findNavController().navigateUp()
-//                                        }
-//                                    }
-//                                withContext(Dispatchers.Main) {
-//                                    if (result.await() > 0) {
-//                                        mainViewModel.setSnackbarText("Transaction deleted")
-//                                        findNavController().navigateUp()
-//                                    }
-//                                }
-                                }
+                                addEditTransactionViewModel.onDeleteClick()
                             }.show()
                         true
                     }
