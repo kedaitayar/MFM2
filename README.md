@@ -19,5 +19,11 @@ Currently the project has implemented the following:
  - Material Design (UI and Theme)
  - [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart) (Chart and Graph view)
   
+Screentshot
+-----------
+screenshot of the V1.0.1-beta pre-release <br>
+![Dashboard](screenshot/01.png)
+![Transaction](screenshot/02.png)
+![Budget](screenshot/03.png)
 
 [Previous version](https://github.com/kedaitayar/MFM)
