@@ -3,37 +3,25 @@ package io.github.kedaitayar.mfm.ui.dashboard.account.account_detail
 import android.os.Bundle
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.Account
-import io.github.kedaitayar.mfm.data.podata.AccountTransactionChartData
 import io.github.kedaitayar.mfm.databinding.FragmentAccountTransactionGraphBinding
-import io.github.kedaitayar.mfm.viewmodels.AccountViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.time.OffsetDateTime
 
 private const val ARG_ACCOUNT =
     "io.github.kedaitayar.mfm.ui.dashboard.account.account_detail.AccountTransactionGraphFragment.account"
 
 @AndroidEntryPoint
 class AccountTransactionGraphFragment : Fragment(R.layout.fragment_account_transaction_graph) {
-    private val accountViewModel: AccountViewModel by viewModels()
     private val accountTransactionGraphViewModel: AccountTransactionGraphViewModel by viewModels()
     private var _binding: FragmentAccountTransactionGraphBinding? = null
     private val binding get() = _binding!!
-    private var accountId = -1L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,15 +33,23 @@ class AccountTransactionGraphFragment : Fragment(R.layout.fragment_account_trans
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAccountTransactionGraphBinding.bind(view)
+
+        initViewModelColor()
         setupCombinedGraph()
+    }
+
+    private fun initViewModelColor() {
+        val typedValue = TypedValue()
+        requireContext().theme.resolveAttribute(R.attr.gGreen, typedValue, true)
+        accountTransactionGraphViewModel.green = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+        requireContext().theme.resolveAttribute(R.attr.gRed, typedValue, true)
+        accountTransactionGraphViewModel.red = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+        requireContext().theme.resolveAttribute(R.attr.colorOnSurface, typedValue, true)
+        accountTransactionGraphViewModel.colorOnSurface = ContextCompat.getColor(requireContext(), typedValue.resourceId)
     }
 
     private fun setupCombinedGraph() {
         val typedValue = TypedValue()
-        requireContext().theme.resolveAttribute(R.attr.gGreen, typedValue, true)
-        val green = ContextCompat.getColor(requireContext(), typedValue.resourceId)
-        requireContext().theme.resolveAttribute(R.attr.gRed, typedValue, true)
-        val red = ContextCompat.getColor(requireContext(), typedValue.resourceId)
         requireContext().theme.resolveAttribute(R.attr.colorOnSurface, typedValue, true)
         val colorOnSurface = ContextCompat.getColor(requireContext(), typedValue.resourceId)
 
@@ -91,62 +87,12 @@ class AccountTransactionGraphFragment : Fragment(R.layout.fragment_account_trans
             axisRight.textColor = colorOnSurface
         }
 
-        val barDataSet = BarDataSet(listOf<BarEntry>(), "bar label")
-        barDataSet.colors = arrayListOf(
-            green,
-            red
-        )
-        barDataSet.setDrawValues(false)
-        val barData = BarData(barDataSet)
-
-        val lineDataSet = LineDataSet(listOf<Entry>(), "line label")
-        lineDataSet.apply {
-            setDrawValues(false)
-            mode = LineDataSet.Mode.LINEAR
-            color = colorOnSurface
-            setCircleColor(colorOnSurface)
-            lineWidth = 2f
-            circleRadius = 2f
-        }
-        val lineData = LineData(lineDataSet)
-
-        val combinedData = CombinedData().apply {
-            setData(barData)
-            setData(lineData)
-            notifyDataChanged()
-        }
-
-        binding.combinedChart.apply {
-            data = combinedData
-            notifyDataSetChanged()
-            invalidate()
-        }
-
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            accountTransactionGraphViewModel.accountTransactionGraphBarEntries.observe(viewLifecycleOwner) {
-                it?.let {
-                    barDataSet.values = it
-                    barData.clearValues()
-                    barData.addDataSet(barDataSet)
-                    binding.combinedChart.apply {
-                        data.setData(barData)
-                        notifyDataSetChanged()
-                        postInvalidate()
-                        animateX(500)
-                    }
-                }
-            }
-            accountTransactionGraphViewModel.accountTransactionGraphLineEntries.observe(viewLifecycleOwner) {
-                it?.let {
-                    lineDataSet.values = it
-                    lineData.clearValues()
-                    lineData.addDataSet(lineDataSet)
-                    binding.combinedChart.apply {
-                        data.setData(lineData)
-                        notifyDataSetChanged()
-                        postInvalidate()
-                        animateX(500)
-                    }
+        accountTransactionGraphViewModel.accountTransactionGraphCombinedData.observe(viewLifecycleOwner) {
+            it?.let {
+                binding.combinedChart.apply {
+                    data = it
+                    notifyDataSetChanged()
+                    invalidate()
                 }
             }
         }

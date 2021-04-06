@@ -13,7 +13,7 @@ class NotBudgetedViewModel @Inject constructor(private val budgetRepository: Bud
     private val totalIncome: Flow<Double?> = budgetRepository.getTotalIncome()
     private val totalBudgetedAmount: Flow<Double?> = budgetRepository.getTotalBudgetedAmount()
     private val notBudgetedAmountFlow = combine(totalIncome, totalBudgetedAmount) { totalIncome, totalBudgetedAmount ->
-        (totalIncome ?: 0.0) + (totalBudgetedAmount ?: 0.0)
+        (totalIncome ?: 0.0) - (totalBudgetedAmount ?: 0.0)
     }
     val notBudgetedAmount = notBudgetedAmountFlow.asLiveData()
 }

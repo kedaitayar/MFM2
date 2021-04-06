@@ -1,4 +1,4 @@
-package io.github.kedaitayar.mfm.ui.budget
+package io.github.kedaitayar.mfm.ui.budget.budgeting
 
 import android.text.Editable
 import android.view.LayoutInflater
@@ -25,7 +25,7 @@ class BudgetingListAdapter(private var listener: OnBudgetingListAdapterListener)
 
         init {
             binding.textInputEditAmount.doAfterTextChanged {
-                listener.onAfterTextChanged(getItem(adapterPosition), it)
+                listener.onAfterTextChanged(getItem(bindingAdapterPosition), it)
             }
         }
 

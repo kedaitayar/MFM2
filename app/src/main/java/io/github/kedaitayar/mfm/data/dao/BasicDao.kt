@@ -87,6 +87,9 @@ interface BasicDao {
     @Query("SELECT * FROM budgettype")
     fun getAllBudgetType(): LiveData<List<BudgetType>>
 
+    @Query("SELECT * FROM budgettype")
+    fun getAllBudgetTypeFlow(): Flow<List<BudgetType>>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(budgetType: BudgetType): Long
 

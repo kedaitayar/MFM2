@@ -34,8 +34,12 @@ class MainFragment : Fragment() {
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-                if (!isFABShown()) {
-                    showFAB()
+                if (position == 2) {
+                    hideFAB()
+                } else {
+                    if (!isFABShown()) {
+                        showFAB()
+                    }
                 }
             }
         })

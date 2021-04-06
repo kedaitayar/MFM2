@@ -42,6 +42,10 @@ class BudgetRepository @Inject constructor(
         return basicDao.getAllBudgetType()
     }
 
+    fun getAllBudgetTypeFlow(): Flow<List<BudgetType>> {
+        return basicDao.getAllBudgetTypeFlow()
+    }
+
     suspend fun insert(budgetType: BudgetType): Long {
         return basicDao.insert(budgetType)
     }
@@ -111,6 +115,24 @@ class BudgetRepository @Inject constructor(
         return budgetDao.getYearlyBudgetingListAdapterDO(month, year, timeFrom, timeTo)
     }
 
+    fun getMonthlyBudgetingListAdapterFlow(
+        month: Int,
+        year: Int
+    ): Flow<List<BudgetListAdapterData>> {
+        val timeFrom = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+        val timeTo = timeFrom.plusMonths(1).minusNanos(1)
+        return budgetDao.getMonthlyBudgetingListAdapterFlow(month, year, timeFrom, timeTo)
+    }
+
+    fun getYearlyBudgetingListAdapterFlow(
+        month: Int,
+        year: Int
+    ): Flow<List<BudgetListAdapterData>> {
+        val timeFrom = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+        val timeTo = timeFrom.plusMonths(1).minusNanos(1)
+        return budgetDao.getYearlyBudgetingListAdapterFlow(month, year, timeFrom, timeTo)
+    }
+
     fun getTotalBudgetedAmount(): Flow<Double> {
         return budgetDao.getTotalBudgetedAmount()
     }
@@ -121,5 +143,9 @@ class BudgetRepository @Inject constructor(
 
     fun getBudgetTransactionJoinTransaction(): LiveData<List<BudgetTransactionJoinTransaction>> {
         return budgetDao.getBudgetTransactionJoinTransaction()
+    }
+
+    fun getBudgetTransactionJoinTransactionFlow(): Flow<List<BudgetTransactionJoinTransaction>> {
+        return budgetDao.getBudgetTransactionJoinTransactionFlow()
     }
 }

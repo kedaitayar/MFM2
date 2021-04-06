@@ -63,6 +63,22 @@ class MainActivity : AppCompatActivity() {
 //            accountViewModel.insert(account1)
             accountViewModel.insert(account2)
 
+            budgetViewModel.update(Budget(budgetId = 1, budgetGoal = 450.0, budgetName = "Food", budgetType = 1))
+            budgetViewModel.update(Budget(budgetId = 2, budgetGoal = 240.0, budgetName = "Groceries", budgetType = 1))
+            budgetViewModel.update(Budget(budgetId = 3, budgetGoal = 800.0, budgetName = "Rent", budgetType = 1))
+            budgetViewModel.update(Budget(budgetId = 4, budgetGoal = 60.0, budgetName = "Electric", budgetType = 1))
+            budgetViewModel.update(Budget(budgetId = 5, budgetGoal = 40.0, budgetName = "Water", budgetType = 1))
+            budgetViewModel.update(Budget(budgetId = 6, budgetGoal = 240.0, budgetName = "Transportation", budgetType = 1))
+            budgetViewModel.update(Budget(budgetId = 7, budgetGoal = 100.0, budgetName = "Bills", budgetType = 1))
+            budgetViewModel.update(Budget(budgetId = 12, budgetGoal = 50.0, budgetName = "Fun Fund", budgetType = 1))
+            budgetViewModel.update(Budget(budgetId = 8, budgetGoal = 1000.0, budgetName = "Car Maintenance", budgetType = 2))
+            budgetViewModel.update(Budget(budgetId = 9, budgetGoal = 1000.0, budgetName = "Home Maintenance", budgetType = 2))
+            budgetViewModel.update(Budget(budgetId = 10, budgetGoal = 2000.0, budgetName = "Medical", budgetType = 2))
+            budgetViewModel.update(Budget(budgetId = 11, budgetGoal = 500.0, budgetName = "Clothing", budgetType = 2))
+            budgetViewModel.update(Budget(budgetId = 13, budgetGoal = 2000.0, budgetName = "Vacation", budgetType = 2))
+            budgetViewModel.update(Budget(budgetId = 14, budgetGoal = 500.0, budgetName = "Stuff I Forgot to Budget for", budgetType = 2))
+            budgetViewModel.update(Budget(budgetId = 15, budgetGoal = 1000.0, budgetName = "Emergency Funds", budgetType = 2))
+
             //budgeting
             budgetViewModel.insert(BudgetTransaction(budgetTransactionMonth=now.minusMonths(3).monthValue, budgetTransactionYear=now.minusMonths(3).year, budgetTransactionAmount=285.0, budgetTransactionBudgetId=1))
             budgetViewModel.insert(BudgetTransaction(budgetTransactionMonth=now.minusMonths(3).monthValue, budgetTransactionYear=now.minusMonths(3).year, budgetTransactionAmount=180.0, budgetTransactionBudgetId=2))

@@ -9,27 +9,16 @@ import android.widget.ArrayAdapter
 import android.widget.Filter
 import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.Account
-import io.github.kedaitayar.mfm.data.entity.Budget
 import io.github.kedaitayar.mfm.databinding.FragmentTransferTransactionBinding
-import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
-import io.github.kedaitayar.mfm.viewmodels.TransactionViewModel
 import io.github.kedaitayar.mfm.data.entity.Transaction
-import io.github.kedaitayar.mfm.databinding.FragmentExpenseTransactionBinding
-import io.github.kedaitayar.mfm.ui.main.MainViewModel
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.AddEditTransactionViewModel
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transaction.AddTransactionChild
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transaction.AddTransactionFragment
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.edit_transaction.EditTransactionChild
-import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.edit_transaction.EditTransactionFragment
-import kotlinx.coroutines.*
-import java.time.OffsetDateTime
 
 private const val ARG_TRANSACTION =
     "io.github.kedaitayar.mfm.ui.transaction.TransferTransactionFragment.TransactionId"

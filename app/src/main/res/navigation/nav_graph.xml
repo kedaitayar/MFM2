@@ -59,12 +59,12 @@
         tools:layout="@layout/fragment_add_transaction" />
     <fragment
         android:id="@+id/addBudgetFragment"
-        android:name="io.github.kedaitayar.mfm.ui.budget.AddBudgetFragment"
+        android:name="io.github.kedaitayar.mfm.ui.budget.add_edit_budget.AddBudgetFragment"
         android:label="fragment_add_budget"
         tools:layout="@layout/fragment_add_budget" />
     <fragment
         android:id="@+id/budgetingFragment"
-        android:name="io.github.kedaitayar.mfm.ui.budget.BudgetingFragment"
+        android:name="io.github.kedaitayar.mfm.ui.budget.budgeting.BudgetingFragment"
         android:label="fragment_budgeting"
         tools:layout="@layout/fragment_budgeting" />
     <fragment
@@ -78,7 +78,7 @@
     </fragment>
     <fragment
         android:id="@+id/editBudgetFragment"
-        android:name="io.github.kedaitayar.mfm.ui.budget.EditBudgetFragment"
+        android:name="io.github.kedaitayar.mfm.ui.budget.add_edit_budget.EditBudgetFragment"
         android:label="fragment_edit_budget"
         tools:layout="@layout/fragment_edit_budget" >
         <argument

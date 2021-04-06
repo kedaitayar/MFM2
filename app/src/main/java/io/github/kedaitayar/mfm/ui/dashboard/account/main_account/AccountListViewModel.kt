@@ -17,6 +17,8 @@ class AccountListViewModel @Inject constructor(
     private val accountListEventChannel = Channel<AccountListEvent>()
     val accountListEvent = accountListEventChannel.receiveAsFlow()
 
+    val accountListAdapterData = dashboardRepository.getAccountListData()
+
     fun onAccountDetailClick(account: Account) {
         viewModelScope.launch {
             accountListEventChannel.send(AccountListEvent.NavigateToAccountDetail(account))

@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
@@ -23,7 +22,19 @@ class TransactionTrendGraphFragment : Fragment(R.layout.fragment_transaction_tre
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentTransactionTrendGraphBinding.bind(view)
+
+        initViewModelColor()
         setupCombinedGraph()
+    }
+
+    private fun initViewModelColor() {
+        val typedValue = TypedValue()
+        requireContext().theme.resolveAttribute(R.attr.gGreen, typedValue, true)
+        transactionTrendGraphViewModel.green = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+        requireContext().theme.resolveAttribute(R.attr.gRed, typedValue, true)
+        transactionTrendGraphViewModel.red = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+        requireContext().theme.resolveAttribute(R.attr.colorOnSurface, typedValue, true)
+        transactionTrendGraphViewModel.colorOnSurface = ContextCompat.getColor(requireContext(), typedValue.resourceId)
     }
 
     private fun setupCombinedGraph() {
@@ -57,75 +68,12 @@ class TransactionTrendGraphFragment : Fragment(R.layout.fragment_transaction_tre
             axisRight.textColor = colorOnSurface
         }
 
-        val typedValue = TypedValue()
-        requireContext().theme.resolveAttribute(R.attr.gGreen, typedValue, true)
-        val green = ContextCompat.getColor(requireContext(), typedValue.resourceId)
-        requireContext().theme.resolveAttribute(R.attr.gRed, typedValue, true)
-        val red = ContextCompat.getColor(requireContext(), typedValue.resourceId)
-
-        // initial empty data
-        val barEntries = mutableListOf<BarEntry>()
-        val lineEntries = mutableListOf<Entry>()
-
-        val barDataSet = BarDataSet(barEntries, "bardataset label")
-        barDataSet.colors = arrayListOf(
-            green,
-            red
-        )
-        barDataSet.setDrawValues(false)
-        val barData = BarData(barDataSet)
-
-        requireContext().theme.resolveAttribute(R.attr.colorOnSurface, typedValue, true)
-        val colorOnSurface = ContextCompat.getColor(requireContext(), typedValue.resourceId)
-
-        val lineDataSet = LineDataSet(lineEntries, "line label")
-        lineDataSet.apply {
-            setDrawValues(false)
-            mode = LineDataSet.Mode.LINEAR
-            color = colorOnSurface
-            setCircleColor(colorOnSurface)
-            lineWidth = 2f
-            circleRadius = 2f
-        }
-        val lineData = LineData(lineDataSet)
-
-        val combinedData = CombinedData().apply {
-            setData(barData)
-            setData(lineData)
-            notifyDataChanged()
-        }
-
-        binding.combinedChart.apply {
-            data = combinedData
-            notifyDataSetChanged()
-            invalidate()
-        }
-
-        //get data and update view
-        transactionTrendGraphViewModel.transactionGraphBarEntries.observe(viewLifecycleOwner) {
+        transactionTrendGraphViewModel.transactionGraphCombinedData.observe(viewLifecycleOwner) {
             it?.let {
-                barDataSet.values = it
-                barData.clearValues()
-                barData.addDataSet(barDataSet)
                 binding.combinedChart.apply {
-                    data.setData(barData)
+                    data = it
                     notifyDataSetChanged()
-                    postInvalidate()
-                    animateX(500)
-                }
-            }
-        }
-
-        transactionTrendGraphViewModel.transactionGraphLineEntries.observe(viewLifecycleOwner) {
-            it?.let {
-                lineDataSet.values = it
-                lineData.clearValues()
-                lineData.addDataSet(lineDataSet)
-                binding.combinedChart.apply {
-                    data.setData(lineData)
-                    notifyDataSetChanged()
-                    postInvalidate()
-                    animateX(500)
+                    invalidate()
                 }
             }
         }

@@ -1,9 +1,7 @@
 package io.github.kedaitayar.mfm.ui.transaction
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R

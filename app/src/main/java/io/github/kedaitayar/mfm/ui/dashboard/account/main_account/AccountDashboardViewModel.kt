@@ -29,7 +29,7 @@ class AccountDashboardViewModel @Inject constructor(
     private val totalIncome: Flow<Double?> = dashboardRepository.getTotalIncome()
     private val totalBudgetedAmount: Flow<Double?> = dashboardRepository.getTotalBudgetedAmount()
     private val notBudgetedAmountFlow = combine(totalIncome, totalBudgetedAmount) { totalIncome, totalBudgetedAmount ->
-        (totalIncome ?: 0.0) + (totalBudgetedAmount ?: 0.0)
+        (totalIncome ?: 0.0) - (totalBudgetedAmount ?: 0.0)
     }
     val notBudgetedAmount = notBudgetedAmountFlow.asLiveData()
 

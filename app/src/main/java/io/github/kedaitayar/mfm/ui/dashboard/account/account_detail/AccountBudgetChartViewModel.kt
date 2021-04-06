@@ -49,7 +49,8 @@ class AccountBudgetChartViewModel @Inject constructor(
                     val transactionAmount = item.transactionAmount ?: 0.0f
                     val pieEntry = PieEntry(transactionAmount, item.budgetName)
                     tempPieEntry.add(pieEntry)
-                    pieEntries.postValue(tempPieEntry)
+//                    pieEntries.postValue(tempPieEntry)
+                    pieEntries.value = tempPieEntry
                 }
             }
         }

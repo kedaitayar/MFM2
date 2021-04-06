@@ -19,8 +19,6 @@ import io.github.kedaitayar.mfm.util.exhaustive
 import io.github.kedaitayar.mfm.ui.main.MainViewModel
 import kotlinx.coroutines.flow.collect
 
-private const val TAG = "AddEditAccountFragment"
-
 @AndroidEntryPoint
 class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
     private val addEditAccountViewModel: AddEditAccountViewModel by viewModels()

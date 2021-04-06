@@ -18,12 +18,10 @@ import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentAccountListBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.util.exhaustive
-import io.github.kedaitayar.mfm.viewmodels.AccountViewModel
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class AccountListFragment : Fragment(R.layout.fragment_account_list) {
-    private val accountViewModel: AccountViewModel by viewModels()
     private val accountListViewModel: AccountListViewModel by viewModels()
     private var _binding: FragmentAccountListBinding? = null
     private val binding get() = _binding!!
@@ -47,7 +45,7 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
                 return true
             }
         }
-        accountViewModel.accountListAdapterData.observe(viewLifecycleOwner, Observer {
+        accountListViewModel.accountListAdapterData.observe(viewLifecycleOwner, Observer {
             if (it == null || it.isEmpty()) {
                 binding.linearLayoutEmptyView.visibility = View.VISIBLE
             } else {

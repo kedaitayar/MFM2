@@ -1,7 +1,6 @@
 package io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.edit_transaction
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.activityViewModels
@@ -24,7 +23,6 @@ import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.common.Trans
 import io.github.kedaitayar.mfm.util.exhaustive
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-
 
 @AndroidEntryPoint
 class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {

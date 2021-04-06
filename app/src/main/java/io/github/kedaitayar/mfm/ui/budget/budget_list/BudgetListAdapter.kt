@@ -1,4 +1,4 @@
-package io.github.kedaitayar.mfm.ui.budget
+package io.github.kedaitayar.mfm.ui.budget.budget_list
 
 import android.util.TypedValue
 import android.view.LayoutInflater

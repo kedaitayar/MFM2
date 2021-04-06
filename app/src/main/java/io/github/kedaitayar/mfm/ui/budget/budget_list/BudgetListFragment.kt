@@ -1,15 +1,11 @@
-package io.github.kedaitayar.mfm.ui.budget
+package io.github.kedaitayar.mfm.ui.budget.budget_list
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.PopupMenu
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,58 +13,27 @@ import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentBudgetListBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
-import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
-
-private const val ARG_BUDGET_TYPE =
-    "io.github.kedaitayar.mfm.ui.budget.BudgetListFragment.budgetType"
 
 @AndroidEntryPoint
-class BudgetListFragment : Fragment() {
-    private val budgetViewModel: BudgetViewModel by viewModels()
+class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
+    private val budgetListViewModel: BudgetListViewModel by viewModels()
     private var _binding: FragmentBudgetListBinding? = null
     private val binding get() = _binding!!
-    private var budgetType: Int? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            budgetType = it.getInt(ARG_BUDGET_TYPE, -1)
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentBudgetListBinding.inflate(inflater, container, false)
-        context ?: return binding.root
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentBudgetListBinding.bind(view)
         val adapter = BudgetListAdapter()
-        adapter.setBudgetType(budgetType ?: 0)
-        when (budgetType) {
-            1 -> {
-                setupRecyclerViewData(budgetViewModel.monthlyBudgetListData, adapter)
-            }
-            2 -> {
-                setupRecyclerViewData(budgetViewModel.yearlyBudgetListData, adapter)
-            }
-            else -> {
-                setupRecyclerViewData(budgetViewModel.monthlyBudgetListData, adapter)
-            }
-        }
-
-        return binding.root
+        adapter.setBudgetType(budgetListViewModel.budgetType ?: 0)
+        setupRecyclerView(adapter)
     }
 
-    private fun setupRecyclerViewData(
-        livedata: LiveData<List<BudgetListAdapterData>>,
-        adapter: BudgetListAdapter
-    ) {
+    private fun setupRecyclerView(adapter: BudgetListAdapter) {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        livedata.observe(viewLifecycleOwner, Observer {
+        budgetListViewModel.budgetList.observe(viewLifecycleOwner) {
             if (it == null || it.isEmpty()) {
-                when (budgetType) {
+                when (budgetListViewModel.budgetType) {
                     1 -> {
                         binding.textViewEmptyViewTopText.text = "Monthly budget is empty"
                     }
@@ -84,7 +49,7 @@ class BudgetListFragment : Fragment() {
                 binding.linearLayoutEmptyView.visibility = View.GONE
                 adapter.submitList(it)
             }
-        })
+        }
         popupMenuSetup(adapter)
     }
 
@@ -117,6 +82,9 @@ class BudgetListFragment : Fragment() {
     }
 
     companion object {
+        const val ARG_BUDGET_TYPE =
+            "io.github.kedaitayar.mfm.ui.budget.BudgetListFragment.budgetType"
+
         @JvmStatic
         fun newInstance(budgetType: Int) =
             BudgetListFragment().apply {

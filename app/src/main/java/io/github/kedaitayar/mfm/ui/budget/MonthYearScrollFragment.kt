@@ -10,33 +10,32 @@ import androidx.lifecycle.Observer
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMonthYearScrollBinding
-import io.github.kedaitayar.mfm.viewmodels.BudgetViewModel
 import java.time.format.TextStyle
 import java.util.*
 
 @AndroidEntryPoint
 class MonthYearScrollFragment : Fragment(R.layout.fragment_month_year_scroll) {
-    private val budgetViewModel: BudgetViewModel by viewModels()
+    private val mainBudgetViewModel: MainBudgetViewModel by viewModels()
     private var _binding: FragmentMonthYearScrollBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMonthYearScrollBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
-        budgetViewModel.selectedDate.observe(viewLifecycleOwner, Observer {
+        mainBudgetViewModel.selectedDate.observe(viewLifecycleOwner, Observer {
             it?.let {
                 binding.buttonDate.text = it.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH) + ", " + it.year    //TODO: extract string
             }
         })
         binding.buttonLeft.setOnClickListener {
-            budgetViewModel.decreaseMonth()
+            mainBudgetViewModel.decreaseMonth()
         }
         binding.buttonRight.setOnClickListener {
-            budgetViewModel.increaseMonth()
+            mainBudgetViewModel.increaseMonth()
         }
 
         return binding.root

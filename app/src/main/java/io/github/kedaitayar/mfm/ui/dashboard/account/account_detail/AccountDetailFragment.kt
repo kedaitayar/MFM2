@@ -8,7 +8,6 @@ import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentAccountDetailBinding
-import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 
 @AndroidEntryPoint
 class AccountDetailFragment : Fragment(R.layout.fragment_account_detail) {
