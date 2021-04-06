@@ -55,7 +55,16 @@ class BudgetListAdapter :
             binding.apply {
                 textViewBudgetName.text = item.budgetName
                 textViewBudgeted.text = item.budgetAllocation.toString()
-                val goalPercentage = ((item.budgetAllocation / item.budgetGoal) * 100).toInt()
+//                val goalPercentage = ((item.budgetAllocation / item.budgetGoal) * 100).toInt()
+                val goalPercentage = when (budgetType) {
+                    1 -> {
+                        ((item.budgetAllocation / item.budgetGoal) * 100).toInt()
+                    }
+                    2 -> {
+                        (((item.budgetAllocation + item.budgetTotalPrevAllocation)/ item.budgetGoal) * 100).toInt()
+                    }
+                    else -> 100
+                }
                 textViewBudgeted.piePercent = goalPercentage
                 if (goalPercentage >= 100) {
                     textViewBudgeted.bgColor = green
