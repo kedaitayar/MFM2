@@ -15,6 +15,6 @@ import java.time.OffsetDateTime
 )
 data class BudgetDeadline(
     @PrimaryKey
-    val budgetId: Long? = null,
-    var budgetDeadline: OffsetDateTime? = null
+    val budgetId: Long = 0,
+    val budgetDeadline: OffsetDateTime? = null
 )

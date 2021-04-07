@@ -10,8 +10,8 @@ import androidx.room.PrimaryKey
 )
 data class Budget(
     @PrimaryKey(autoGenerate = true)
-    var budgetId: Long? = null,
-    var budgetGoal: Double = 0.0,
-    var budgetName: String = "",
-    var budgetType: Int = 1,
+    val budgetId: Long = 0,
+    val budgetGoal: Double = 0.0,
+    val budgetName: String = "",
+    val budgetType: Int = 1,
 )

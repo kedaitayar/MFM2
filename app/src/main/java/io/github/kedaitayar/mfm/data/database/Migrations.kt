@@ -65,8 +65,34 @@ val MIGRATION_4_5 = object : Migration(4, 5) {
 val MIGRATION_5_6 = object : Migration(5, 6) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL("CREATE TABLE `TransactionType_backup` (`transactionTypeId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `transactionTypeName` TEXT NOT NULL)")
-        database.execSQL("INSERT INTO `Transaction_backup` (`transactionTypeId`, `transactionTypeName`) SELECT `transactionTypeId`, `transactionTypeName` FROM `TransactionType`")
+        database.execSQL("INSERT INTO `TransactionType_backup` (`transactionTypeId`, `transactionTypeName`) SELECT `transactionTypeId`, `transactionTypeName` FROM `TransactionType`")
         database.execSQL("DROP TABLE `TransactionType`")
-        database.execSQL("ALTER TABLE `Transaction_backup` RENAME TO `TransactionType`")
+        database.execSQL("ALTER TABLE `TransactionType_backup` RENAME TO `TransactionType`")
+    }
+}
+
+val MIGRATION_6_7 = object : Migration(6, 7) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("CREATE TABLE `Budget_backup` (`budgetId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `budgetGoal` REAL NOT NULL, `budgetName` TEXT NOT NULL, `budgetType` INTEGER NOT NULL)")
+        database.execSQL("INSERT INTO `Budget_backup` (`budgetId`, `budgetGoal`, `budgetName`, `budgetType`) SELECT `budgetId`, `budgetGoal`, `budgetName`, `budgetType` FROM `Budget`")
+        database.execSQL("DROP TABLE `Budget`")
+        database.execSQL("ALTER TABLE `Budget_backup` RENAME TO `Budget`")
+        database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_Budget_budgetName` ON `Budget` (`budgetName`)")
+
+        database.execSQL("CREATE TABLE `BudgetTransaction_backup` (`budgetTransactionMonth` INTEGER NOT NULL, `budgetTransactionYear` INTEGER NOT NULL, `budgetTransactionAmount` REAL NOT NULL, `budgetTransactionBudgetId` INTEGER NOT NULL, PRIMARY KEY(`budgetTransactionMonth`, `budgetTransactionYear`, `budgetTransactionBudgetId`), FOREIGN KEY(`budgetTransactionBudgetId`) REFERENCES `Budget`(`budgetId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+        database.execSQL("INSERT INTO `BudgetTransaction_backup` (`budgetTransactionMonth`, `budgetTransactionYear`, `budgetTransactionAmount`, `budgetTransactionBudgetId`) SELECT `budgetTransactionMonth`, `budgetTransactionYear`, `budgetTransactionAmount`, `budgetTransactionBudgetId` FROM `BudgetTransaction`")
+        database.execSQL("DROP TABLE `BudgetTransaction`")
+        database.execSQL("ALTER TABLE `BudgetTransaction_backup` RENAME TO `BudgetTransaction`")
+
+        database.execSQL("CREATE TABLE `BudgetType_backup` (`budgetTypeId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `budgetTypeName` TEXT NOT NULL)")
+        database.execSQL("INSERT INTO `BudgetType_backup` (`budgetTypeId`, `budgetTypeName`) SELECT `budgetTypeId`, `budgetTypeName` FROM `BudgetType`")
+        database.execSQL("DROP TABLE `BudgetType`")
+        database.execSQL("ALTER TABLE `BudgetType_backup` RENAME TO `BudgetType`")
+        database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_BudgetType_budgetTypeName` ON `BudgetType` (`budgetTypeName`)")
+
+        database.execSQL("CREATE TABLE `BudgetDeadline_backup` (`budgetId` INTEGER NOT NULL, `budgetDeadline` TEXT, PRIMARY KEY(`budgetId`), FOREIGN KEY(`budgetId`) REFERENCES `Budget`(`budgetId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+        database.execSQL("INSERT INTO `BudgetDeadline_backup` (`budgetId`, `budgetDeadline`) SELECT `budgetId`, `budgetDeadline` FROM `BudgetDeadline`")
+        database.execSQL("DROP TABLE `BudgetDeadline`")
+        database.execSQL("ALTER TABLE `BudgetDeadline_backup` RENAME TO `BudgetDeadline`")
     }
 }

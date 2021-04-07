@@ -13,7 +13,7 @@ import io.github.kedaitayar.mfm.data.entity.*
 
 @Database(
     entities = [Account::class, Transaction::class, TransactionType::class, Budget::class, BudgetTransaction::class, BudgetType::class, BudgetDeadline::class],
-    version = 6,
+    version = 7,
     exportSchema = true
 )
 @TypeConverters(Converters::class)
@@ -42,6 +42,7 @@ abstract class MFMDatabase : RoomDatabase() {
                     .addMigrations(MIGRATION_3_4)
                     .addMigrations(MIGRATION_4_5)
                     .addMigrations(MIGRATION_5_6)
+                    .addMigrations(MIGRATION_6_7)
                     .build()
                 INSTANCE = instance
                 instance

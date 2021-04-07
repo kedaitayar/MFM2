@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 @Entity(indices = [Index(value = ["budgetTypeName"], unique = true)])
 data class BudgetType(
     @PrimaryKey(autoGenerate = true)
-    var budgetTypeId: Long? = null,
-    var budgetTypeName: String = ""
+    val budgetTypeId: Long = 0,
+    val budgetTypeName: String = ""
 )

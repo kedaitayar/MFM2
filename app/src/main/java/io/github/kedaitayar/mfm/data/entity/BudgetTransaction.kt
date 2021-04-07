@@ -14,8 +14,8 @@ import io.github.kedaitayar.mfm.data.entity.Budget
     )]
 )
 data class BudgetTransaction(
-    var budgetTransactionMonth: Int = -1,
-    var budgetTransactionYear: Int = -1,
-    var budgetTransactionAmount: Double = 0.0,
-    var budgetTransactionBudgetId: Long = -1
+    val budgetTransactionMonth: Int = -1,
+    val budgetTransactionYear: Int = -1,
+    val budgetTransactionAmount: Double = 0.0,
+    val budgetTransactionBudgetId: Long = -1
 )
