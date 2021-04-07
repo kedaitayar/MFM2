@@ -58,6 +58,7 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
                         }
                         hideKeyboard()
                         findNavController().navigateUp()
+                        true
                     }
                     is AddEditAccountViewModel.AddEditAccountEvent.NavigateBackWithDeleteResult -> {
                         if (event.result == 1) {
@@ -67,6 +68,7 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
                         }
                         hideKeyboard()
                         findNavController().navigateUp()
+                        true
                     }
                     is AddEditAccountViewModel.AddEditAccountEvent.NavigateBackWithEditResult -> {
                         if (event.result == 1) {
@@ -76,11 +78,13 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
                         }
                         hideKeyboard()
                         findNavController().navigateUp()
+                        true
                     }
                     is AddEditAccountViewModel.AddEditAccountEvent.ShowSnackbar -> {
                         Snackbar.make(requireView(), event.msg, event.length)
                             .setAnchorView(binding.buttonAddAccount)
                             .show()
+                        true
                     }
                 }.exhaustive
             }
@@ -93,7 +97,7 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
             topAppBar.title = "Edit Account"
             textInputEditAccountName.setText(args.account!!.accountName)
             textInputEditAccountName.addTextChangedListener { editable ->
-                addEditAccountViewModel.account?.accountName = editable.toString()
+                addEditAccountViewModel.account = addEditAccountViewModel.account.copy(accountName = editable.toString())
             }
             buttonAddAccount.setOnClickListener {
                 addEditAccountViewModel.onSaveClick()
@@ -105,7 +109,7 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
         binding.apply {
             topAppBar.title = "Add Account"
             textInputEditAccountName.addTextChangedListener { editable ->
-                addEditAccountViewModel.account?.accountName = editable.toString()
+                addEditAccountViewModel.account = addEditAccountViewModel.account.copy(accountName = editable.toString())
             }
             buttonAddAccount.setOnClickListener {
                 addEditAccountViewModel.onAddClick()

@@ -17,7 +17,7 @@ class AddEditAccountViewModel @Inject constructor(
     private val dashboardRepository: DashboardRepository,
     private val state: SavedStateHandle
 ) : ViewModel() {
-    val account = state.get<Account>("account")
+    var account = state.get<Account>("account") ?: Account()
 
     private val addEditAccountEventChannel = Channel<AddEditAccountEvent>()
     val addEditAccountEvent = addEditAccountEventChannel.receiveAsFlow()
