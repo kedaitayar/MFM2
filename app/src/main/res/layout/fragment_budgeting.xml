@@ -19,7 +19,7 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
-                style="@style/Widget.MaterialComponents.Toolbar.Primary"
+                style="@style/Toolbar1"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize" />
         </com.google.android.material.appbar.AppBarLayout>
@@ -40,7 +40,7 @@
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
                 android:text="Not budgeted"
-                android:textColor="@color/black"
+                android:textColor="?colorOnSurface"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -54,7 +54,7 @@
                 android:paddingEnd="8dp"
                 android:paddingBottom="4dp"
                 android:text="RM"
-                android:textColor="@color/black"
+                android:textColor="?colorOnSurface"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -73,6 +73,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.card.MaterialCardView
+                    style="@style/CardView1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp">
@@ -120,7 +121,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:barrierDirection="bottom"
-                            app:constraint_referenced_ids="text_view_budget, text_view_budgeted, text_view_available"/>
+                            app:constraint_referenced_ids="text_view_budget, text_view_budgeted, text_view_available" />
 
                         <View
                             android:id="@+id/divider"
@@ -140,6 +141,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
+                    style="@style/CardView1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp">
@@ -187,7 +189,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:barrierDirection="bottom"
-                            app:constraint_referenced_ids="text_view_budget2, text_view_budgeted2, text_view_available2"/>
+                            app:constraint_referenced_ids="text_view_budget2, text_view_budgeted2, text_view_available2" />
 
                         <View
                             android:id="@+id/divider2"

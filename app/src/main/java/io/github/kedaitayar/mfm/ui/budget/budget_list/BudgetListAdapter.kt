@@ -21,6 +21,7 @@ class BudgetListAdapter :
     private var green = 0
     private var yellow = 0
     private var red = 0
+    private var onSurface = 0
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -31,6 +32,8 @@ class BudgetListAdapter :
         yellow = ContextCompat.getColor(recyclerView.context, typedValue.resourceId)
         recyclerView.context.theme.resolveAttribute(R.attr.gRed, typedValue, true)
         red = ContextCompat.getColor(recyclerView.context, typedValue.resourceId)
+        recyclerView.context.theme.resolveAttribute(R.attr.colorOnSurface, typedValue, true)
+        onSurface = ContextCompat.getColor(recyclerView.context, typedValue.resourceId)
     }
 
     interface OnItemClickListener {

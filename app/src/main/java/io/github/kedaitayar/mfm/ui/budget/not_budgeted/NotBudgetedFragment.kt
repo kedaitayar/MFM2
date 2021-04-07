@@ -1,8 +1,10 @@
 package io.github.kedaitayar.mfm.ui.budget.not_budgeted
 
 import android.os.Bundle
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
@@ -32,6 +34,17 @@ class NotBudgetedFragment : Fragment(R.layout.fragment_not_budgeted) {
 
         notBudgetedViewModel.notBudgetedAmount.observe(viewLifecycleOwner) {
             binding.textViewNotBudgetedAmount.text = resources.getString(R.string.currency_symbol, formatter.format(it))
+
+            val typedValue = TypedValue()
+            requireContext().theme.resolveAttribute(R.attr.gGreen, typedValue, true)
+            val green = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+            requireContext().theme.resolveAttribute(R.attr.gRed, typedValue, true)
+            val red = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+            if (it < 0) {
+                binding.root.setBackgroundColor(red)
+            } else {
+                binding.root.setBackgroundColor(green)
+            }
         }
     }
 

@@ -63,7 +63,7 @@ class AddTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
             addEditTransactionViewModel.addEditTransactionEvent.collect { event: AddEditTransactionViewModel.AddEditTransactionEvent ->
                 when (event) {
                     is AddEditTransactionViewModel.AddEditTransactionEvent.NavigateBackWithAddResult -> {
-                        if (event.result == 1L) {
+                        if (event.result > 0L) {
                             mainViewModel.showSnackbar("Transaction added", Snackbar.LENGTH_SHORT)
                         } else {
                             mainViewModel.showSnackbar("Transaction add failed", Snackbar.LENGTH_SHORT)

@@ -2,7 +2,8 @@
 <resources>
     <declare-styleable name="PillPieCustomView">
         <attr name="piePercentage" format="integer" />
-        <attr name="bgColor" format="integer" />
+        <attr name="bgColor" format="color" />
+        <attr name="pieColor" format="color" />
     </declare-styleable>
     <declare-styleable name="RingCustomView">
         <attr name="ringProgress" format="integer" />

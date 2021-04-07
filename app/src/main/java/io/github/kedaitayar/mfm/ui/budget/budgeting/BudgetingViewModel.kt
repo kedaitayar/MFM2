@@ -31,8 +31,8 @@ class BudgetingViewModel
     }
     private val totalIncome = budgetRepository.getTotalIncome()
     private val totalBudgeted = budgetRepository.getTotalBudgetedAmount()
-    val totalNotBudgeted = combine(totalIncome, totalBudgeted) { income: Double, budgeted: Double ->
-        income - budgeted
+    val totalNotBudgeted = combine(totalIncome, totalBudgeted) { income: Double?, budgeted: Double? ->
+        (income ?: 0.0) - (budgeted ?: 0.0)
     }.asLiveData()
 
     var totalMonthlyBudgetedThisMonth: Double = 0.0
@@ -47,7 +47,7 @@ class BudgetingViewModel
             if (monthlyBudgetingList != null) {
                 for (budgeting in monthlyBudgetingList) {
                     val budgetTransaction = BudgetTransaction(
-                        budgetTransactionAmount = ((budgetingAmountListMonthly[budgeting.budgetId])?.toDouble()
+                        budgetTransactionAmount = ((budgetingAmountListMonthly[budgeting.budgetId])?.toDoubleOrNull()
                             ?: 0.0),
                         budgetTransactionBudgetId = budgeting.budgetId,
                         budgetTransactionMonth = date.monthValue,
@@ -61,7 +61,7 @@ class BudgetingViewModel
             if (yearlyBudgetingList != null) {
                 for (budgeting in yearlyBudgetingList) {
                     val budgetTransaction = BudgetTransaction(
-                        budgetTransactionAmount = ((budgetingAmountListYearly[budgeting.budgetId])?.toDouble()
+                        budgetTransactionAmount = ((budgetingAmountListYearly[budgeting.budgetId])?.toDoubleOrNull()
                             ?: 0.0),
                         budgetTransactionBudgetId = budgeting.budgetId,
                         budgetTransactionMonth = date.monthValue,

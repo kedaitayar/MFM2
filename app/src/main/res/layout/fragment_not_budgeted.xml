@@ -15,7 +15,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:text="Not budgeted"
-        android:textColor="@color/black"
+        android:textColor="?colorOnSurface"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +29,7 @@
         android:paddingEnd="8dp"
         android:paddingBottom="4dp"
         android:text="RM 0.0"
-        android:textColor="@color/black"
+        android:textColor="?colorOnSurface"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

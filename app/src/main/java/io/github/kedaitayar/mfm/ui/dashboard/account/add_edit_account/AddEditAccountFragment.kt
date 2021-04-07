@@ -51,7 +51,7 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
             addEditAccountViewModel.addEditAccountEvent.collect { event ->
                 when (event) {
                     is AddEditAccountViewModel.AddEditAccountEvent.NavigateBackWithAddResult -> {
-                        if (event.result == 1L) {
+                        if (event.result > 0L) {
                             mainViewModel.showSnackbar("Account added", Snackbar.LENGTH_SHORT)
                         } else {
                             mainViewModel.showSnackbar("Account add failed", Snackbar.LENGTH_SHORT)

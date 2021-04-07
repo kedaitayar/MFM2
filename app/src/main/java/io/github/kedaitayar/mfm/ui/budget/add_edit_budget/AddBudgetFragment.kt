@@ -47,7 +47,7 @@ class AddBudgetFragment : Fragment(R.layout.fragment_add_budget) {
             addEditBudgetViewModel.addEditBudgetEvent.collect { event ->
                 when (event) {
                     is AddEditBudgetViewModel.AddEditBudgetEvent.NavigateBackWithAddResult -> {
-                        if (event.result == 1L) {
+                        if (event.result > 0L) {
                             mainViewModel.showSnackbar("Budget added", Snackbar.LENGTH_SHORT)
                         } else {
                             mainViewModel.showSnackbar("Budget add failed", Snackbar.LENGTH_SHORT)
@@ -105,6 +105,7 @@ class AddBudgetFragment : Fragment(R.layout.fragment_add_budget) {
 
     private fun setupToolbar() {
         binding.topAppBar.setNavigationIcon(R.drawable.ic_baseline_close_24)
+        binding.topAppBar.title = "Add Budget"
         binding.topAppBar.setNavigationOnClickListener {
             hideKeyboard()
             findNavController().navigateUp()

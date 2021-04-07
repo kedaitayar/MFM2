@@ -40,7 +40,7 @@ class AddEditAccountViewModel @Inject constructor(
 
     fun onAddClick() {
         viewModelScope.launch {
-            if (account.accountName.isBlank()) {
+            if (account.accountName.isNotBlank()) {
                 val result = dashboardRepository.insert(Account(accountId = account.accountId, accountName = account.accountName))
                 addEditAccountEventChannel.send(AddEditAccountEvent.NavigateBackWithAddResult(result))
             } else {

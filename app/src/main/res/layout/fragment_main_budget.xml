@@ -68,6 +68,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_view_budget_list_type1"
+                style="@style/CardView1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
@@ -135,6 +136,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_view_budget_list_type2"
+                style="@style/CardView1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"

@@ -19,16 +19,25 @@ class PillPieCustomView @JvmOverloads constructor(context: Context, attrs: Attri
             field = value
             invalidate()
         }
+    var pieColor = 0
+        set(value) {
+            field = value
+            invalidate()
+        }
+
 
     init {
         this.setPadding(paddingLeft, paddingTop, paddingRight + (textSize*1.75).toInt(), paddingBottom)
-        bgColor = Color.parseColor("#4CAF50")
         val typeArray = context.obtainStyledAttributes(attrs, R.styleable.PillPieCustomView)
         if (isInEditMode) {
             this.text = "Placeholder"
+            bgColor = Color.parseColor("#4CAF50")
+            pieColor = Color.parseColor("#777777")
             piePercent = 80
         } else {
             piePercent = typeArray.getInt(R.styleable.PillPieCustomView_piePercentage, 0)
+            bgColor = typeArray.getColor(R.styleable.PillPieCustomView_bgColor, Color.parseColor("#4CAF50"))
+            pieColor = typeArray.getColor(R.styleable.PillPieCustomView_pieColor, Color.parseColor("#777777"))
         }
         typeArray.recycle()
     }
@@ -68,7 +77,7 @@ class PillPieCustomView @JvmOverloads constructor(context: Context, attrs: Attri
         canvas?.drawRoundRect(rect01, radius * 0.7f, radius * 0.7f, paint)
         canvas?.restore()
 
-        paint.color = Color.parseColor("#777777")
+        paint.color = this@PillPieCustomView.pieColor
         val rect02 = RectF(height * 0.2f, height * 0.2f, height * 0.8f, height * 0.8f)
         canvas?.drawArc(rect02, -90f, piePercent.toPiePercentageDiscrete(), true, paint)
     }
