@@ -61,3 +61,12 @@ val MIGRATION_4_5 = object : Migration(4, 5) {
         database.execSQL("CREATE INDEX IF NOT EXISTS `index_Transaction_transactionAccountId_transactionBudgetId_transactionAccountTransferTo` ON `Transaction` (`transactionAccountId`,`transactionBudgetId`,`transactionAccountTransferTo`)")
     }
 }
+
+val MIGRATION_5_6 = object : Migration(5, 6) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("CREATE TABLE `TransactionType_backup` (`transactionTypeId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `transactionTypeName` TEXT NOT NULL)")
+        database.execSQL("INSERT INTO `Transaction_backup` (`transactionTypeId`, `transactionTypeName`) SELECT `transactionTypeId`, `transactionTypeName` FROM `TransactionType`")
+        database.execSQL("DROP TABLE `TransactionType`")
+        database.execSQL("ALTER TABLE `Transaction_backup` RENAME TO `TransactionType`")
+    }
+}

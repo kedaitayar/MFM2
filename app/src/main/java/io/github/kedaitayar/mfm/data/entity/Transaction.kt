@@ -30,11 +30,11 @@ import java.time.OffsetDateTime
 )
 data class Transaction(
     @PrimaryKey(autoGenerate = true)
-    var transactionId: Long? = null,
-    var transactionAmount: Double = 0.0,
-    var transactionTime: OffsetDateTime? = OffsetDateTime.now(),
-    var transactionType: Int = 0,
-    var transactionAccountId: Long = 0,
-    var transactionBudgetId: Long? = null,
-    var transactionAccountTransferTo: Long? = null
+    val transactionId: Long = 0,
+    val transactionAmount: Double = 0.0,
+    val transactionTime: OffsetDateTime? = OffsetDateTime.now(),
+    val transactionType: Int = 0,
+    val transactionAccountId: Long = 0,
+    val transactionBudgetId: Long? = null,
+    val transactionAccountTransferTo: Long? = null
 ): Parcelable

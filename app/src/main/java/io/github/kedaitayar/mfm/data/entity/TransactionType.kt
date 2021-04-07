@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 @Entity
 data class TransactionType(
     @PrimaryKey(autoGenerate = true)
-    var transactionTypeId: Int? = null,
-    var transactionTypeName: String = ""
+    val transactionTypeId: Int = 0,
+    val transactionTypeName: String = ""
 )
