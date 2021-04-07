@@ -11,7 +11,7 @@ Currently the project has implemented the following:
  - Hilt (Dependency injection)
  - Navigation Component (Single Activity design)
  - ViewModel (MVVM architecture)
- - LiveData (Observer pattern - MVVM)
+ - LiveData - Flow (Observer pattern - MVVM)
  - Room (Local database)
  - Dao instrument test (Automated testing)
  - ViewBinding
