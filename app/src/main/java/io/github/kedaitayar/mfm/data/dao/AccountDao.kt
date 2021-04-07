@@ -192,13 +192,7 @@ interface AccountDao {
         WHERE
             (
                 budgetTransactionMonth = :month 
-                AND budgetTransactionYear = :year 
-                AND budgetTypeId != 2
-            )
-            OR 
-            (
-                budgetTransactionYear = :year 
-                AND budgetTypeId = 2
+                AND budgetTransactionYear = :year
             )
     """
     )
