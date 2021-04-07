@@ -1,7 +1,7 @@
 # Mobile Financial Management 2 (MFM)
 MFM is Android budgeting application based on the [envelope budgeting method](https://en.wikipedia.org/wiki/Envelope_system). The aim of this app is to make budgeting easy and fast.
 
-[Download Link](https://github.com/kedaitayar/MFM2/releases/download/V1.0.1-beta/app-release.apk)
+[Download Link](https://github.com/kedaitayar/MFM2/releases)
 
 
 The plan for this project is to rewrite [MFM v1](https://github.com/kedaitayar/MFM) that will include more technology that is missing from the previous project and overall do a better job at coding and organising the project.
