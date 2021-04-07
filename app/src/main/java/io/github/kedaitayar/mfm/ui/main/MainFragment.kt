@@ -49,7 +49,6 @@ class MainFragment : Fragment() {
         }.attach()
 
 //        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-        setupSnackbarTextObserver()
 
         binding.fab.setOnClickListener {
             val action = MainFragmentDirections.actionMainFragmentToAddTransactionFragment()
@@ -84,12 +83,6 @@ class MainFragment : Fragment() {
     }
 
     fun isFABShown(): Boolean = binding.fab.isShown
-
-    private fun setupSnackbarTextObserver() {
-        mainViewModel.snackbarText.observe(viewLifecycleOwner, EventObserver{
-            showSnackBar(it, Snackbar.LENGTH_SHORT)
-        })
-    }
 
     private fun getTabTitle(position: Int): String? {
         return when (position) {

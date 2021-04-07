@@ -77,14 +77,14 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAd
             }
         }
 
-        budgetingViewModel.selectedDate.observe(viewLifecycleOwner, Observer {
+        budgetingViewModel.selectedDate.observe(viewLifecycleOwner) {
             it?.let {
                 binding.topAppBar.title = it.month.getDisplayName(
                     TextStyle.FULL,
                     Locale.ENGLISH
                 ) + ", " + it.year    //TODO: extract string
             }
-        })
+        }
     }
 
     private fun setupBudgetingListRecyclerView(

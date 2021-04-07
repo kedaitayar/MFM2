@@ -96,7 +96,7 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
     }
 
     private fun setupAccountDropdown() {
-        addEditTransactionViewModel.allAccount.observe(viewLifecycleOwner, Observer { list ->
+        addEditTransactionViewModel.allAccount.observe(viewLifecycleOwner) { list ->
             list?.let { list2 ->
                 val adapter = object : ArrayAdapter<Account>(
                     requireContext(),
@@ -144,7 +144,7 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
                 }
                 binding.autoCompleteAccount.setAdapter(adapter)
             }
-        })
+        }
     }
 
     override fun onResume() {

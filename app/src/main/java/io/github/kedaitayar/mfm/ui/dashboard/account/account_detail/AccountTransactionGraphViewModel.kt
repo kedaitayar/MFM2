@@ -31,7 +31,7 @@ class AccountTransactionGraphViewModel @Inject constructor(
         }
 
     private val accountTransactionChartDataFlow = account.flatMapLatest {
-        getAccountTransactionChartData(it.accountId!!)
+        getAccountTransactionChartData(it.accountId)
     }
     val accountTransactionGraphCombinedData = MutableLiveData<CombinedData>()
     var green = 0

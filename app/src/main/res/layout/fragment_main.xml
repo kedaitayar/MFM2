@@ -39,7 +39,8 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
             app:tint="?colorOnSecondary"
-            app:srcCompat="@drawable/ic_round_add_24"/>
+            app:srcCompat="@drawable/ic_round_add_24"
+            android:contentDescription="Add Transaction" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

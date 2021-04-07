@@ -16,16 +16,6 @@ class MainViewModel @Inject constructor() : ViewModel() {
     private val mainEventChannel = Channel<MainEvent>()
     val mainEvent = mainEventChannel.receiveAsFlow()
 
-    @Deprecated("to be remove. use showSnackbar and mainEvent")
-    private val _snackbarText = MutableLiveData<SnackbarEvent<String>>()
-    @Deprecated("to be remove. use showSnackbar and mainEvent")
-    val snackbarText: LiveData<SnackbarEvent<String>> get() = _snackbarText
-
-    @Deprecated("to be remove. use showSnackbar and mainEvent")
-    fun setSnackbarText(text: String) {
-        _snackbarText.value = SnackbarEvent(text)
-    }
-
     fun showSnackbar(msg: String, length: Int) {
         viewModelScope.launch {
             mainEventChannel.send(MainEvent.ShowSnackbar(msg, length))

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ui.budget.BudgetListFragment">
+    tools:context=".ui.budget.budget_list.BudgetListFragment">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linear_layout_empty_view"

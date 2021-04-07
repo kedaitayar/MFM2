@@ -1,7 +1,5 @@
 package io.github.kedaitayar.mfm
 
-import android.util.Log
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -15,20 +13,14 @@ import io.github.kedaitayar.mfm.util.getOrAwaitValue
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 
-private const val TAG = "BudgetDaoTest"
-
 @RunWith(AndroidJUnit4::class)
 class BudgetDaoTest {
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
-
     private lateinit var budgetDao: BudgetDao
     private lateinit var basicDao: BasicDao
     private lateinit var mfmDb: MFMDatabase

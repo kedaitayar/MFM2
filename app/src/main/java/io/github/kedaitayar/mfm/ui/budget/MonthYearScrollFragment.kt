@@ -26,11 +26,11 @@ class MonthYearScrollFragment : Fragment(R.layout.fragment_month_year_scroll) {
         _binding = FragmentMonthYearScrollBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
-        mainBudgetViewModel.selectedDate.observe(viewLifecycleOwner, Observer {
+        mainBudgetViewModel.selectedDate.observe(viewLifecycleOwner) {
             it?.let {
                 binding.buttonDate.text = it.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH) + ", " + it.year    //TODO: extract string
             }
-        })
+        }
         binding.buttonLeft.setOnClickListener {
             mainBudgetViewModel.decreaseMonth()
         }

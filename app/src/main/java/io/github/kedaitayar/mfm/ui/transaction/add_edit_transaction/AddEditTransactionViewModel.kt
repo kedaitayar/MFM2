@@ -59,7 +59,7 @@ constructor(
                         liveData<Budget?> { emit(null) }
                     }
                     else -> {
-                        transactionRepository.getBudgetByIdFlow(transaction.transactionBudgetId!!)
+                        transactionRepository.getBudgetByIdFlow(transaction.transactionBudgetId)
                             .asLiveData()
                     }
                 }
@@ -78,7 +78,7 @@ constructor(
                         liveData<Account?> { emit(null) }
                     }
                     else -> {
-                        transactionRepository.getAccountByIdFlow(transaction.transactionAccountTransferTo!!)
+                        transactionRepository.getAccountByIdFlow(transaction.transactionAccountTransferTo)
                             .asLiveData()
                     }
                 }
@@ -119,7 +119,7 @@ constructor(
                         else -> {
                             val transaction =
                                 transaction?.copy(
-                                    transactionAccountId = inputAccountFrom!!.accountId!!,
+                                    transactionAccountId = inputAccountFrom!!.accountId,
                                     transactionBudgetId = inputBudget!!.budgetId,
                                     transactionAmount = inputAmount!!,
                                     transactionTime = inputDate
@@ -157,7 +157,7 @@ constructor(
                         else -> {
                             val transaction =
                                 transaction?.copy(
-                                    transactionAccountId = inputAccountFrom!!.accountId!!,
+                                    transactionAccountId = inputAccountFrom!!.accountId,
                                     transactionAmount = inputAmount!!,
                                     transactionTime = inputDate
                                 )
@@ -201,7 +201,7 @@ constructor(
                         else -> {
                             val transaction =
                                 transaction?.copy(
-                                    transactionAccountId = inputAccountFrom!!.accountId!!,
+                                    transactionAccountId = inputAccountFrom!!.accountId,
                                     transactionAccountTransferTo = inputAccountTo!!.accountId,
                                     transactionAmount = inputAmount!!,
                                     transactionTime = inputDate
@@ -252,7 +252,7 @@ constructor(
                         }
                         else -> {
                             val transaction = Transaction(
-                                transactionAccountId = inputAccountFrom!!.accountId!!,
+                                transactionAccountId = inputAccountFrom!!.accountId,
                                 transactionBudgetId = inputBudget!!.budgetId,
                                 transactionAmount = inputAmount ?: 0.0,
                                 transactionType = 1,
@@ -287,7 +287,7 @@ constructor(
                         }
                         else -> {
                             val transaction = Transaction(
-                                transactionAccountId = inputAccountFrom!!.accountId!!,
+                                transactionAccountId = inputAccountFrom!!.accountId,
                                 transactionAmount = inputAmount ?: 0.0,
                                 transactionType = 2,
                                 transactionTime = inputDate
@@ -329,7 +329,7 @@ constructor(
                         }
                         else -> {
                             val transaction = Transaction(
-                                transactionAccountId = inputAccountFrom!!.accountId!!,
+                                transactionAccountId = inputAccountFrom!!.accountId,
                                 transactionAmount = inputAmount ?: 0.0,
                                 transactionAccountTransferTo = inputAccountTo!!.accountId,
                                 transactionType = 3,

@@ -1,6 +1,5 @@
 package io.github.kedaitayar.mfm
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -12,7 +11,6 @@ import io.github.kedaitayar.mfm.util.getOrAwaitValue
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
@@ -21,8 +19,6 @@ import java.time.ZoneOffset
 
 @RunWith(AndroidJUnit4::class)
 class BasicDaoTest {
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var basicDao: BasicDao
     private lateinit var mfmDb: MFMDatabase
@@ -87,10 +83,12 @@ class BasicDaoTest {
         runBlocking {
             val account = Account(accountId = 1, accountName = "Cash")
             basicDao.insert(account)
-            account.accountName = "Cash2"
-            basicDao.update(account)
+            val updatedAccount = account.copy(
+                accountName = "Cash2"
+            )
+            basicDao.update(updatedAccount)
             val accountList = basicDao.getAllAccount().getOrAwaitValue()
-            assertThat(accountList[0]).isEqualTo(account)
+            assertThat(accountList[0]).isEqualTo(updatedAccount)
         }
     }
 
@@ -131,11 +129,10 @@ class BasicDaoTest {
             val budget =
                 Budget(budgetId = 1, budgetGoal = 100.0, budgetName = "Food", budgetType = 1)
             basicDao.insert(budget)
-            budget.budgetName = "Food2"
-            budget.budgetGoal = 120.0
-            basicDao.update(budget)
+            val updatedBudget = budget.copy(budgetName = "Food2", budgetGoal = 120.0)
+            basicDao.update(updatedBudget)
             val budgetList = basicDao.getAllBudget().getOrAwaitValue()
-            assertThat(budgetList[0]).isEqualTo(budget)
+            assertThat(budgetList[0]).isEqualTo(updatedBudget)
         }
     }
 
@@ -187,7 +184,7 @@ class BasicDaoTest {
             val budget =
                 Budget(budgetId = 1, budgetGoal = 100.0, budgetName = "Food", budgetType = 3)
             basicDao.insert(budget)
-            var budgetDeadline = BudgetDeadline(
+            val budgetDeadline = BudgetDeadline(
                 budgetId = 1,
                 budgetDeadline = OffsetDateTime.of(
                     2020,
@@ -201,12 +198,10 @@ class BasicDaoTest {
                 )
             )
             basicDao.insert(budgetDeadline)
-
-            budgetDeadline.budgetDeadline =
-                OffsetDateTime.of(2020, 2, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
-            basicDao.update(budgetDeadline)
+            val updateBudgetDeadline = budgetDeadline.copy(budgetDeadline = OffsetDateTime.of(2020, 2, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0)))
+            basicDao.update(updateBudgetDeadline)
             val budgetDeadlineList = basicDao.getAllBudgetDeadline().getOrAwaitValue()
-            assertThat(budgetDeadlineList[0]).isEqualTo(budgetDeadline)
+            assertThat(budgetDeadlineList[0]).isEqualTo(updateBudgetDeadline)
         }
     }
 
@@ -217,7 +212,7 @@ class BasicDaoTest {
             val budget =
                 Budget(budgetId = 1, budgetGoal = 100.0, budgetName = "Food", budgetType = 3)
             basicDao.insert(budget)
-            var budgetDeadline = BudgetDeadline(
+            val budgetDeadline = BudgetDeadline(
                 budgetId = 1,
                 budgetDeadline = OffsetDateTime.of(
                     2020,
@@ -283,10 +278,10 @@ class BasicDaoTest {
                 budgetTransactionBudgetId = 1
             )
             basicDao.insert(budgetTransaction)
-            budgetTransaction.budgetTransactionAmount = 60.0
-            basicDao.update(budgetTransaction)
+            val updateBudgetTransaction = budgetTransaction.copy(budgetTransactionAmount = 60.0)
+            basicDao.update(updateBudgetTransaction)
             val list = basicDao.getAllBudgetTransaction().getOrAwaitValue()
-            assertThat(list[0]).isEqualTo(budgetTransaction)
+            assertThat(list[0]).isEqualTo(updateBudgetTransaction)
         }
     }
 
@@ -412,7 +407,7 @@ class BasicDaoTest {
             val account1 = Account(accountId = 1, accountName = "Cash")
             val account2 = Account(accountId = 2, accountName = "Bank")
             val budget = Budget(budgetId = 1, budgetGoal = 100.0, budgetName = "Food", budgetType = 1)
-            val item = Transaction(
+            val transaction = Transaction(
                 transactionId = 1,
                 transactionAccountId = 1,
                 transactionType = 2,
@@ -422,11 +417,11 @@ class BasicDaoTest {
             basicDao.insert(account1)
             basicDao.insert(account2)
             basicDao.insert(budget)
-            basicDao.insert(item)
-            item.transactionAmount = 800.0
-            basicDao.update(item)
+            basicDao.insert(transaction)
+            val updatedTransaction = transaction.copy(transactionAmount = 800.0)
+            basicDao.update(updatedTransaction)
             val list = basicDao.getAllTransaction().getOrAwaitValue()
-            assertThat(list[0]).isEqualTo(item)
+            assertThat(list[0]).isEqualTo(updatedTransaction)
         }
     }
 

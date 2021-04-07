@@ -24,7 +24,7 @@ class AccountBudgetChartViewModel @Inject constructor(
         }
 
     private val accountTransactionBudgetFlow = account.flatMapLatest {
-        getAccountTransactionBudget(it.accountId!!)
+        getAccountTransactionBudget(it.accountId)
     }
     val accountTransactionBudget = accountTransactionBudgetFlow.asLiveData()
 

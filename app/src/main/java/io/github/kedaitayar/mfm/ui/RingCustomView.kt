@@ -34,6 +34,7 @@ class RingCustomView @JvmOverloads constructor(
             this.ringStrokeWidth =
                 typeArray.getFloat(R.styleable.RingCustomView_ringStrokeWidth, 20f)
         }
+        typeArray.recycle()
     }
 
     override fun onDraw(canvas: Canvas?) {

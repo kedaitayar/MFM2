@@ -45,14 +45,14 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
                 return true
             }
         }
-        accountListViewModel.accountListAdapterData.observe(viewLifecycleOwner, Observer {
+        accountListViewModel.accountListAdapterData.observe(viewLifecycleOwner) {
             if (it == null || it.isEmpty()) {
                 binding.linearLayoutEmptyView.visibility = View.VISIBLE
             } else {
                 binding.linearLayoutEmptyView.visibility = View.GONE
                 adapter.submitList(it)
             }
-        })
+        }
         popupMenuSetup(adapter)
     }
 

@@ -52,7 +52,7 @@ class AddEditBudgetViewModel
                             budgetId = budgetListAdapterData.budgetId,
                             budgetGoal = inputBudgetGoal ?: 0.0,
                             budgetName = inputBudgetName!!,
-                            budgetType = inputBudgetType!!.budgetTypeId!!.toInt()
+                            budgetType = inputBudgetType!!.budgetTypeId.toInt()
                         )
                         val result = budgetRepository.update(budget)
                         addEditBudgetEventChanel.send(AddEditBudgetEvent.NavigateBackWithEditResult(result))
@@ -86,7 +86,7 @@ class AddEditBudgetViewModel
 //                        budgetId = 0,
                         budgetGoal = inputBudgetGoal ?: 0.0,
                         budgetName = inputBudgetName!!,
-                        budgetType = inputBudgetType!!.budgetTypeId!!.toInt()
+                        budgetType = inputBudgetType!!.budgetTypeId.toInt()
                     )
                     val result = budgetRepository.insert(budget)
                     addEditBudgetEventChanel.send(AddEditBudgetEvent.NavigateBackWithAddResult(result))

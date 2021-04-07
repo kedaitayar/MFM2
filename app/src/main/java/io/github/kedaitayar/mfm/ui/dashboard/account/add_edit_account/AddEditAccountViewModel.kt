@@ -24,7 +24,7 @@ class AddEditAccountViewModel @Inject constructor(
 
     fun onSaveClick() {
         viewModelScope.launch {
-            if (account?.accountName?.isNotBlank() == true) {
+            if (account.accountName.isNotBlank()) {
                 val result = dashboardRepository.update(Account(accountId = account.accountId, accountName = account.accountName))
                 addEditAccountEventChannel.send(AddEditAccountEvent.NavigateBackWithEditResult(result))
             } else {
@@ -40,7 +40,7 @@ class AddEditAccountViewModel @Inject constructor(
 
     fun onAddClick() {
         viewModelScope.launch {
-            if (account?.accountName?.isBlank() == true) {
+            if (account.accountName.isBlank()) {
                 val result = dashboardRepository.insert(Account(accountId = account.accountId, accountName = account.accountName))
                 addEditAccountEventChannel.send(AddEditAccountEvent.NavigateBackWithAddResult(result))
             } else {
@@ -56,7 +56,7 @@ class AddEditAccountViewModel @Inject constructor(
 
     fun onDeleteClick() {
         viewModelScope.launch {
-            val result = dashboardRepository.delete(Account(accountId = account!!.accountId, accountName = account.accountName))
+            val result = dashboardRepository.delete(Account(accountId = account.accountId, accountName = account.accountName))
             addEditAccountEventChannel.send(AddEditAccountEvent.NavigateBackWithDeleteResult(result))
         }
     }

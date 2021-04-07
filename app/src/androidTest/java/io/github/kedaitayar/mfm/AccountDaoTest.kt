@@ -1,6 +1,5 @@
 package io.github.kedaitayar.mfm
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -26,8 +25,6 @@ import java.time.OffsetDateTime
 
 @RunWith(AndroidJUnit4::class)
 class AccountDaoTest {
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var accountDao: AccountDao
     private lateinit var basicDao: BasicDao
@@ -127,7 +124,7 @@ class AccountDaoTest {
         )
 
         val accountResult1 = AccountListAdapterData(
-            accountId = account1.accountId!!,
+            accountId = account1.accountId,
             accountName = account1.accountName,
             accountIncome = transaction1.transactionAmount,
             accountExpense = transaction2.transactionAmount,
@@ -135,7 +132,7 @@ class AccountDaoTest {
             accountTransferOut = transaction3.transactionAmount
         )
         val accountResult2 = AccountListAdapterData(
-            accountId = account2.accountId!!,
+            accountId = account2.accountId,
             accountName = account2.accountName,
             accountIncome = 0.0,
             accountExpense = 0.0,
