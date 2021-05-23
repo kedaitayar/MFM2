@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_fragment_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.main.MainFragment">
@@ -25,8 +26,8 @@
             android:fitsSystemWindows="true">
 
             <com.google.android.material.tabs.TabLayout
-                style="@style/TabLayout1"
                 android:id="@+id/tab_layout"
+                style="@style/TabLayout1"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize" />
 
@@ -38,9 +39,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            app:tint="?colorOnSecondary"
+            android:contentDescription="Add Transaction"
             app:srcCompat="@drawable/ic_round_add_24"
-            android:contentDescription="Add Transaction" />
+            app:tint="?colorOnSecondary" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

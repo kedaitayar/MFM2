@@ -38,13 +38,13 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
     private fun recyclerViewSetup(adapter: AccountListAdapter) {
         binding.recyclerViewAccountList.adapter = adapter
         // to half the recycler itemview width - https://stackoverflow.com/a/51224889
-//        binding.recyclerViewAccountList.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.recyclerViewAccountList.layoutManager = object : GridLayoutManager(requireContext(), 2) {
-            override fun checkLayoutParams(lp: RecyclerView.LayoutParams?): Boolean {
-                lp?.width = width / 2
-                return true
-            }
-        }
+        binding.recyclerViewAccountList.layoutManager = GridLayoutManager(requireContext(), 2)
+//        binding.recyclerViewAccountList.layoutManager = object : GridLayoutManager(requireContext(), 2) {
+//            override fun checkLayoutParams(lp: RecyclerView.LayoutParams?): Boolean {
+//                lp?.width = width / 2
+//                return true
+//            }
+//        }
         accountListViewModel.accountListAdapterData.observe(viewLifecycleOwner) {
             if (it == null || it.isEmpty()) {
                 binding.linearLayoutEmptyView.visibility = View.VISIBLE

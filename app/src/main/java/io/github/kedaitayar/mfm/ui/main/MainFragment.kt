@@ -12,13 +12,15 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMainBinding
 import io.github.kedaitayar.mfm.util.EventObserver
 import io.github.kedaitayar.mfm.util.exhaustive
 import kotlinx.coroutines.flow.collect
+import java.lang.Exception
 
 @AndroidEntryPoint
-class MainFragment : Fragment() {
+class MainFragment : Fragment(R.layout.fragment_main) {
     private val mainViewModel: MainViewModel by activityViewModels()
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!

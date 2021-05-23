@@ -1,27 +1,36 @@
-package io.github.kedaitayar.mfm
+package io.github.kedaitayar.mfm.data.dao
 
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
-import io.github.kedaitayar.mfm.data.dao.BasicDao
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.kedaitayar.mfm.data.database.MFMDatabase
 import io.github.kedaitayar.mfm.data.entity.*
 import io.github.kedaitayar.mfm.util.getOrAwaitValue
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import java.io.IOException
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import javax.inject.Inject
+import javax.inject.Named
+import kotlin.jvm.Throws
 
-@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class BasicDaoTest {
+    @get:Rule
+    var hiltAndroidRule = HiltAndroidRule(this)
 
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @Inject
+    @Named("test_database")
+    lateinit var mfmDb: MFMDatabase
     private lateinit var basicDao: BasicDao
-    private lateinit var mfmDb: MFMDatabase
 
     private val budgetTypeList = listOf(
         BudgetType(budgetTypeId = 1, budgetTypeName = "Monthly"),
@@ -36,12 +45,7 @@ class BasicDaoTest {
 
     @Before
     fun createDb() {
-        mfmDb = Room.inMemoryDatabaseBuilder(
-            ApplicationProvider.getApplicationContext(),
-            MFMDatabase::class.java
-        )
-            .allowMainThreadQueries()
-            .build()
+        hiltAndroidRule.inject()
         basicDao = mfmDb.basicDao()
 
         // insert prepopulate data

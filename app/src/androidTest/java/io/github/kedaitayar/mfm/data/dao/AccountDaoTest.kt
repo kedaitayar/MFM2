@@ -1,9 +1,9 @@
-package io.github.kedaitayar.mfm
+package io.github.kedaitayar.mfm.data.dao
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.github.kedaitayar.mfm.data.dao.AccountDao
 import io.github.kedaitayar.mfm.data.database.MFMDatabase
 import io.github.kedaitayar.mfm.data.entity.Account
 import org.junit.After
@@ -12,7 +12,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
 import com.google.common.truth.Truth.assertThat
-import io.github.kedaitayar.mfm.data.dao.BasicDao
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.kedaitayar.mfm.data.entity.TransactionType
 import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.util.getOrAwaitValue
@@ -22,13 +23,24 @@ import io.github.kedaitayar.mfm.data.entity.Transaction
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import java.time.OffsetDateTime
+import javax.inject.Inject
+import javax.inject.Named
+import kotlin.jvm.Throws
 
-@RunWith(AndroidJUnit4::class)
+//@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class AccountDaoTest {
+    @get:Rule
+    var hiltAndroidRule = HiltAndroidRule(this)
 
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @Inject
+    @Named("test_database")
+    lateinit var mfmDb: MFMDatabase
     private lateinit var accountDao: AccountDao
     private lateinit var basicDao: BasicDao
-    private lateinit var mfmDb: MFMDatabase
 
     private val budgetTypeList = listOf(
         BudgetType(budgetTypeId = 1, budgetTypeName = "Monthly"),
@@ -43,13 +55,8 @@ class AccountDaoTest {
 
     @Before
     fun createDb() {
-        mfmDb = Room.inMemoryDatabaseBuilder(
-            ApplicationProvider.getApplicationContext(),
-            MFMDatabase::class.java
-        )
-            .allowMainThreadQueries()
-//            .createFromAsset("database/mfm_db.db")
-            .build()
+        hiltAndroidRule.inject()
+
         accountDao = mfmDb.accountDao()
         basicDao = mfmDb.basicDao()
 
