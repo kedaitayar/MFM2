@@ -11,6 +11,7 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.idling.CountingIdlingResource
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -19,7 +20,9 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
+import io.github.kedaitayar.mfm.ui.budget.budgeting.BudgetingListAdapter
 import io.github.kedaitayar.mfm.ui.dashboard.account.main_account.AccountListAdapter
+import io.github.kedaitayar.mfm.ui.transaction.transaction_list.TransactionListAdapter
 import io.github.kedaitayar.mfm.util.childAtPosition
 import io.github.kedaitayar.mfm.util.clickOnViewChild
 import org.hamcrest.Description
@@ -237,6 +240,7 @@ class MainActivityTest {
     fun addEditDeleteIncomeTransaction() {
         val account01 = "Cash"
         val amount = "1000"
+        val amount2 = "2000"
         val waiter = CountDownLatch(1)
         onView(withId(R.id.view_pager_main)).perform(swipeLeft())
         onView(withId(R.id.fab)).perform(click())
@@ -266,7 +270,260 @@ class MainActivityTest {
             .check(matches(withText(account01)))
 
         onView(withId(R.id.text_input_edit_amount))
+            .check(matches(isDisplayed()))
             .perform(typeText(amount))
+            .check(matches(withText(amount)))
+
+        onView(withId(R.id.button_save))
+            .check(matches(isDisplayed()))
+            .perform(click())
+
+        onView(withText("Transaction added"))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+
+        // update income
+        onView(withId(R.id.recycler_view_transaction_list))
+            .perform(
+                RecyclerViewActions.scrollTo<TransactionListAdapter.TransactionListViewHolder>(
+                    hasDescendant(withText("Income"))
+                )
+            )
+            .perform(
+                RecyclerViewActions.actionOnItem<TransactionListAdapter.TransactionListViewHolder>(
+                    hasDescendant(withText("Income")), clickOnViewChild(R.id.button_popup_menu)
+                )
+            )
+
+        onView(withText("Edit"))
+            .perform(click())
+
+        onView(withId(R.id.text_input_edit_amount))
+            .perform(replaceText(amount2))
+
+        onView(withId(R.id.button_save))
+            .check(matches(isDisplayed()))
+            .perform(click())
+
+        onView(withText("Transaction updated"))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+
+        // delete income
+        onView(withId(R.id.recycler_view_transaction_list))
+            .perform(
+                RecyclerViewActions.scrollTo<TransactionListAdapter.TransactionListViewHolder>(
+                    hasDescendant(withText("Income"))
+                )
+            )
+            .perform(
+                RecyclerViewActions.actionOnItem<TransactionListAdapter.TransactionListViewHolder>(
+                    hasDescendant(withText("Income")), clickOnViewChild(R.id.button_popup_menu)
+                )
+            )
+
+        onView(withText("Edit"))
+            .perform(click())
+
+        onView(withId(R.id.delete))
+            .perform(click())
+
+        onView(withText("Delete transaction?"))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+
+        onView(withText("Delete"))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+            .perform(click())
+
+        onView(withText("Transaction deleted"))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+
+        try {
+            onView(withId(R.id.recycler_view_transaction_list))
+                .perform(
+                    RecyclerViewActions.scrollTo<AccountListAdapter.AccountListViewHolder>(
+                        hasDescendant(withText("Income"))
+                    )
+                )
+
+            // if deleted account exist, throw AssertionError
+            throw  AssertionError("Deleted account still exist.")
+        } catch (e: PerformException) {
+            /**
+             * swallowing the exception because
+             * in the try block, its searching for the deleted account, checking if the account still exist,
+             * since the account is already deleted, exception occurs, which is the expected result
+             */
+        }
+
+//        waiter.await(2000, TimeUnit.MILLISECONDS)
+    }
+
+    @Test
+    fun addEditDeleteExpenseTransaction() {
+        val account01 = "Cash"
+        val budget = "Food"
+        val amount = "50"
+        val amount2 = "100"
+        val waiter = CountDownLatch(1)
+        onView(withId(R.id.view_pager_main)).perform(swipeLeft())
+        onView(withId(R.id.fab)).perform(click())
+        waiter.await(100, TimeUnit.MILLISECONDS)
+        //select account
+        onView(
+            allOf(
+                withId(R.id.autoComplete_account),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.text_input_layout_account),
+                        0
+                    ),
+                    1
+                ),
+                isDisplayed()
+            )
+        ).perform(click())
+
+        // click dropdown with name account01
+        // .inRoot(RootMatchers.isPlatformPopup()) - https://stackoverflow.com/a/48869887/12528485
+        onView(withText(account01))
+            .inRoot(RootMatchers.isPlatformPopup())
+            .perform(click())
+
+        onView(withId(R.id.autoComplete_account))
+            .check(matches(withText(account01)))
+
+        //select budget
+        onView(
+            allOf(
+                withId(R.id.autoComplete_budget),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.text_input_layout_budget),
+                        0
+                    ),
+                    1
+                ),
+                isDisplayed()
+            )
+        ).perform(click())
+
+        onView(withText(budget))
+            .inRoot(RootMatchers.isPlatformPopup())
+            .perform(click())
+
+        onView(withId(R.id.autoComplete_budget))
+            .check(matches(withText(budget)))
+
+        //input amount
+        onView(withId(R.id.text_input_edit_amount))
+            .check(matches(isDisplayed()))
+            .perform(typeText(amount))
+            .check(matches(withText(amount)))
+
+        onView(withId(R.id.button_save))
+            .check(matches(isDisplayed()))
+            .perform(click())
+
+        onView(withText("Transaction added"))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+
+        // update income
+        onView(withId(R.id.recycler_view_transaction_list))
+            .perform(
+                RecyclerViewActions.scrollTo<TransactionListAdapter.TransactionListViewHolder>(
+                    hasDescendant(withText(budget))
+                )
+            )
+            .perform(
+                RecyclerViewActions.actionOnItem<TransactionListAdapter.TransactionListViewHolder>(
+                    hasDescendant(withText(budget)), clickOnViewChild(R.id.button_popup_menu)
+                )
+            )
+
+        onView(withText("Edit"))
+            .perform(click())
+
+        onView(withId(R.id.text_input_edit_amount))
+            .perform(replaceText(amount2))
+
+        onView(withId(R.id.button_save))
+            .check(matches(isDisplayed()))
+            .perform(click())
+
+        onView(withText("Transaction updated"))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+
+        // delete income
+        onView(withId(R.id.recycler_view_transaction_list))
+            .perform(
+                RecyclerViewActions.scrollTo<TransactionListAdapter.TransactionListViewHolder>(
+                    hasDescendant(withText(budget))
+                )
+            )
+            .perform(
+                RecyclerViewActions.actionOnItem<TransactionListAdapter.TransactionListViewHolder>(
+                    hasDescendant(withText(budget)), clickOnViewChild(R.id.button_popup_menu)
+                )
+            )
+
+        onView(withText("Edit"))
+            .perform(click())
+
+        onView(withId(R.id.delete))
+            .perform(click())
+
+        onView(withText("Delete transaction?"))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+
+        onView(withText("Delete"))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+            .perform(click())
+
+        onView(withText("Transaction deleted"))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+
+        try {
+            onView(withId(R.id.recycler_view_transaction_list))
+                .perform(
+                    RecyclerViewActions.scrollTo<AccountListAdapter.AccountListViewHolder>(
+                        hasDescendant(withText(budget))
+                    )
+                )
+
+            // if deleted account exist, throw AssertionError
+            throw  AssertionError("Deleted account still exist.")
+        } catch (e: PerformException) {
+            /**
+             * swallowing the exception because
+             * in the try block, its searching for the deleted account, checking if the account still exist,
+             * since the account is already deleted, exception occurs, which is the expected result
+             */
+        }
+
+//        waiter.await(2000, TimeUnit.MILLISECONDS)
+    }
+
+    @Test
+    fun budgeting() {
+        val waiter = CountDownLatch(1)
+        onView(withId(R.id.view_pager_main))
+            .perform(swipeLeft())
+            .perform(swipeLeft())
+        waiter.await(100, TimeUnit.MILLISECONDS)
+
+        onView(withId(R.id.button_budgeting))
+            .check(matches(isDisplayed()))
+            .perform(click())
+        waiter.await(500, TimeUnit.MILLISECONDS)
+
+        onView(
+            allOf(
+//                withParent(withId(R.id.recycler_view_budgeting)),
+                withId(R.id.text_input_layout_amount),
+                hasSibling(withText("Food"))
+            )
+        )
+            .check(matches(hasDescendant(withText("0.0"))))
+            .perform(typeText("50"))
 
         waiter.await(2000, TimeUnit.MILLISECONDS)
     }

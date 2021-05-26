@@ -3,17 +3,17 @@ package io.github.kedaitayar.mfm
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.assertion.ViewAssertions.*
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import org.hamcrest.Description
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.allOf
 import org.hamcrest.TypeSafeMatcher
 import org.junit.Rule
 import org.junit.Test
@@ -29,45 +29,42 @@ class MainActivityTest2 {
 
     @Test
     fun mainActivityTest2() {
-        val floatingActionButton = onView(
+        val tabView = onView(
             allOf(
-                withId(R.id.fab), withContentDescription("Add Transaction"),
+                withContentDescription("Budget"),
                 childAtPosition(
-                    allOf(
-                        withId(R.id.coordinator_layout),
-                        childAtPosition(
-                            withId(R.id.main_fragment_root),
-                            0
-                        )
+                    childAtPosition(
+                        withId(R.id.tab_layout),
+                        0
                     ),
                     2
                 ),
                 isDisplayed()
             )
         )
-        floatingActionButton.perform(click())
-
-        val tabView = onView(
-            allOf(
-                withContentDescription("Income"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(R.id.tab_layout),
-                        0
-                    ),
-                    1
-                ),
-                isDisplayed()
-            )
-        )
         tabView.perform(click())
 
-        val materialAutoCompleteTextView = onView(
+        val materialButton = onView(
             allOf(
-                withId(R.id.autoComplete_account),
+                withId(R.id.button_budgeting), withText("budgeting"),
                 childAtPosition(
                     childAtPosition(
-                        withId(R.id.text_input_layout_account),
+                        withClassName(`is`("androidx.appcompat.widget.LinearLayoutCompat")),
+                        2
+                    ),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        materialButton.perform(click())
+
+        val textInputEditText = onView(
+            allOf(
+                withId(R.id.text_input_edit_amount), withText("0.0"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.text_input_layout_amount),
                         0
                     ),
                     1
@@ -75,17 +72,55 @@ class MainActivityTest2 {
                 isDisplayed()
             )
         )
-        materialAutoCompleteTextView.perform(click())
+        textInputEditText.perform(replaceText("10"))
 
-        val materialTextView = onData(anything())
-            .inAdapterView(
+        val textInputEditText2 = onView(
+            allOf(
+                withId(R.id.text_input_edit_amount), withText("10"),
                 childAtPosition(
-                    withClassName(`is`("android.widget.PopupWindow\$PopupBackgroundView")),
-                    0
-                )
+                    childAtPosition(
+                        withId(R.id.text_input_layout_amount),
+                        0
+                    ),
+                    1
+                ),
+                isDisplayed()
             )
-            .atPosition(0)
-        materialTextView.perform(click())
+        )
+        textInputEditText2.perform(closeSoftKeyboard())
+
+        val actionMenuItemView = onView(
+            allOf(
+                withId(R.id.save_budgeting), withContentDescription("Save"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.topAppBar),
+                        0
+                    ),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        actionMenuItemView.perform(click())
+
+        val textView = onView(
+            allOf(
+                withId(R.id.text_view_budgeted), withText("10.0"),
+                withParent(withParent(withId(R.id.recycler_view))),
+                isDisplayed()
+            )
+        )
+        textView.check(matches(withText("10.0")))
+
+        val textView2 = onView(
+            allOf(
+                withId(R.id.text_view_available), withText("10.0"),
+                withParent(withParent(withId(R.id.recycler_view))),
+                isDisplayed()
+            )
+        )
+        textView2.check(matches(withText("10.0")))
     }
 
     private fun childAtPosition(

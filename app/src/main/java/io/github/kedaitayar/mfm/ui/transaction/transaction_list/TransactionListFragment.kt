@@ -60,15 +60,15 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
     }
 
     private fun setupRecyclerView(adapter: TransactionListAdapter) {
-        binding.recyclerView.adapter = adapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        binding.recyclerViewTransactionList.adapter = adapter
+        binding.recyclerViewTransactionList.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerViewTransactionList.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         viewLifecycleOwner.lifecycleScope.launch {
             transactionListViewModel.allTransactionListAdapterData.collectLatest {
                 adapter.submitData(it)
             }
         }
-        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.recyclerViewTransactionList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val mainFragment = parentFragment?.parentFragment
                 if (mainFragment is MainFragment) {

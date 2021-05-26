@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData
-import io.github.kedaitayar.mfm.databinding.RecyclerViewItemTransctionListBinding
+import io.github.kedaitayar.mfm.databinding.RecyclerViewItemTransactionListBinding
 
 class TransactionListAdapter :
     PagingDataAdapter<TransactionListAdapterData, TransactionListAdapter.TransactionListViewHolder>(
@@ -35,7 +35,7 @@ class TransactionListAdapter :
         )
     }
 
-    inner class TransactionListViewHolder(private val binding: RecyclerViewItemTransctionListBinding) :
+    inner class TransactionListViewHolder(private val binding: RecyclerViewItemTransactionListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -79,7 +79,7 @@ class TransactionListAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionListViewHolder {
         return TransactionListViewHolder(
-            RecyclerViewItemTransctionListBinding.inflate(
+            RecyclerViewItemTransactionListBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false

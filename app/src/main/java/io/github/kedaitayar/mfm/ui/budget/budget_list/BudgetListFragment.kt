@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.PopupMenu
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
