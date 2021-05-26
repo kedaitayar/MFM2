@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
@@ -20,6 +21,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
+import io.github.kedaitayar.mfm.ui.budget.budget_list.BudgetListAdapter
 import io.github.kedaitayar.mfm.ui.budget.budgeting.BudgetingListAdapter
 import io.github.kedaitayar.mfm.ui.dashboard.account.main_account.AccountListAdapter
 import io.github.kedaitayar.mfm.ui.transaction.transaction_list.TransactionListAdapter
@@ -504,27 +506,169 @@ class MainActivityTest {
 
     @Test
     fun budgeting() {
+        val budget = "Test"
+        val goal = "50"
+        val goal2 = "100"
+        val type = "Monthly"
+        val budgeted = "50"
+        val budgetedAfter = "50.0"
         val waiter = CountDownLatch(1)
         onView(withId(R.id.view_pager_main))
             .perform(swipeLeft())
             .perform(swipeLeft())
         waiter.await(100, TimeUnit.MILLISECONDS)
 
-        onView(withId(R.id.button_budgeting))
-            .check(matches(isDisplayed()))
+        onView(withId(R.id.button_add_budget))
             .perform(click())
-        waiter.await(500, TimeUnit.MILLISECONDS)
+
+        onView(withId(R.id.text_input_edit_budget_name))
+            .perform(typeText(budget))
+
+        onView(withId(R.id.text_input_edit_budget_goal))
+            .perform(typeText(goal))
 
         onView(
             allOf(
-//                withParent(withId(R.id.recycler_view_budgeting)),
-                withId(R.id.text_input_layout_amount),
-                hasSibling(withText("Food"))
+                withId(R.id.autoComplete_budget_type),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.text_input_layout_budget_type),
+                        0
+                    ),
+                    1
+                ),
+                isDisplayed()
+            )
+        ).perform(click())
+
+        // click dropdown with name account01
+        // .inRoot(RootMatchers.isPlatformPopup()) - https://stackoverflow.com/a/48869887/12528485
+        onView(withText(type))
+            .inRoot(RootMatchers.isPlatformPopup())
+            .perform(click())
+
+        onView(withId(R.id.autoComplete_budget_type))
+            .check(matches(withText(type)))
+
+        onView(withId(R.id.button_add_budget))
+            .perform(click())
+
+        onView(withText("Budget added"))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+
+        onView(
+            allOf(
+                hasSibling(allOf(withId(R.id.text_view_budget_name), withText(budget))),
+                withId(R.id.text_view_budgeted)
             )
         )
-            .check(matches(hasDescendant(withText("0.0"))))
-            .perform(typeText("50"))
+            .check(matches(isDisplayed()))
 
-        waiter.await(2000, TimeUnit.MILLISECONDS)
+        //budgeting
+        onView(withId(R.id.button_budgeting))
+            .check(matches(isDisplayed()))
+            .perform(click())
+
+        waiter.await(300, TimeUnit.MILLISECONDS)
+
+        onView(
+            allOf(
+                isDescendantOfA(
+                    allOf(
+                        withId(R.id.text_input_layout_amount),
+                        hasSibling(withText(budget))
+                    )
+                ),
+                withId(R.id.text_input_edit_amount)
+            )
+        )
+//            .check(matches(withText("0.0")))
+            .perform(typeText(budgeted))
+
+        onView(withId(R.id.save_budgeting))
+            .perform(click())
+
+        // edit budget
+        onView(
+            allOf(
+                hasSibling(allOf(withId(R.id.text_view_budget_name), withText(budget))),
+                withId(R.id.text_view_budgeted)
+            )
+        )
+            .check(matches(withText(budgetedAfter)))
+
+        onView(
+            allOf(
+                hasSibling(allOf(withId(R.id.text_view_budget_name), withText(budget))),
+                withId(R.id.button_more)
+            )
+        )
+            .perform(click())
+
+        onView(withText("Edit"))
+            .perform(click())
+
+        onView(withId(R.id.text_input_edit_budget_goal))
+            .perform(replaceText(goal2))
+
+        onView(withId(R.id.button_add_budget))
+            .perform(click())
+
+        onView(withText("Budget updated"))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+
+        //delete budget
+        onView(
+            allOf(
+                hasSibling(allOf(withId(R.id.text_view_budget_name), withText(budget))),
+                withId(R.id.text_view_budgeted)
+            )
+        )
+            .check(matches(withText(budgetedAfter)))
+
+        onView(
+            allOf(
+                hasSibling(allOf(withId(R.id.text_view_budget_name), withText(budget))),
+                withId(R.id.button_more)
+            )
+        )
+            .perform(click())
+
+        onView(withText("Edit"))
+            .perform(click())
+
+        onView(withId(R.id.delete))
+            .perform(click())
+
+        onView(withText("Delete budget?"))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+
+        onView(withText("Delete"))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+            .perform(click())
+
+        onView(withText("Budget deleted"))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+
+        try {
+            onView(
+                allOf(
+                    hasSibling(allOf(withId(R.id.text_view_budget_name), withText(budget))),
+                    withId(R.id.text_view_budgeted)
+                )
+            )
+                .check(matches(isDisplayed()))
+
+            // if deleted budget exist, throw AssertionError
+            throw  AssertionError("Deleted budget still exist.")
+        } catch (e: NoMatchingViewException) {
+            /**
+             * swallowing the exception because
+             * in the try block, its searching for the deleted budget, checking if the budget still exist,
+             * since the budget is already deleted, exception occurs, which is the expected result
+             */
+        }
+
+//        waiter.await(2000, TimeUnit.MILLISECONDS)
     }
 }

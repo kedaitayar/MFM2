@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -49,7 +50,10 @@ class EditBudgetFragment : Fragment(R.layout.fragment_edit_budget) {
             autoCompleteBudgetType.setText(args.budgetListAdapterData.budgetTypeName)
         }
 
-        addEditBudgetViewModel.inputBudgetType = BudgetType(budgetTypeId = args.budgetListAdapterData.budgetTypeId, budgetTypeName = args.budgetListAdapterData.budgetTypeName)
+        addEditBudgetViewModel.inputBudgetType = BudgetType(
+            budgetTypeId = args.budgetListAdapterData.budgetTypeId,
+            budgetTypeName = args.budgetListAdapterData.budgetTypeName
+        )
     }
 
     private fun setupEventListener() {
