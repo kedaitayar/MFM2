@@ -19,7 +19,7 @@ class AddEditTransactionViewModel
 @Inject
 constructor(
     private val transactionRepository: TransactionRepository,
-    private val savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val addEditTransactionEventChannel = Channel<AddEditTransactionEvent>()
     val addEditTransactionEvent = addEditTransactionEventChannel.receiveAsFlow()
@@ -36,6 +36,7 @@ constructor(
     var inputAccountTo: Account? = null
     var inputAmount: Double? = null
     var inputDate: OffsetDateTime = OffsetDateTime.now()
+    var inputNote: String = ""
 
     private fun getAccountFromLivedata(): LiveData<Account?> {
         return when (transaction) {
@@ -86,7 +87,6 @@ constructor(
         }
     }
 
-
     fun onButtonSaveClick(transactionType: TransactionType) {
         viewModelScope.launch {
             when (transactionType) {
@@ -122,7 +122,8 @@ constructor(
                                     transactionAccountId = inputAccountFrom!!.accountId,
                                     transactionBudgetId = inputBudget!!.budgetId,
                                     transactionAmount = inputAmount!!,
-                                    transactionTime = inputDate
+                                    transactionTime = inputDate,
+                                    transactionNote = inputNote
                                     )
                             transaction?.let {
                                 val result = update(transaction)
@@ -159,7 +160,8 @@ constructor(
                                 transaction?.copy(
                                     transactionAccountId = inputAccountFrom!!.accountId,
                                     transactionAmount = inputAmount!!,
-                                    transactionTime = inputDate
+                                    transactionTime = inputDate,
+                                    transactionNote = inputNote
                                 )
                             transaction?.let {
                                 val result = update(transaction)
@@ -204,7 +206,8 @@ constructor(
                                     transactionAccountId = inputAccountFrom!!.accountId,
                                     transactionAccountTransferTo = inputAccountTo!!.accountId,
                                     transactionAmount = inputAmount!!,
-                                    transactionTime = inputDate
+                                    transactionTime = inputDate,
+                                    transactionNote = inputNote
                                 )
                             transaction?.let {
                                 val result = update(transaction)
@@ -256,7 +259,8 @@ constructor(
                                 transactionBudgetId = inputBudget!!.budgetId,
                                 transactionAmount = inputAmount ?: 0.0,
                                 transactionType = 1,
-                                transactionTime = inputDate
+                                transactionTime = inputDate,
+                                transactionNote = inputNote
                             )
                             val result = insert(transaction)
                             addEditTransactionEventChannel.send(
@@ -290,7 +294,8 @@ constructor(
                                 transactionAccountId = inputAccountFrom!!.accountId,
                                 transactionAmount = inputAmount ?: 0.0,
                                 transactionType = 2,
-                                transactionTime = inputDate
+                                transactionTime = inputDate,
+                                transactionNote = inputNote
                             )
                             val result = insert(transaction)
                             addEditTransactionEventChannel.send(
@@ -333,7 +338,8 @@ constructor(
                                 transactionAmount = inputAmount ?: 0.0,
                                 transactionAccountTransferTo = inputAccountTo!!.accountId,
                                 transactionType = 3,
-                                transactionTime = inputDate
+                                transactionTime = inputDate,
+                                transactionNote = inputNote
                             )
                             val result = insert(transaction)
                             addEditTransactionEventChannel.send(

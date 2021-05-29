@@ -36,5 +36,6 @@ data class Transaction(
     val transactionType: Int = 0,
     val transactionAccountId: Long = 0,
     val transactionBudgetId: Long? = null,
-    val transactionAccountTransferTo: Long? = null
-): Parcelable
+    val transactionAccountTransferTo: Long? = null,
+    val transactionNote: String = ""
+) : Parcelable

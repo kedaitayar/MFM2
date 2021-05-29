@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
@@ -23,7 +22,7 @@ import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transact
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transaction.AddTransactionFragment
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.edit_transaction.EditTransactionChild
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
-import kotlinx.coroutines.*
+import io.github.kedaitayar.mfm.util.toStringOrBlank
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -52,6 +51,8 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
         }
     }
 
+
+
     private fun setupDateInput() {
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
@@ -76,19 +77,21 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
 
     private fun setupInputListener() {
         binding.apply {
-            autoCompleteAccount.setOnItemClickListener { parent, view, position, id ->
+            autoCompleteAccount.setOnItemClickListener { parent, _, position, _ ->
                 addEditTransactionViewModel.inputAccountFrom = parent.getItemAtPosition(position) as Account?
             }
-            autoCompleteBudget.setOnItemClickListener { parent, view, position, id ->
+            autoCompleteBudget.setOnItemClickListener { parent, _, position, _ ->
                 addEditTransactionViewModel.inputBudget = parent.getItemAtPosition(position) as Budget?
             }
             textInputEditAmount.addTextChangedListener {
                 addEditTransactionViewModel.inputAmount = it.toString().toDoubleOrNull()
             }
+            textInputEditNote.addTextChangedListener {
+                addEditTransactionViewModel.inputNote = it.toStringOrBlank()
+            }
         }
     }
 
-    @ExperimentalCoroutinesApi
     private fun setupEditTransactionValue() {
         addEditTransactionViewModel.accountFrom.observe(viewLifecycleOwner) {
             it?.let {
@@ -105,6 +108,10 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
         addEditTransactionViewModel.transaction?.transactionAmount?.let {
             addEditTransactionViewModel.inputAmount = it
             binding.textInputEditAmount.setText(it.toString())
+        }
+        addEditTransactionViewModel.transaction?.transactionNote?.let {
+            addEditTransactionViewModel.inputNote = it
+            binding.textInputEditNote.setText(it)
         }
 //        addEditTransactionViewModel.transaction.observe(viewLifecycleOwner) {
 //            it?.let {

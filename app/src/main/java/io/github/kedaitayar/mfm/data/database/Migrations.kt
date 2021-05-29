@@ -96,3 +96,9 @@ val MIGRATION_6_7 = object : Migration(6, 7) {
         database.execSQL("ALTER TABLE `BudgetDeadline_backup` RENAME TO `BudgetDeadline`")
     }
 }
+
+val MIGRATION_7_8 = object : Migration(7, 8) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("ALTER TABLE `Transaction` ADD COLUMN `transactionNote` TEXT NOT NULL DEFAULT ''")
+    }
+}

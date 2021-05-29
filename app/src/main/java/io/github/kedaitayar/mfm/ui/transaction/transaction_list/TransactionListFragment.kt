@@ -120,7 +120,8 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
             transactionType = transactionTypeId,
             transactionAccountId = transactionAccountId,
             transactionBudgetId = transactionBudgetId,
-            transactionAccountTransferTo = transactionAccountTransferTo
+            transactionAccountTransferTo = transactionAccountTransferTo,
+            transactionNote = transactionNote
         )
     }
 

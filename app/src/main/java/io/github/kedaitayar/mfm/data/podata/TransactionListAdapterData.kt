@@ -16,5 +16,6 @@ data class TransactionListAdapterData(
     var transactionAccountTransferTo: Long? = null,
     var transactionAccountName: String = "",
     var transactionBudgetName: String? = null,
-    var transactionAccountTransferToName: String? = null
+    var transactionAccountTransferToName: String? = null,
+    var transactionNote: String = ""
 ) : Parcelable
