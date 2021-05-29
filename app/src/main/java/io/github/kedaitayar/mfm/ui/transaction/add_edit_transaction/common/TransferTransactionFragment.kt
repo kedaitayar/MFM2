@@ -104,7 +104,11 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
         }
         addEditTransactionViewModel.transaction?.transactionAmount?.let {
             addEditTransactionViewModel.inputAmount = it
-            binding.textInputEditNote.setText(it.toString())
+            binding.textInputEditAmount.setText(it.toString())
+        }
+        addEditTransactionViewModel.transaction?.transactionNote?.let {
+            addEditTransactionViewModel.inputNote = it
+            binding.textInputEditNote.setText(it)
         }
     }
 

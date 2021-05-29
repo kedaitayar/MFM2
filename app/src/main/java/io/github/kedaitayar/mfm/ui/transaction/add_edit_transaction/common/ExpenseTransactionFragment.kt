@@ -51,8 +51,6 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
         }
     }
 
-
-
     private fun setupDateInput() {
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
