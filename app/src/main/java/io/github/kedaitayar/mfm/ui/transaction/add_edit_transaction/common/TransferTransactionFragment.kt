@@ -110,6 +110,11 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
             addEditTransactionViewModel.inputNote = it
             binding.textInputEditNote.setText(it)
         }
+        val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        addEditTransactionViewModel.transaction?.transactionTime?.let {
+            addEditTransactionViewModel.inputDate = it
+            binding.textInputEditDate.setText(it.format(dateFormatter))
+        }
     }
 
     private fun setupAccountFromDropdown() {

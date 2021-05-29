@@ -111,12 +111,11 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
             addEditTransactionViewModel.inputNote = it
             binding.textInputEditNote.setText(it)
         }
-//        addEditTransactionViewModel.transaction.observe(viewLifecycleOwner) {
-//            it?.let {
-//                addEditTransactionViewModel.inputAmount = it.transactionAmount
-//                binding.textInputEditAmount.setText(it.transactionAmount.toString())
-//            }
-//        }
+        val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        addEditTransactionViewModel.transaction?.transactionTime?.let {
+            addEditTransactionViewModel.inputDate = it
+            binding.textInputEditDate.setText(it.format(dateFormatter))
+        }
     }
 
     private fun setupAccountDropdown() {
