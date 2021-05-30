@@ -35,6 +35,7 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
         val adapter = TransactionListAdapter()
         setupAdapter(adapter)
         setupRecyclerView(adapter)
+        setupHideFABOnScroll()
     }
 
     private fun setupAdapter(adapter: TransactionListAdapter) {
@@ -59,15 +60,7 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
         }
     }
 
-    private fun setupRecyclerView(adapter: TransactionListAdapter) {
-        binding.recyclerViewTransactionList.adapter = adapter
-        binding.recyclerViewTransactionList.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerViewTransactionList.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
-        viewLifecycleOwner.lifecycleScope.launch {
-            transactionListViewModel.allTransactionListAdapterData.collectLatest {
-                adapter.submitData(it)
-            }
-        }
+    private fun setupHideFABOnScroll() {
         binding.recyclerViewTransactionList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val mainFragment = parentFragment?.parentFragment
@@ -84,6 +77,17 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
                 }
             }
         })
+    }
+
+    private fun setupRecyclerView(adapter: TransactionListAdapter) {
+        binding.recyclerViewTransactionList.adapter = adapter
+        binding.recyclerViewTransactionList.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerViewTransactionList.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        viewLifecycleOwner.lifecycleScope.launch {
+            transactionListViewModel.allTransactionListAdapterData.collectLatest {
+                adapter.submitData(it)
+            }
+        }
         popupMenuSetup(adapter)
     }
 

@@ -43,7 +43,7 @@ class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
         }
 
         setupReclaimUnusedBudgetButton()
-        setupHideFABOnScroll()
+//        setupHideFABOnScroll()
     }
 
     private fun setupReclaimUnusedBudgetButton() {
