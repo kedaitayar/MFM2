@@ -161,6 +161,23 @@ interface AccountDao {
     )
     fun getAccountListData(): LiveData<List<AccountListAdapterData>>
 
+    @Query(
+        """
+        SELECT account.accountId, accountName, SUM(accountIncome) AS accountIncome, SUM(accountExpense) AS accountExpense, SUM(accountTransferIn) AS accountTransferIn, SUM(accountTransferOut) AS accountTransferOut 
+        FROM account 
+        LEFT JOIN 
+            (SELECT transactionAccountId AS accountId, SUM(CASE WHEN transactionType = 2 THEN transactionAmount ELSE 0 END) AS accountIncome, SUM(CASE WHEN transactionType = 1 THEN transactionAmount ELSE 0 END) AS accountExpense, 0 AS accountTransferIn, SUM(CASE WHEN transactionType = 3 THEN transactionAmount ELSE 0 END) AS accountTransferOut 
+            FROM `transaction` 
+            GROUP BY transactionAccountId 
+            UNION 
+            SELECT transactionAccountTransferTo AS accountId, 0 AS accountIncome, 0 AS accountExpense, SUM(CASE WHEN transactionType = 3 THEN transactionAmount ELSE 0 END) AS accountTransferIn, 0 AS accountTransferOut 
+            FROM `transaction` 
+            WHERE transactionType = 3 
+            GROUP BY transactionAccountTransferTo) AS tbl ON account.accountId = tbl.accountId 
+        GROUP BY account.accountId"""
+    )
+    fun getAccountListDataFlow(): Flow<List<AccountListAdapterData>>
+
     @Query("SELECT SUM(budgetTransactionAmount) FROM budgettransaction")
     fun getTotalBudgetedAmount(): Flow<Double>
 

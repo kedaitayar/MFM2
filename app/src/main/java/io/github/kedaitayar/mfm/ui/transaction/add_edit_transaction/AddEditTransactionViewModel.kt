@@ -6,6 +6,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.entity.Budget
 import io.github.kedaitayar.mfm.data.entity.Transaction
+import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
+import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.data.repository.TransactionRepository
 import io.github.kedaitayar.mfm.util.exhaustive
 import kotlinx.coroutines.channels.Channel
@@ -21,71 +23,37 @@ constructor(
     private val transactionRepository: TransactionRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    private val now = OffsetDateTime.now()
     private val addEditTransactionEventChannel = Channel<AddEditTransactionEvent>()
     val addEditTransactionEvent = addEditTransactionEventChannel.receiveAsFlow()
 
     val transaction = savedStateHandle.get<Transaction>("transaction")
-    val allAccount = transactionRepository.getAllAccountFlow().asLiveData()
-    val allBudget = transactionRepository.getAllBudgetFlow().asLiveData()
-    val accountFrom = getAccountFromLivedata()
-    val budget = getBudgetLivedata()
-    val accountTo = getAccountToLivedata()
+    private val allAccountFlow = transactionRepository.getAccountListDataFlow()
+    val allAccount = allAccountFlow.asLiveData()
+    private val monthlyBudgetFlow = transactionRepository.getBudgetMonthlyListAdapterFlow(now.monthValue, now.year)
+    private val yearlyBudgetFlow = transactionRepository.getBudgetYearlyListAdapterFlow(now.monthValue, now.year)
+    val allBudget =
+        monthlyBudgetFlow.combine(yearlyBudgetFlow) { monthly: List<BudgetListAdapterData>, yearly: List<BudgetListAdapterData> ->
+            monthly + yearly
+        }.asLiveData()
 
-    var inputAccountFrom: Account? = null
-    var inputBudget: Budget? = null
-    var inputAccountTo: Account? = null
+    val accountFrom = allAccountFlow.map { value: List<AccountListAdapterData> ->
+        value.find { accountListAdapterData -> accountListAdapterData.accountId == transaction!!.transactionAccountId }
+    }.asLiveData()
+    val budget = monthlyBudgetFlow.combine(yearlyBudgetFlow) { monthly, yearly ->
+        val budget = monthly + yearly
+        budget.find { budgetListAdapterData -> budgetListAdapterData.budgetId == transaction!!.transactionBudgetId }
+    }.asLiveData()
+    val accountTo = allAccountFlow.map { value: List<AccountListAdapterData> ->
+        value.find { accountListAdapterData -> accountListAdapterData.accountId == transaction!!.transactionAccountId }
+    }.asLiveData()
+
+    var inputAccountFrom: AccountListAdapterData? = null
+    var inputBudget: BudgetListAdapterData? = null
+    var inputAccountTo: AccountListAdapterData? = null
     var inputAmount: Double? = null
     var inputDate: OffsetDateTime = OffsetDateTime.now()
     var inputNote: String = ""
-
-    private fun getAccountFromLivedata(): LiveData<Account?> {
-        return when (transaction) {
-            null -> {
-                liveData<Account?> { emit(null) }
-            }
-            else -> {
-                transactionRepository.getAccountByIdFlow(transaction.transactionAccountId).asLiveData()
-            }
-        }
-    }
-
-    private fun getBudgetLivedata(): LiveData<Budget?> {
-        return when (transaction) {
-            null -> {
-                liveData<Budget?> { emit(null) }
-            }
-            else -> {
-                when (transaction.transactionBudgetId) {
-                    null -> {
-                        liveData<Budget?> { emit(null) }
-                    }
-                    else -> {
-                        transactionRepository.getBudgetByIdFlow(transaction.transactionBudgetId)
-                            .asLiveData()
-                    }
-                }
-            }
-        }
-    }
-
-    private fun getAccountToLivedata(): LiveData<Account?> {
-        return when (transaction) {
-            null -> {
-                liveData<Account?> { emit(null) }
-            }
-            else -> {
-                when (transaction.transactionAccountTransferTo) {
-                    null -> {
-                        liveData<Account?> { emit(null) }
-                    }
-                    else -> {
-                        transactionRepository.getAccountByIdFlow(transaction.transactionAccountTransferTo)
-                            .asLiveData()
-                    }
-                }
-            }
-        }
-    }
 
     fun onButtonSaveClick(transactionType: TransactionType) {
         viewModelScope.launch {
@@ -124,7 +92,7 @@ constructor(
                                     transactionAmount = inputAmount!!,
                                     transactionTime = inputDate,
                                     transactionNote = inputNote
-                                    )
+                                )
                             transaction?.let {
                                 val result = update(transaction)
                                 addEditTransactionEventChannel.send(
@@ -196,6 +164,14 @@ constructor(
                             addEditTransactionEventChannel.send(
                                 AddEditTransactionEvent.ShowSnackbar(
                                     "Amount cannot be empty",
+                                    Snackbar.LENGTH_SHORT
+                                )
+                            )
+                        }
+                        inputAccountFrom == inputAccountTo -> {
+                            addEditTransactionEventChannel.send(
+                                AddEditTransactionEvent.ShowSnackbar(
+                                    "'Account From' and 'Account To' cannot be empty",
                                     Snackbar.LENGTH_SHORT
                                 )
                             )
@@ -332,6 +308,14 @@ constructor(
                                 )
                             )
                         }
+                        inputAccountFrom == inputAccountTo -> {
+                            addEditTransactionEventChannel.send(
+                                AddEditTransactionEvent.ShowSnackbar(
+                                    "'Account From' and 'Account To' cannot be empty",
+                                    Snackbar.LENGTH_SHORT
+                                )
+                            )
+                        }
                         else -> {
                             val transaction = Transaction(
                                 transactionAccountId = inputAccountFrom!!.accountId,
@@ -373,10 +357,6 @@ constructor(
 
     suspend fun update(transaction: Transaction): Int {
         return transactionRepository.update(transaction)
-    }
-
-    suspend fun getTransactionById(transactionId: Long): Transaction {
-        return transactionRepository.getTransactionById(transactionId)
     }
 
     enum class TransactionType { EXPENSE, INCOME, TRANSFER }

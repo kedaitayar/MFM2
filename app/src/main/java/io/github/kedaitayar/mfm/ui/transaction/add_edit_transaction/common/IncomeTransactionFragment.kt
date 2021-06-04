@@ -1,12 +1,7 @@
 package io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.common
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Filter
-import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,11 +10,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.entity.Transaction
+import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentIncomeTransactionBinding
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.AddEditTransactionViewModel
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transaction.AddTransactionChild
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transaction.AddTransactionFragment
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.edit_transaction.EditTransactionChild
+import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.utils.AccountListArrayAdapter
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.util.toStringOrBlank
 import java.time.Instant
@@ -42,7 +39,7 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
 
         setupAccountDropdown()
         setupDateInput()
-        setupInputListener()
+//        setupInputListener()
 
         if (addEditTransactionViewModel.transaction != null) {
             setupEditTransactionValue()
@@ -74,7 +71,7 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
     private fun setupInputListener() {
         binding.apply {
             autoCompleteAccount.setOnItemClickListener { parent, _, position, _ ->
-                addEditTransactionViewModel.inputAccountFrom = parent.getItemAtPosition(position) as Account?
+                addEditTransactionViewModel.inputAccountFrom = parent.getItemAtPosition(position) as AccountListAdapterData?
             }
             textInputEditAmount.addTextChangedListener {
                 addEditTransactionViewModel.inputAmount = it.toString().toDoubleOrNull()
@@ -110,50 +107,11 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
     private fun setupAccountDropdown() {
         addEditTransactionViewModel.allAccount.observe(viewLifecycleOwner) { list ->
             list?.let { list2 ->
-                val adapter = object : ArrayAdapter<Account>(
+                val adapter = AccountListArrayAdapter(
                     requireContext(),
                     R.layout.support_simple_spinner_dropdown_item,
                     list2
-                ) {
-                    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                        val currentItemView = convertView ?: LayoutInflater.from(context)
-                            .inflate(R.layout.support_simple_spinner_dropdown_item, parent, false)
-                        val account: Account? = getItem(position)
-                        val textView = currentItemView as TextView
-                        account?.let {
-                            textView.text = account.accountName
-                        }
-                        return currentItemView
-                    }
-
-                    override fun getFilter(): Filter {
-                        return object : Filter() {
-                            override fun performFiltering(constraint: CharSequence?): FilterResults {
-                                val result = FilterResults()
-                                result.values = list2
-                                result.count = list2.size
-                                return result
-                            }
-
-                            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                                if (results != null) {
-                                    if (results.count > 0) {
-                                        notifyDataSetChanged()
-                                    } else {
-                                        notifyDataSetInvalidated()
-                                    }
-                                }
-                            }
-
-                            override fun convertResultToString(resultValue: Any?): CharSequence {
-                                if (resultValue is Account) {
-                                    return resultValue.accountName
-                                }
-                                return resultValue.toString()
-                            }
-                        }
-                    }
-                }
+                )
                 binding.autoCompleteAccount.setAdapter(adapter)
             }
         }

@@ -4,21 +4,29 @@ import androidx.lifecycle.LiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import io.github.kedaitayar.mfm.data.dao.AccountDao
 import io.github.kedaitayar.mfm.data.dao.BasicDao
+import io.github.kedaitayar.mfm.data.dao.BudgetDao
 import io.github.kedaitayar.mfm.data.dao.TransactionDao
 import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.entity.Budget
 import io.github.kedaitayar.mfm.data.entity.Transaction
 import io.github.kedaitayar.mfm.data.entity.TransactionType
+import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
+import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.data.podata.TransactionGraphData
 import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData
 import kotlinx.coroutines.flow.Flow
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class TransactionRepository @Inject constructor(
     private val transactionDao: TransactionDao,
+    private val accountDao: AccountDao,
+    private val budgetDao: BudgetDao,
     private val basicDao: BasicDao
 ) {
 
@@ -27,6 +35,28 @@ class TransactionRepository @Inject constructor(
             config = PagingConfig(pageSize = 30, enablePlaceholders = false),
             pagingSourceFactory = { transactionDao.getTransactionListData() }
         ).flow
+    }
+
+    fun getBudgetMonthlyListAdapterFlow(
+        month: Int,
+        year: Int,
+    ): Flow<List<BudgetListAdapterData>> {
+        val timeFrom = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+        val timeTo = timeFrom.plusMonths(1).minusNanos(1)
+        return budgetDao.getBudgetMonthlyListAdapterFlow(month, year, timeFrom, timeTo)
+    }
+
+    fun getBudgetYearlyListAdapterFlow(
+        month: Int,
+        year: Int,
+    ): Flow<List<BudgetListAdapterData>> {
+        val timeFrom = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+        val timeTo = timeFrom.plusMonths(1).minusNanos(1)
+        return budgetDao.getBudgetYearlyListAdapterFlow(month, year, timeFrom, timeTo)
+    }
+
+    fun getAccountListDataFlow(): Flow<List<AccountListAdapterData>> {
+        return accountDao.getAccountListDataFlow()
     }
 
     suspend fun insert(transaction: Transaction): Long {
@@ -45,14 +75,6 @@ class TransactionRepository @Inject constructor(
         return basicDao.getTransactionById(transactionId)
     }
 
-    fun getAllTransaction(): LiveData<List<Transaction>> {
-        return basicDao.getAllTransaction()
-    }
-
-    fun getAllAccount(): LiveData<List<Account>> {
-        return basicDao.getAllAccount()
-    }
-
     fun getAllBudget(): LiveData<List<Budget>> {
         return basicDao.getAllBudget()
     }
@@ -69,16 +91,8 @@ class TransactionRepository @Inject constructor(
         return basicDao.getAccountByIdFlow(accountId)
     }
 
-    suspend fun getAccountById(accountId: Long): Account {
-        return basicDao.getAccountById(accountId)
-    }
-
     fun getBudgetByIdFlow(budgetId: Long): Flow<Budget> {
         return basicDao.getBudgetByIdFlow(budgetId)
-    }
-
-    suspend fun getBudgetById(budgetId: Long): Budget {
-        return basicDao.getBudgetById(budgetId)
     }
 
     fun getTransactionGraphData(year: String): Flow<List<TransactionGraphData>> {
@@ -98,7 +112,4 @@ class TransactionRepository @Inject constructor(
         return basicDao.update(transactionType)
     }
 
-    fun getAllTransactionType(): LiveData<List<TransactionType>> {
-        return basicDao.getAllTransactionType()
-    }
 }

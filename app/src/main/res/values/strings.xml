@@ -3,5 +3,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="currency_symbol">RM %1$s</string>
     <string name="currency_format">###,##0.00</string>
+    <string name="grouping_separator"> </string>
     <string name="date">%1$d/%2$d/%3$d</string>
 </resources>
