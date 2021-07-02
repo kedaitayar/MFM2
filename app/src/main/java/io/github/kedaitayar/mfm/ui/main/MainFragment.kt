@@ -1,10 +1,10 @@
 package io.github.kedaitayar.mfm.ui.main
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -14,10 +14,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMainBinding
-import io.github.kedaitayar.mfm.util.EventObserver
 import io.github.kedaitayar.mfm.util.exhaustive
 import kotlinx.coroutines.flow.collect
-import java.lang.Exception
 
 @AndroidEntryPoint
 class MainFragment : Fragment(R.layout.fragment_main) {

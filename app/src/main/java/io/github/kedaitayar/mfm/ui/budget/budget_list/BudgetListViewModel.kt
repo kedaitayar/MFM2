@@ -24,7 +24,7 @@ class BudgetListViewModel
     val budgetListEvent = budgetListEventChannel.receiveAsFlow()
 
     val budgetType = savedStateHandle.get<Int>(BudgetListFragment.ARG_BUDGET_TYPE)
-    val selectedDate: LiveData<LocalDateTime> = selectedDateRepository.selectedDate
+    private val selectedDate: LiveData<LocalDateTime> = selectedDateRepository.selectedDate
     val budgetList = getBudgetListData()
 
     private fun getBudgetListData(): LiveData<List<BudgetListAdapterData>> {

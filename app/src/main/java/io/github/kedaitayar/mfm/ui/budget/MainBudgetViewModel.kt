@@ -16,13 +16,10 @@ import javax.inject.Inject
 class MainBudgetViewModel
 @Inject constructor(
     private val budgetRepository: BudgetRepository,
-    private val selectedDateRepository: SelectedDateRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val selectedDateRepository: SelectedDateRepository
 ) : ViewModel() {
     val selectedDate: LiveData<LocalDateTime> = selectedDateRepository.selectedDate
     private val now: OffsetDateTime = OffsetDateTime.now()
-    private val allBudgetTransactionJoinTransactionFlow: Flow<List<BudgetTransactionJoinTransaction>> =
-        budgetRepository.getBudgetTransactionJoinTransactionFlow()
 
     fun onReclaimUnusedBudgetClick() {
         viewModelScope.launch {

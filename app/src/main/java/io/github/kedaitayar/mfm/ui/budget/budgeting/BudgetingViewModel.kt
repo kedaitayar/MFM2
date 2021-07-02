@@ -16,8 +16,7 @@ import javax.inject.Inject
 class BudgetingViewModel
 @Inject constructor(
     private val budgetRepository: BudgetRepository,
-    private val selectedDateRepository: SelectedDateRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val selectedDateRepository: SelectedDateRepository
 ) : ViewModel() {
     private val budgetingEventChannel = Channel<BudgetingEvent>()
     val budgetingEvent = budgetingEventChannel.receiveAsFlow()

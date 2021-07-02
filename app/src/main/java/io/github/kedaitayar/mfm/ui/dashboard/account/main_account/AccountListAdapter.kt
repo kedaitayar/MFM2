@@ -29,8 +29,8 @@ class AccountListAdapter :
 
         init {
             binding.buttonMore.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    listener?.onPopupMenuButtonClick(getItem(adapterPosition), it as Button)
+                if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
+                    listener?.onPopupMenuButtonClick(getItem(bindingAdapterPosition), it as Button)
                 }
             }
         }

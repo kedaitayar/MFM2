@@ -1,16 +1,14 @@
 package io.github.kedaitayar.mfm.ui.dashboard.account.main_account
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Button
 import android.widget.PopupMenu
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.Account
@@ -62,7 +60,6 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
                 accountListAdapterData: AccountListAdapterData,
                 popupMenuButton: Button
             ) {
-                val account = accountListAdapterData
                 val popupMenu = PopupMenu(this@AccountListFragment.context, popupMenuButton)
                 popupMenu.inflate(R.menu.menu_account_list_item)
                 popupMenu.setOnMenuItemClickListener {

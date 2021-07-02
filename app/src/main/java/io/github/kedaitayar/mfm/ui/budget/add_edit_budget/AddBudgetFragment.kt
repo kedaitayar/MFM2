@@ -12,7 +12,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -115,7 +114,7 @@ class AddBudgetFragment : Fragment(R.layout.fragment_add_budget) {
 
     private fun setupDropdown() {
         addEditBudgetViewModel.allBudgetType.observe(viewLifecycleOwner) { list ->
-            list?.let {
+            list.let {
                 val adapter = object : ArrayAdapter<BudgetType>(
                     requireContext(),
                     R.layout.support_simple_spinner_dropdown_item,

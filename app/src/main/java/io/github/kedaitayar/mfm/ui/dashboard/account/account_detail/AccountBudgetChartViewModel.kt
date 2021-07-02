@@ -6,30 +6,37 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.podata.AccountTransactionBudgetData
 import io.github.kedaitayar.mfm.data.repository.DashboardRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 @HiltViewModel
 class AccountBudgetChartViewModel @Inject constructor(
     private val dashboardRepository: DashboardRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    var account = MutableStateFlow(savedStateHandle.get<Account>(AccountDetailFragment.ACCOUNT_STATE_KEY) ?: Account(accountId = -1))
+    var account = MutableStateFlow(
+        savedStateHandle.get<Account>(AccountDetailFragment.ACCOUNT_STATE_KEY) ?: Account(accountId = -1)
+    )
         set(value) {
             field = value
             savedStateHandle.set(AccountDetailFragment.ACCOUNT_STATE_KEY, value.value)
         }
 
+    @ExperimentalCoroutinesApi
     private val accountTransactionBudgetFlow = account.flatMapLatest {
         getAccountTransactionBudget(it.accountId)
     }
+    @ExperimentalCoroutinesApi
     val accountTransactionBudget = accountTransactionBudgetFlow.asLiveData()
 
+    @ExperimentalCoroutinesApi
     val totalTransactionAmount = accountTransactionBudgetFlow.map { list ->
-        list.sumByDouble { item ->
+        list.sumOf { item ->
             item.transactionAmount?.toDouble() ?: 0.0
         }
     }.asLiveData()
@@ -40,6 +47,7 @@ class AccountBudgetChartViewModel @Inject constructor(
         setupAccountBudgetChartData()
     }
 
+    @ExperimentalCoroutinesApi
     private fun setupAccountBudgetChartData() {
         viewModelScope.launch {
             accountTransactionBudgetFlow.collect { list ->

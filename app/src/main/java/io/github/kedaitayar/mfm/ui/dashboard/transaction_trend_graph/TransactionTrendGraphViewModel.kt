@@ -22,7 +22,6 @@ class TransactionTrendGraphViewModel @Inject constructor(
     private val weekNow = now.get(weekField)
     private val transactionYearlyTrendGraphFlow: Flow<List<TransactionGraphData>> =
         transactionRepository.getTransactionGraphData(now.year.toString())
-    val transactionYearlyTrendGraph = transactionYearlyTrendGraphFlow.asLiveData()
     val transactionGraphCombinedData = MutableLiveData<CombinedData>()
     var green = 0
     var red = 0

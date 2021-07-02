@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.kedaitayar.mfm.data.dao.BasicDao
 import io.github.kedaitayar.mfm.data.podata.BudgetedAndGoal
 import io.github.kedaitayar.mfm.data.repository.DashboardRepository
 import kotlinx.coroutines.channels.Channel
@@ -19,8 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AccountDashboardViewModel @Inject constructor(
-    private val dashboardRepository: DashboardRepository,
-    private val basicDao: BasicDao
+    private val dashboardRepository: DashboardRepository
 ) : ViewModel() {
     private val now = OffsetDateTime.now()
     val thisMonthSpending: LiveData<Double> = getThisMonthSpendingData().asLiveData()
