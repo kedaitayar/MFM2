@@ -28,7 +28,7 @@ class MainBudgetViewModel
         viewModelScope.launch {
             val reclaimBudgetTransactionData = getBudgetTransactionJoinTransactionSuspend().filter { item ->
                 when {
-                    item.budgetTransactionMonth < now.monthValue && item.budgetTransactionYear <= now.year && item.budgetTransactionAmount > item.transactionAmount -> {
+                    item.budgetTransactionMonth < now.monthValue && item.budgetTransactionYear <= now.year && item.budgetTransactionAmount > item.transactionAmount && item.budgetType == 1 -> {
                         true
                     }
                     else -> false

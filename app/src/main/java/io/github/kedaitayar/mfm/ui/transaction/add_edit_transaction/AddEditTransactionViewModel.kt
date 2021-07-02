@@ -45,7 +45,7 @@ constructor(
         budget.find { budgetListAdapterData -> budgetListAdapterData.budgetId == transaction!!.transactionBudgetId }
     }.asLiveData()
     val accountTo = allAccountFlow.map { value: List<AccountListAdapterData> ->
-        value.find { accountListAdapterData -> accountListAdapterData.accountId == transaction!!.transactionAccountId }
+        value.find { accountListAdapterData -> accountListAdapterData.accountId == transaction!!.transactionAccountTransferTo }
     }.asLiveData()
 
     var inputAccountFrom: AccountListAdapterData? = null

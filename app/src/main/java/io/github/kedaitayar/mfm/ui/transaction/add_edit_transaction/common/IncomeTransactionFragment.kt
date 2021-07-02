@@ -39,7 +39,7 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
 
         setupAccountDropdown()
         setupDateInput()
-//        setupInputListener()
+        setupInputListener()
 
         if (addEditTransactionViewModel.transaction != null) {
             setupEditTransactionValue()

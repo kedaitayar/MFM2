@@ -39,7 +39,7 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
 
         setupAccountDropdown()
         setupDateInput()
-//        setupInputListener()
+        setupInputListener()
 
         if (addEditTransactionViewModel.transaction != null) {
             setupEditTransactionValue()
