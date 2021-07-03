@@ -43,7 +43,8 @@ class AddTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
             setNavigationIcon(R.drawable.ic_baseline_close_24)
             setNavigationOnClickListener {
                 hideKeyboard()
-                findNavController().navigateUp()
+//                findNavController().navigateUp()
+                requireActivity().onBackPressed()
             }
             title = "Add Transaction"
         }

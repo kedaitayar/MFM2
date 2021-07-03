@@ -1,5 +1,7 @@
 package io.github.kedaitayar.mfm.ui.main
 
+import android.app.ActivityOptions
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMainBinding
+import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transaction.AddTransactionActivity
 import io.github.kedaitayar.mfm.util.exhaustive
 import kotlinx.coroutines.flow.collect
 
@@ -48,11 +51,14 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             tab.text = getTabTitle(position)
         }.attach()
 
-//        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-
         binding.fab.setOnClickListener {
-            val action = MainFragmentDirections.actionMainFragmentToAddTransactionFragment()
-            findNavController().navigate(action)
+//            val action = MainFragmentDirections.actionMainFragmentToAddTransactionFragment()
+//            findNavController().navigate(action)
+            val intent = Intent(requireContext(), AddTransactionActivity::class.java)
+            val options = ActivityOptions.makeSceneTransitionAnimation(
+                requireActivity(), binding.fab, "add_transaction_activity_transition"
+            )
+            startActivity(intent, options.toBundle())
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
