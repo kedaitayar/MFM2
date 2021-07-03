@@ -2,7 +2,9 @@ package io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transac
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Window
+import androidx.fragment.app.commit
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.transition.platform.MaterialArcMotion
@@ -11,6 +13,8 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.ActivityAddTransactionBinding
+
+private const val TAG = "AddTransactionActivity"
 
 @AndroidEntryPoint
 class AddTransactionActivity : AppCompatActivity() {
@@ -42,8 +46,11 @@ class AddTransactionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.add_transaction_container_view, AddTransactionFragment())
-            .commit()
+        if (savedInstanceState == null) {
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                add(R.id.add_transaction_container_view, AddTransactionFragment())
+            }
+        }
     }
 }
