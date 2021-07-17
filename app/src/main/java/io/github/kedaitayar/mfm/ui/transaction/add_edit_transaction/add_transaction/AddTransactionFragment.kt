@@ -1,14 +1,17 @@
 package io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transaction
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentAddTransactionBinding
@@ -16,6 +19,7 @@ import io.github.kedaitayar.mfm.ui.main.MainViewModel
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.AddEditTransactionViewModel
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.util.exhaustive
+import io.github.kedaitayar.mfm.util.themeColor
 import kotlinx.coroutines.flow.collect
 import java.lang.ref.WeakReference
 
@@ -29,6 +33,20 @@ class AddTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
     // to get the current viewpager2 fragment, solution get from - https://stackoverflow.com/a/57495777/12528485 (no idea if this is good solution)
     private var _currentPage: WeakReference<AddTransactionChild>? = null
     private val currentPage get() = _currentPage?.get()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = MaterialContainerTransform()
+            .apply {
+                drawingViewId = R.id.nav_host
+                duration = 300
+                scrimColor = Color.TRANSPARENT
+                setAllContainerColors(requireContext().themeColor(R.attr.colorSurface))
+                interpolator = FastOutSlowInInterpolator()
+                fadeMode = MaterialContainerTransform.FADE_MODE_IN
+            }
+
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,7 +88,8 @@ class AddTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
                             mainViewModel.showSnackbar("Transaction add failed", Snackbar.LENGTH_SHORT)
                         }
                         hideKeyboard()
-                        findNavController().navigateUp()
+//                        findNavController().navigateUp()
+                        requireActivity().onBackPressed()
                     }
                     is AddEditTransactionViewModel.AddEditTransactionEvent.NavigateBackWithDeleteResult -> {
                         if (event.result == 1) {
@@ -79,7 +98,8 @@ class AddTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
                             mainViewModel.showSnackbar("Transaction delete failed", Snackbar.LENGTH_SHORT)
                         }
                         hideKeyboard()
-                        findNavController().navigateUp()
+//                        findNavController().navigateUp()
+                        requireActivity().onBackPressed()
                     }
                     is AddEditTransactionViewModel.AddEditTransactionEvent.NavigateBackWithEditResult -> {
                         if (event.result == 1) {
@@ -88,7 +108,8 @@ class AddTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
                             mainViewModel.showSnackbar("Transaction update failed", Snackbar.LENGTH_SHORT)
                         }
                         hideKeyboard()
-                        findNavController().navigateUp()
+//                        findNavController().navigateUp()
+                        requireActivity().onBackPressed()
                     }
                     is AddEditTransactionViewModel.AddEditTransactionEvent.ShowSnackbar -> {
                         Snackbar.make(requireView(), event.msg, event.length)

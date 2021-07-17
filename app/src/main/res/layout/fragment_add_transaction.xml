@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
+    android:transitionName="add_transaction_activity_transition"
     tools:context=".ui.transaction.add_edit_transaction.add_transaction.AddTransactionFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -11,10 +13,10 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
-            app:elevation="0dp"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:elevation="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -26,7 +28,6 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.tabs.TabLayout
-            style="@style/Widget.MaterialComponents.TabLayout.Colored"
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -123,7 +123,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/barrier"
             app:layout_constraintTop_toTopOf="@+id/text_view_account"
-            app:ringColor="@color/design_default_color_primary"
             app:ringStrokeWidth="20" />
 
         <LinearLayout

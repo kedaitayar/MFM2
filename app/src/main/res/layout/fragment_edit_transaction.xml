@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
     tools:context=".ui.transaction.add_edit_transaction.edit_transaction.EditTransactionFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout

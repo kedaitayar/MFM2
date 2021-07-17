@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import io.github.kedaitayar.mfm.R
 import kotlin.math.min
@@ -26,11 +27,14 @@ class RingCustomView @JvmOverloads constructor(
 
     init {
         val typeArray = context.obtainStyledAttributes(attrs, R.styleable.RingCustomView)
+        val typedValue = TypedValue()
+        val theme = context.theme
+        theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
         if (isInEditMode) {
             this.ringProgress = 200f
         } else {
             this.setRingProgress(typeArray.getInt(R.styleable.RingCustomView_ringProgress, 0))
-            this.ringColor = typeArray.getColor(R.styleable.RingCustomView_ringColor, Color.GREEN)
+            this.ringColor = typeArray.getColor(R.styleable.RingCustomView_ringColor, typedValue.data)
             this.ringStrokeWidth =
                 typeArray.getFloat(R.styleable.RingCustomView_ringStrokeWidth, 20f)
         }

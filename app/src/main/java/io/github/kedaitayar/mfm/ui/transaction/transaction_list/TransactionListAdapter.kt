@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData
 import io.github.kedaitayar.mfm.databinding.RecyclerViewItemTransactionListBinding
@@ -29,28 +30,33 @@ class TransactionListAdapter :
     }
 
     interface OnItemClickListener {
-        fun onPopupMenuButtonClick(
+        fun onClick(
             transactionListAdapterData: TransactionListAdapterData,
-            popupMenuButton: Button
+            transactionCard: MaterialCardView
         )
     }
 
     inner class TransactionListViewHolder(private val binding: RecyclerViewItemTransactionListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        init {
-            binding.buttonPopupMenu.setOnClickListener { view ->
-                if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
-                    val currentItem = getItem(bindingAdapterPosition)
-                    currentItem?.let { item ->
-                        listener?.onPopupMenuButtonClick(item, view as Button)
-                    }
-                }
-            }
-        }
+//        init {
+//            binding.root.setOnClickListener { view ->
+//                if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
+//                    val currentItem = getItem(bindingAdapterPosition)
+//                    currentItem?.let { item ->
+//                        listener?.onClick(item, binding.root)
+//                    }
+//                }
+//            }
+//        }
 
         fun bind(item: TransactionListAdapterData) {
             binding.apply {
+                root.transitionName = "edit_transaction_${item.transactionId}"
+                root.setOnClickListener {
+                    listener?.onClick(item, root)
+                }
+
                 textViewTransactionAccount.text = item.transactionAccountName
                 textViewTransactionAmount.text = "RM ${item.transactionAmount}"
                 textViewTransactionDate.text =

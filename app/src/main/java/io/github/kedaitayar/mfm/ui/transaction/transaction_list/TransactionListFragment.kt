@@ -1,17 +1,24 @@
 package io.github.kedaitayar.mfm.ui.transaction.transaction_list
 
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.PopupMenu
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.transition.MaterialElevationScale
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.Transaction
@@ -23,15 +30,34 @@ import io.github.kedaitayar.mfm.ui.transaction.MainTransactionFragment
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+private const val TAG = "TransactionListFragment"
+
 @AndroidEntryPoint
 class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
     private val transactionListViewModel: TransactionListViewModel by viewModels()
     private var _binding: FragmentTransactionListBinding? = null
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = 300
+        }
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = 300
+        }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentTransactionListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentTransactionListBinding.bind(view)
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+
         val adapter = TransactionListAdapter()
         setupAdapter(adapter)
         setupRecyclerView(adapter)
@@ -82,7 +108,12 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
     private fun setupRecyclerView(adapter: TransactionListAdapter) {
         binding.recyclerViewTransactionList.adapter = adapter
         binding.recyclerViewTransactionList.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerViewTransactionList.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        binding.recyclerViewTransactionList.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                DividerItemDecoration.VERTICAL
+            )
+        )
         viewLifecycleOwner.lifecycleScope.launch {
             transactionListViewModel.allTransactionListAdapterData.collectLatest {
                 adapter.submitData(it)
@@ -93,30 +124,41 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
 
     private fun popupMenuSetup(adapter: TransactionListAdapter) {
         adapter.setOnItemClickListener(object : TransactionListAdapter.OnItemClickListener {
-            override fun onPopupMenuButtonClick(
+
+            override fun onClick(
                 transactionListAdapterData: TransactionListAdapterData,
-                popupMenuButton: Button
+                transactionCard: MaterialCardView
             ) {
-                val popupMenu = PopupMenu(this@TransactionListFragment.context, popupMenuButton)
-                popupMenu.inflate(R.menu.menu_transaction_list_item)
-                popupMenu.setOnMenuItemClickListener {
-                    when (it.itemId) {
-                        R.id.edit -> {
-                            val action = MainFragmentDirections.actionMainFragmentToEditTransactionFragment(
-                                transactionListAdapterData.toTransaction()
-                            )
-                            findNavController().navigate(action)
-                            true
-                        }
-                        else -> false
-                    }
-                }
-                popupMenu.show()
+                val action =
+                    MainFragmentDirections.actionMainFragmentToEditTransactionFragment(transactionListAdapterData.toTransaction())
+                val extras =
+                    FragmentNavigatorExtras(transactionCard to "edit_transaction_${transactionListAdapterData.transactionId}")
+                findNavController().navigate(action, extras)
             }
+//            override fun onPopupMenuButtonClick(
+//                transactionListAdapterData: TransactionListAdapterData,
+//                popupMenuButton: Button
+//            ) {
+//                val popupMenu = PopupMenu(this@TransactionListFragment.context, popupMenuButton)
+//                popupMenu.inflate(R.menu.menu_transaction_list_item)
+//                popupMenu.setOnMenuItemClickListener {
+//                    when (it.itemId) {
+//                        R.id.edit -> {
+//                            val action = MainFragmentDirections.actionMainFragmentToEditTransactionFragment(
+//                                transactionListAdapterData.toTransaction()
+//                            )
+//                            findNavController().navigate(action)
+//                            true
+//                        }
+//                        else -> false
+//                    }
+//                }
+//                popupMenu.show()
+//            }
         })
     }
 
-    private fun TransactionListAdapterData.toTransaction() : Transaction {
+    private fun TransactionListAdapterData.toTransaction(): Transaction {
         return Transaction(
             transactionId = transactionId,
             transactionAmount = transactionAmount,

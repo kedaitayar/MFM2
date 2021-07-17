@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+//        setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 //        initialData()

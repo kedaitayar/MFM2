@@ -1,7 +1,5 @@
 package io.github.kedaitayar.mfm.ui.main
 
-import android.app.ActivityOptions
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.snackbar.Snackbar
@@ -16,7 +15,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMainBinding
-import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transaction.AddTransactionActivity
 import io.github.kedaitayar.mfm.util.exhaustive
 import kotlinx.coroutines.flow.collect
 
@@ -52,13 +50,14 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }.attach()
 
         binding.fab.setOnClickListener {
-//            val action = MainFragmentDirections.actionMainFragmentToAddTransactionFragment()
-//            findNavController().navigate(action)
-            val intent = Intent(requireContext(), AddTransactionActivity::class.java)
-            val options = ActivityOptions.makeSceneTransitionAnimation(
-                requireActivity(), binding.fab, "add_transaction_activity_transition"
-            )
-            startActivity(intent, options.toBundle())
+            val action = MainFragmentDirections.actionMainFragmentToAddTransactionFragment()
+            val extras = FragmentNavigatorExtras(binding.fab to "add_transaction_activity_transition")
+            findNavController().navigate(action, extras)
+//            val intent = Intent(requireContext(), AddTransactionActivity::class.java)
+//            val options = ActivityOptions.makeSceneTransitionAnimation(
+//                requireActivity(), binding.fab, "add_transaction_activity_transition"
+//            )
+//            startActivity(intent, options.toBundle())
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {

@@ -1,27 +1,38 @@
 package io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.edit_transaction
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.View
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
+import androidx.core.content.res.use
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentEditTransactionBinding
 import io.github.kedaitayar.mfm.ui.BlankFragment
-import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.ui.main.MainViewModel
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.AddEditTransactionViewModel
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.common.ExpenseTransactionFragment
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.common.IncomeTransactionFragment
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.common.TransferTransactionFragment
+import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.util.exhaustive
 import kotlinx.coroutines.flow.collect
+
+private const val TAG = "EditTransactionFragment"
 
 @AndroidEntryPoint
 class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
@@ -34,11 +45,24 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         addEditTransactionViewModel.transaction  // need this to instantiate transaction i think, if not, the transaction will be null
+        postponeEnterTransition()
+        sharedElementEnterTransition = MaterialContainerTransform()
+            .apply {
+                drawingViewId = R.id.nav_host
+                duration = 300
+                scrimColor = Color.TRANSPARENT
+                setAllContainerColors(requireContext().themeColor(R.attr.colorSurface))
+                interpolator = FastOutSlowInInterpolator()
+                fadeMode = MaterialContainerTransform.FADE_MODE_IN
+            }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentEditTransactionBinding.bind(view)
+        startPostponedEnterTransition()
+//        Log.i(TAG, "edit_transaction_${args.transaction.transactionId}")
+        binding.root.transitionName = "edit_transaction_${args.transaction.transactionId}"
         setupToolbar()
         setupFragment()
         setupEventListener()
@@ -137,15 +161,20 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
         }
     }
 
-    @Deprecated("use MainViewModel.showSnackbar()")
-    fun showSnackbar(text: String) {
-        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
-            .setAnchorView(binding.buttonSave)
-            .show()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    @ColorInt
+    @SuppressLint("Recycle")
+    fun Context.themeColor(
+        @AttrRes themeAttrId: Int
+    ): Int {
+        return obtainStyledAttributes(
+            intArrayOf(themeAttrId)
+        ).use {
+            it.getColor(0, Color.MAGENTA)
+        }
     }
 }
