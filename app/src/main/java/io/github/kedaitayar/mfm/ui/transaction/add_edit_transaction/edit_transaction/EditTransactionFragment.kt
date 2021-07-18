@@ -30,6 +30,7 @@ import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.common.Incom
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.common.TransferTransactionFragment
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.util.exhaustive
+import io.github.kedaitayar.mfm.util.themeColor
 import kotlinx.coroutines.flow.collect
 
 private const val TAG = "EditTransactionFragment"
@@ -45,7 +46,6 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         addEditTransactionViewModel.transaction  // need this to instantiate transaction i think, if not, the transaction will be null
-        postponeEnterTransition()
         sharedElementEnterTransition = MaterialContainerTransform()
             .apply {
                 drawingViewId = R.id.nav_host
@@ -60,8 +60,6 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentEditTransactionBinding.bind(view)
-        startPostponedEnterTransition()
-//        Log.i(TAG, "edit_transaction_${args.transaction.transactionId}")
         binding.root.transitionName = "edit_transaction_${args.transaction.transactionId}"
         setupToolbar()
         setupFragment()
@@ -164,17 +162,5 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    @ColorInt
-    @SuppressLint("Recycle")
-    fun Context.themeColor(
-        @AttrRes themeAttrId: Int
-    ): Int {
-        return obtainStyledAttributes(
-            intArrayOf(themeAttrId)
-        ).use {
-            it.getColor(0, Color.MAGENTA)
-        }
     }
 }

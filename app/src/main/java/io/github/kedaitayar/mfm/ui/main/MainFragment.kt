@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -12,6 +13,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.transition.Hold
+import com.google.android.material.transition.MaterialElevationScale
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMainBinding
@@ -23,6 +26,16 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private val mainViewModel: MainViewModel by activityViewModels()
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        exitTransition = MaterialElevationScale(true).apply {
+            duration = 300
+        }
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = 300
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,11 +66,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             val action = MainFragmentDirections.actionMainFragmentToAddTransactionFragment()
             val extras = FragmentNavigatorExtras(binding.fab to "add_transaction_activity_transition")
             findNavController().navigate(action, extras)
-//            val intent = Intent(requireContext(), AddTransactionActivity::class.java)
-//            val options = ActivityOptions.makeSceneTransitionAnimation(
-//                requireActivity(), binding.fab, "add_transaction_activity_transition"
-//            )
-//            startActivity(intent, options.toBundle())
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -73,11 +81,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         return binding.root
     }
 
-//    private fun setupAddEditAccountFragmentResultListener() {
-//        setFragmentResultListener(AddEditAccountFragment.NAVIGATE_BACK_EDIT_RESULT) { _: String, bundle: Bundle ->
-//            val result = bundle.getInt(AddEditAccountFragment.RESULT_KEY)
-//        }
-//    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+    }
 
     fun hideFAB() {
         binding.fab.hide()

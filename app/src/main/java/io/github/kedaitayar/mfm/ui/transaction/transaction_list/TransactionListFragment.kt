@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.transition.Hold
 import com.google.android.material.transition.MaterialElevationScale
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
@@ -38,16 +39,6 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
     private var _binding: FragmentTransactionListBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        exitTransition = MaterialElevationScale(false).apply {
-            duration = 300
-        }
-        reenterTransition = MaterialElevationScale(true).apply {
-            duration = 300
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentTransactionListBinding.inflate(inflater, container, false)
         return binding.root
@@ -55,8 +46,6 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        postponeEnterTransition()
-        view.doOnPreDraw { startPostponedEnterTransition() }
 
         val adapter = TransactionListAdapter()
         setupAdapter(adapter)
