@@ -31,8 +31,6 @@ import io.github.kedaitayar.mfm.ui.transaction.MainTransactionFragment
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-private const val TAG = "TransactionListFragment"
-
 @AndroidEntryPoint
 class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
     private val transactionListViewModel: TransactionListViewModel by viewModels()

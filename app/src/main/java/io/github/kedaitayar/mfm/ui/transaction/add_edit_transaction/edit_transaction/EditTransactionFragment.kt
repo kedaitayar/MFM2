@@ -1,14 +1,8 @@
 package io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.edit_transaction
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
-import androidx.core.content.res.use
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -32,8 +26,6 @@ import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.util.exhaustive
 import io.github.kedaitayar.mfm.util.themeColor
 import kotlinx.coroutines.flow.collect
-
-private const val TAG = "EditTransactionFragment"
 
 @AndroidEntryPoint
 class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
