@@ -120,4 +120,7 @@ dependencies {
 
     //MPAndroidChart - chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    //Android-Room-Database-Backup
+    implementation 'com.github.rafi0101:Android-Room-Database-Backup:1.0.0-beta06'
 }
