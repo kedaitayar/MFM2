@@ -26,10 +26,14 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginEnd="128dp"
-        app:pieColor="?attr/colorOnSurface"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/custom_ripple_effect"
+        android:textColor="?onGGreen"
         app:layout_constraintBottom_toBottomOf="@+id/text_view_available"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/text_view_available" />
+        app:layout_constraintTop_toTopOf="@+id/text_view_available"
+        app:pieColor="?attr/colorOnSurface" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_available"
@@ -37,6 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_text_view_pill"
+        android:textColor="?onGGreen"
         app:layout_constraintBottom_toBottomOf="@+id/text_view_budget_name"
         app:layout_constraintEnd_toStartOf="@+id/button_more"
         app:layout_constraintTop_toTopOf="@+id/text_view_budget_name"

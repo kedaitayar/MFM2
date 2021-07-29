@@ -241,13 +241,14 @@ class MainActivityTest {
     @Test
     fun addEditDeleteIncomeTransaction() {
         val account01 = "Cash"
+        val account01String = "Cash (RM 0.00)"
         val amount = "1000"
         val amount2 = "2000"
         val waiter = CountDownLatch(1)
         onView(withId(R.id.view_pager_main)).perform(swipeLeft())
         onView(withId(R.id.fab)).perform(click())
         onView(withId(R.id.view_pager)).perform(swipeLeft())
-        waiter.await(100, TimeUnit.MILLISECONDS)
+        waiter.await(200, TimeUnit.MILLISECONDS)
         onView(
             allOf(
                 withId(R.id.autoComplete_account),
@@ -264,7 +265,7 @@ class MainActivityTest {
 
         // click dropdown with name account01
         // .inRoot(RootMatchers.isPlatformPopup()) - https://stackoverflow.com/a/48869887/12528485
-        onView(withText(account01))
+        onView(withText(account01String))
             .inRoot(RootMatchers.isPlatformPopup())
             .perform(click())
 
@@ -291,13 +292,14 @@ class MainActivityTest {
                 )
             )
             .perform(
-                RecyclerViewActions.actionOnItem<TransactionListAdapter.TransactionListViewHolder>(
-                    hasDescendant(withText("Income")), clickOnViewChild(R.id.button_popup_menu)
-                )
+                click()
+//                RecyclerViewActions.actionOnItem<TransactionListAdapter.TransactionListViewHolder>(
+//                    hasDescendant(withText("Income")), clickOnViewChild(R.id.button_popup_menu)
+//                )
             )
 
-        onView(withText("Edit"))
-            .perform(click())
+//        onView(withText("Edit"))
+//            .perform(click())
 
         onView(withId(R.id.text_input_edit_amount))
             .perform(replaceText(amount2))

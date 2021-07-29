@@ -1,14 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.MFM" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">#c83e4d</item>
-        <item name="colorPrimaryVariant">#910025</item>
-        <item name="colorSecondary">#ffb74d</item>
-        <item name="colorSecondaryVariant">#c88719</item>
+        <item name="colorPrimary">#e57373</item>
+        <item name="colorPrimaryVariant">#af4448</item>
+        <item name="colorSecondary">#73e5e5</item>
+        <item name="colorSecondaryVariant">#39b3b3</item>
         <item name="android:colorBackground">@color/white_50</item>
         <item name="colorSurface">@color/white_50</item>
         <item name="colorError">@color/red_600</item>
-        <item name="colorOnPrimary">@color/white_50</item>
+        <item name="colorOnPrimary">@color/black_900</item>
         <item name="colorOnSecondary">@color/black_900</item>
         <item name="colorOnBackground">@color/black_900</item>
         <item name="colorOnSurface">@color/black_900</item>
@@ -17,8 +17,11 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="gGreen">@color/gGreenLight</item>
+        <item name="onGGreen">@color/black_900</item>
         <item name="gYellow">@color/gYellowLight</item>
+        <item name="onGYellow">@color/black_900</item>
         <item name="gRed">@color/gRedLight</item>
+        <item name="onGRed">@color/black_900</item>
         <item name="customBackgroundColor">@color/customBackgroundColorLight</item>
     </style>
 </resources>

@@ -12,6 +12,9 @@
     </declare-styleable>
     <attr name="customBackgroundColor" format="color"/>
     <attr name="gGreen" format="color"/>
+    <attr name="onGGreen" format="color"/>
     <attr name="gYellow" format="color"/>
+    <attr name="onGYellow" format="color"/>
     <attr name="gRed" format="color"/>
+    <attr name="onGRed" format="color"/>
 </resources>

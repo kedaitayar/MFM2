@@ -41,6 +41,9 @@ class BudgetListAdapter :
             budgetListAdapterData: BudgetListAdapterData,
             popupMenuButton: Button
         )
+        fun onBudgetedPillClick(budgetListAdapterData: BudgetListAdapterData) {
+
+        }
     }
 
     inner class BudgetListViewHolder(private val binding: RecyclerViewItemBudgetListBinding) :
@@ -50,6 +53,11 @@ class BudgetListAdapter :
             binding.buttonMore.setOnClickListener {
                 if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
                     listener?.onPopupMenuButtonClick(getItem(bindingAdapterPosition), it as Button)
+                }
+            }
+            binding.textViewBudgeted.setOnClickListener {
+                if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
+                    listener?.onBudgetedPillClick(getItem(bindingAdapterPosition))
                 }
             }
         }

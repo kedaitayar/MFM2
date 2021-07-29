@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.PopupMenu
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,9 +64,11 @@ class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
                 popupMenu.inflate(R.menu.menu_budget_list_item)
                 popupMenu.setOnMenuItemClickListener {
                     when (it.itemId) {
-//                        R.id.detail -> {
-//                            true
-//                        }
+                        R.id.budgeting -> {
+                            val action = MainFragmentDirections.actionMainFragmentToSingleBudgetingFragment()
+                            findNavController().navigate(action)
+                            true
+                        }
                         R.id.edit -> {
                             val action =
                                 MainFragmentDirections.actionMainFragmentToEditBudgetFragment(budgetListAdapterData)
@@ -78,6 +79,11 @@ class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
                     }
                 }
                 popupMenu.show()
+            }
+
+            override fun onBudgetedPillClick(budgetListAdapterData: BudgetListAdapterData) {
+                val action = MainFragmentDirections.actionMainFragmentToSingleBudgetingFragment()
+                findNavController().navigate(action)
             }
         })
     }

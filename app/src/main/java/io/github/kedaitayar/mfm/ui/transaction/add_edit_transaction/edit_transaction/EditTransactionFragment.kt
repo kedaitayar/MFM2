@@ -2,7 +2,9 @@ package io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.edit_transa
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -49,9 +51,13 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
             }
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentEditTransactionBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentEditTransactionBinding.bind(view)
         binding.root.transitionName = "edit_transaction_${args.transaction.transactionId}"
         setupToolbar()
         setupFragment()
