@@ -312,20 +312,26 @@ class MainActivityTest {
             .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
         // delete income
-        onView(withId(R.id.recycler_view_transaction_list))
-            .perform(
-                RecyclerViewActions.scrollTo<TransactionListAdapter.TransactionListViewHolder>(
-                    hasDescendant(withText("Income"))
-                )
+//        onView(withId(R.id.recycler_view_transaction_list))
+//            .perform(
+//                RecyclerViewActions.scrollTo<TransactionListAdapter.TransactionListViewHolder>(
+//                    hasDescendant(withText("Income"))
+//                )
+//            )
+//            .perform(
+//                RecyclerViewActions.actionOnItem<TransactionListAdapter.TransactionListViewHolder>(
+//                    hasDescendant(withText("Income")), clickOnViewChild(R.id.button_popup_menu)
+//                )
+//            )
+//
+//        onView(withText("Edit"))
+//            .perform(click())
+        onView(
+            allOf(
+                withId(R.id.recycler_view_transaction_list),
+                childAtPosition(withClassName(`is`("android.widget.FrameLayout")), 0)
             )
-            .perform(
-                RecyclerViewActions.actionOnItem<TransactionListAdapter.TransactionListViewHolder>(
-                    hasDescendant(withText("Income")), clickOnViewChild(R.id.button_popup_menu)
-                )
-            )
-
-        onView(withText("Edit"))
-            .perform(click())
+        ).perform(click())
 
         onView(withId(R.id.delete))
             .perform(click())
@@ -364,7 +370,9 @@ class MainActivityTest {
     @Test
     fun addEditDeleteExpenseTransaction() {
         val account01 = "Cash"
+        val account01String = "Cash (RM 0.00)"
         val budget = "Food"
+        val budgetString = "Food (RM 0.00)"
         val amount = "50"
         val amount2 = "100"
         val waiter = CountDownLatch(1)
@@ -388,7 +396,7 @@ class MainActivityTest {
 
         // click dropdown with name account01
         // .inRoot(RootMatchers.isPlatformPopup()) - https://stackoverflow.com/a/48869887/12528485
-        onView(withText(account01))
+        onView(withText(account01String))
             .inRoot(RootMatchers.isPlatformPopup())
             .perform(click())
 
@@ -410,7 +418,7 @@ class MainActivityTest {
             )
         ).perform(click())
 
-        onView(withText(budget))
+        onView(withText(budgetString))
             .inRoot(RootMatchers.isPlatformPopup())
             .perform(click())
 
@@ -431,20 +439,26 @@ class MainActivityTest {
             .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
         // update income
-        onView(withId(R.id.recycler_view_transaction_list))
-            .perform(
-                RecyclerViewActions.scrollTo<TransactionListAdapter.TransactionListViewHolder>(
-                    hasDescendant(withText(budget))
-                )
+//        onView(withId(R.id.recycler_view_transaction_list))
+//            .perform(
+//                RecyclerViewActions.scrollTo<TransactionListAdapter.TransactionListViewHolder>(
+//                    hasDescendant(withText(budget))
+//                )
+//            )
+//            .perform(
+//                RecyclerViewActions.actionOnItem<TransactionListAdapter.TransactionListViewHolder>(
+//                    hasDescendant(withText(budget)), clickOnViewChild(R.id.button_popup_menu)
+//                )
+//            )
+//
+//        onView(withText("Edit"))
+//            .perform(click())
+        onView(
+            allOf(
+                withId(R.id.recycler_view_transaction_list),
+                childAtPosition(withClassName(`is`("android.widget.FrameLayout")), 0)
             )
-            .perform(
-                RecyclerViewActions.actionOnItem<TransactionListAdapter.TransactionListViewHolder>(
-                    hasDescendant(withText(budget)), clickOnViewChild(R.id.button_popup_menu)
-                )
-            )
-
-        onView(withText("Edit"))
-            .perform(click())
+        ).perform(click())
 
         onView(withId(R.id.text_input_edit_amount))
             .perform(replaceText(amount2))
@@ -457,20 +471,26 @@ class MainActivityTest {
             .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
         // delete income
-        onView(withId(R.id.recycler_view_transaction_list))
-            .perform(
-                RecyclerViewActions.scrollTo<TransactionListAdapter.TransactionListViewHolder>(
-                    hasDescendant(withText(budget))
-                )
+//        onView(withId(R.id.recycler_view_transaction_list))
+//            .perform(
+//                RecyclerViewActions.scrollTo<TransactionListAdapter.TransactionListViewHolder>(
+//                    hasDescendant(withText(budget))
+//                )
+//            )
+//            .perform(
+//                RecyclerViewActions.actionOnItem<TransactionListAdapter.TransactionListViewHolder>(
+//                    hasDescendant(withText(budget)), clickOnViewChild(R.id.button_popup_menu)
+//                )
+//            )
+//
+//        onView(withText("Edit"))
+//            .perform(click())
+        onView(
+            allOf(
+                withId(R.id.recycler_view_transaction_list),
+                childAtPosition(withClassName(`is`("android.widget.FrameLayout")), 0)
             )
-            .perform(
-                RecyclerViewActions.actionOnItem<TransactionListAdapter.TransactionListViewHolder>(
-                    hasDescendant(withText(budget)), clickOnViewChild(R.id.button_popup_menu)
-                )
-            )
-
-        onView(withText("Edit"))
-            .perform(click())
+        ).perform(click())
 
         onView(withId(R.id.delete))
             .perform(click())
@@ -620,21 +640,34 @@ class MainActivityTest {
             .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
         //delete budget
+//        onView(
+//            allOf(
+//                hasSibling(allOf(withId(R.id.text_view_budget_name), withText(budget))),
+//                withId(R.id.text_view_budgeted)
+//            )
+//        )
+//            .check(matches(withText(budgetedAfter)))
+//
+//        onView(
+//            allOf(
+//                hasSibling(allOf(withId(R.id.text_view_budget_name), withText(budget))),
+//                withId(R.id.button_more)
+//            )
+//        )
+//            .perform(click())
         onView(
             allOf(
-                hasSibling(allOf(withId(R.id.text_view_budget_name), withText(budget))),
-                withId(R.id.text_view_budgeted)
+                withId(R.id.button_more),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.recycler_view),
+                        1
+                    ),
+                    3
+                ),
+                isDisplayed()
             )
-        )
-            .check(matches(withText(budgetedAfter)))
-
-        onView(
-            allOf(
-                hasSibling(allOf(withId(R.id.text_view_budget_name), withText(budget))),
-                withId(R.id.button_more)
-            )
-        )
-            .perform(click())
+        ).perform(click())
 
         onView(withText("Edit"))
             .perform(click())
@@ -671,6 +704,6 @@ class MainActivityTest {
              */
         }
 
-//        waiter.await(2000, TimeUnit.MILLISECONDS)
+//        waiter.await(10, TimeUnit.SECONDS)
     }
 }
