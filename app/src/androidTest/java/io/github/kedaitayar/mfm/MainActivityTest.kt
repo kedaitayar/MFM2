@@ -627,6 +627,8 @@ class MainActivityTest {
         )
             .perform(click())
 
+        waiter.await(100, TimeUnit.MILLISECONDS)
+
         onView(withText("Edit"))
             .perform(click())
 
@@ -668,6 +670,8 @@ class MainActivityTest {
                 isDisplayed()
             )
         ).perform(click())
+
+        waiter.await(100, TimeUnit.MILLISECONDS)
 
         onView(withText("Edit"))
             .perform(click())
