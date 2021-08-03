@@ -41,6 +41,7 @@ class BudgetListAdapter :
             budgetListAdapterData: BudgetListAdapterData,
             popupMenuButton: Button
         )
+
         fun onBudgetedPillClick(budgetListAdapterData: BudgetListAdapterData) {
 
         }
@@ -72,7 +73,7 @@ class BudgetListAdapter :
                         ((item.budgetAllocation / item.budgetGoal) * 100).toInt()
                     }
                     2 -> {
-                        (((item.budgetAllocation + item.budgetTotalPrevAllocation)/ item.budgetGoal) * 100).toInt()
+                        (((item.budgetAllocation + item.budgetTotalPrevAllocation) / item.budgetGoal) * 100).toInt()
                     }
                     else -> 100
                 }
@@ -82,17 +83,21 @@ class BudgetListAdapter :
                 } else {
                     textViewBudgeted.bgColor = yellow
                 }
-                if (item.budgetUsed <= item.budgetAllocation) {
-                    textViewAvailable.background.setTint(green)
-                } else {
-                    textViewAvailable.background.setTint(red)
-                }
+//                if (item.budgetUsed <= item.budgetAllocation) {
+//                    textViewAvailable.background.setTint(green)
+//                } else {
+//                    textViewAvailable.background.setTint(red)
+//                }
                 when (budgetType) {
                     1 -> {
-                        textViewAvailable.text = (item.budgetAllocation - item.budgetUsed).toString()
+                        val availableBudget = item.budgetAllocation - item.budgetUsed
+                        textViewAvailable.text = availableBudget.toString()
+                        textViewAvailable.background.setTint(if (availableBudget >= 0) green else red)
                     }
                     2 -> {
-                        textViewAvailable.text = (item.budgetAllocation + item.budgetTotalPrevAllocation - item.budgetUsed).toString()
+                        val availableBudget = item.budgetAllocation + item.budgetTotalPrevAllocation - item.budgetUsed
+                        textViewAvailable.text = availableBudget.toString()
+                        textViewAvailable.background.setTint(if (availableBudget >= 0) green else red)
                     }
                 }
 

@@ -7,6 +7,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.data.entity.*
 import kotlinx.coroutines.runBlocking
 import java.time.OffsetDateTime
+import java.time.ZoneOffset
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 //        initialData()
 //        testData()
+//        testData2()
 //        runBlocking {
 //            var budgetType = BudgetType(budgetTypeId = 1, budgetTypeName = "Monthly")
 //            mainActivityViewModel.insert(budgetType)
@@ -2308,6 +2310,171 @@ class MainActivity : AppCompatActivity() {
                     transactionAccountTransferTo = null
                 )
             )
+        }
+    }
+
+    private fun testData2() {
+        val now = OffsetDateTime.now()
+        runBlocking {
+            val account1 = Account(accountId = 1, accountName = "Cash")
+            val account2 = Account(accountId = 2, accountName = "Bank")
+//            mainActivityViewModel.insert(account1)
+            mainActivityViewModel.insert(account2)
+            val budget1 = Budget(budgetId = 1, budgetGoal = 100.0, budgetName = "Food", budgetType = 1)
+            val budget2 = Budget(budgetId = 2, budgetGoal = 100.0, budgetName = "Fuel", budgetType = 1)
+            val budget3 = Budget(budgetId = 3, budgetGoal = 20.0, budgetName = "Drink", budgetType = 1)
+            val budget4 = Budget(budgetId = 4, budgetGoal = 100.0, budgetName = "Internet", budgetType = 1)
+            val budget5 = Budget(budgetId = 5, budgetGoal = 1000.0, budgetName = "Vacation", budgetType = 2)
+            val budget6 = Budget(budgetId = 6, budgetGoal = 500.0, budgetName = "Car Maintenance", budgetType = 2)
+            mainActivityViewModel.insert(budget1)
+            mainActivityViewModel.insert(budget2)
+            mainActivityViewModel.insert(budget3)
+            mainActivityViewModel.insert(budget4)
+            mainActivityViewModel.insert(budget5)
+            mainActivityViewModel.insert(budget6)
+
+            //budgeting
+            val budgetTransaction1 = BudgetTransaction(
+                budgetTransactionBudgetId = 1,
+                budgetTransactionMonth = now.monthValue - 1,
+                budgetTransactionYear = now.year,
+                budgetTransactionAmount = 10.0
+            )
+            val budgetTransaction2 = BudgetTransaction(
+                budgetTransactionBudgetId = 1,
+                budgetTransactionMonth = now.monthValue,
+                budgetTransactionYear = now.year,
+                budgetTransactionAmount = 20.0
+            )
+            val budgetTransaction3 = BudgetTransaction(
+                budgetTransactionBudgetId = 2,
+                budgetTransactionMonth = now.monthValue - 1,
+                budgetTransactionYear = now.year,
+                budgetTransactionAmount = 30.0
+            )
+            val budgetTransaction4 = BudgetTransaction(
+                budgetTransactionBudgetId = 2,
+                budgetTransactionMonth = now.monthValue,
+                budgetTransactionYear = now.year,
+                budgetTransactionAmount = 40.0
+            )
+            val budgetTransaction5 = BudgetTransaction(
+                budgetTransactionBudgetId = 3,
+                budgetTransactionMonth = now.monthValue - 1,
+                budgetTransactionYear = now.year,
+                budgetTransactionAmount = 50.0
+            )
+            val budgetTransaction6 = BudgetTransaction(
+                budgetTransactionBudgetId = 5,
+                budgetTransactionMonth = now.monthValue - 2,
+                budgetTransactionYear = now.year,
+                budgetTransactionAmount = 300.0
+            )
+            val budgetTransaction7 = BudgetTransaction(
+                budgetTransactionBudgetId = 5,
+                budgetTransactionMonth = now.monthValue - 1,
+                budgetTransactionYear = now.year,
+                budgetTransactionAmount = 50.0
+            )
+            val budgetTransaction8 = BudgetTransaction(
+                budgetTransactionBudgetId = 5,
+                budgetTransactionMonth = now.monthValue,
+                budgetTransactionYear = now.year,
+                budgetTransactionAmount = 100.0
+            )
+            mainActivityViewModel.insert(budgetTransaction1)
+            mainActivityViewModel.insert(budgetTransaction2)
+            mainActivityViewModel.insert(budgetTransaction3)
+            mainActivityViewModel.insert(budgetTransaction4)
+            mainActivityViewModel.insert(budgetTransaction5)
+            mainActivityViewModel.insert(budgetTransaction6)
+            mainActivityViewModel.insert(budgetTransaction7)
+            mainActivityViewModel.insert(budgetTransaction8)
+
+            //transaction
+            //income
+            val transaction1 = Transaction(
+                transactionId = 1,
+                transactionAmount = 1000.0,
+                transactionTime = OffsetDateTime.of(now.year, now.monthValue - 1, 1, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
+                transactionType = 2,
+                transactionAccountId = 1,
+                transactionBudgetId = null,
+                transactionAccountTransferTo = null
+            )
+            //transfer
+            val transaction2 = Transaction(
+                transactionId = 2,
+                transactionAmount = 200.0,
+                transactionTime = OffsetDateTime.of(now.year, now.monthValue - 1, 2, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
+                transactionType = 3,
+                transactionAccountId = 1,
+                transactionBudgetId = null,
+                transactionAccountTransferTo = 2
+            )
+            //expense
+            val transaction3 = Transaction(
+                transactionId = 3,
+                transactionAmount = 5.0,
+                transactionTime = OffsetDateTime.of(now.year, now.monthValue - 1, 3, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
+                transactionType = 1,
+                transactionAccountId = 1,
+                transactionBudgetId = 1,
+                transactionAccountTransferTo = null
+            )
+            val transaction4 = Transaction(
+                transactionId = 4,
+                transactionAmount = 30.0,
+                transactionTime = OffsetDateTime.of(now.year, now.monthValue - 1, 4, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
+                transactionType = 1,
+                transactionAccountId = 1,
+                transactionBudgetId = 2,
+                transactionAccountTransferTo = null
+            )
+            val transaction5 = Transaction(
+                transactionId = 5,
+                transactionAmount = 50.0,
+                transactionTime = OffsetDateTime.of(now.year, now.monthValue - 1, 4, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
+                transactionType = 1,
+                transactionAccountId = 1,
+                transactionBudgetId = 3,
+                transactionAccountTransferTo = null
+            )
+            val transaction6 = Transaction(
+                transactionId = 6,
+                transactionAmount = 15.0,
+                transactionTime = OffsetDateTime.of(now.year, now.monthValue, 3, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
+                transactionType = 1,
+                transactionAccountId = 1,
+                transactionBudgetId = 1,
+                transactionAccountTransferTo = null
+            )
+            val transaction7 = Transaction(
+                transactionId = 7,
+                transactionAmount = 40.0,
+                transactionTime = OffsetDateTime.of(now.year, now.monthValue, 4, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
+                transactionType = 1,
+                transactionAccountId = 1,
+                transactionBudgetId = 2,
+                transactionAccountTransferTo = null
+            )
+            val transaction8 = Transaction(
+                transactionId = 8,
+                transactionAmount = 50.0,
+                transactionTime = OffsetDateTime.of(now.year, now.monthValue, 5, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
+                transactionType = 1,
+                transactionAccountId = 1,
+                transactionBudgetId = 5,
+                transactionAccountTransferTo = null
+            )
+            mainActivityViewModel.insert(transaction1)
+            mainActivityViewModel.insert(transaction2)
+            mainActivityViewModel.insert(transaction3)
+            mainActivityViewModel.insert(transaction4)
+            mainActivityViewModel.insert(transaction5)
+            mainActivityViewModel.insert(transaction6)
+            mainActivityViewModel.insert(transaction7)
+            mainActivityViewModel.insert(transaction8)
         }
     }
 }

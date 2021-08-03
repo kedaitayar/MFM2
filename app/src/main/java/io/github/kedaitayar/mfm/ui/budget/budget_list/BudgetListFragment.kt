@@ -64,11 +64,11 @@ class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
                 popupMenu.inflate(R.menu.menu_budget_list_item)
                 popupMenu.setOnMenuItemClickListener {
                     when (it.itemId) {
-                        R.id.budgeting -> {
-                            val action = MainFragmentDirections.actionMainFragmentToSingleBudgetingFragment()
-                            findNavController().navigate(action)
-                            true
-                        }
+//                        R.id.budgeting -> {
+//                            val action = MainFragmentDirections.actionMainFragmentToSingleBudgetingFragment(budgetListAdapterData)
+//                            findNavController().navigate(action)
+//                            true
+//                        }
                         R.id.edit -> {
                             val action =
                                 MainFragmentDirections.actionMainFragmentToEditBudgetFragment(budgetListAdapterData)
@@ -82,7 +82,7 @@ class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
             }
 
             override fun onBudgetedPillClick(budgetListAdapterData: BudgetListAdapterData) {
-                val action = MainFragmentDirections.actionMainFragmentToSingleBudgetingFragment()
+                val action = MainFragmentDirections.actionMainFragmentToSingleBudgetingFragment(budgetListAdapterData)
                 findNavController().navigate(action)
             }
         })

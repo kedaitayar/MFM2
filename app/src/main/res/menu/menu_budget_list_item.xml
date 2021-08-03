@@ -3,9 +3,9 @@
 <!--    <item-->
 <!--        android:id="@+id/detail"-->
 <!--        android:title="Detail" />-->
-    <item
-        android:id="@+id/budgeting"
-        android:title="Budgeting" />
+<!--    <item-->
+<!--        android:id="@+id/budgeting"-->
+<!--        android:title="Budgeting" />-->
     <item
         android:id="@+id/edit"
         android:title="Edit" />
