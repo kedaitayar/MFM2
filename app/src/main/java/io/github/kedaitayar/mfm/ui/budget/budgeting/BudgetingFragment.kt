@@ -7,7 +7,9 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -17,8 +19,10 @@ import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentBudgetingBinding
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.time.format.TextStyle
 import java.util.*
+
 
 @AndroidEntryPoint
 class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAdapter.OnBudgetingListAdapterListener {
@@ -34,7 +38,6 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAd
         setupEventListener()
         setupToolbar()
         setupBudgetingListRecyclerView(adapter1, adapter2)
-
         setupNotBudgeted()
     }
 
@@ -80,7 +83,7 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAd
                 binding.topAppBar.title = it.month.getDisplayName(
                     TextStyle.FULL,
                     Locale.ENGLISH
-                ) + ", " + it.year    //TODO: extract string
+                ) + ", " + it.year
             }
         }
     }
@@ -94,7 +97,6 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAd
         budgetingViewModel.monthlyBudgetingListData.observe(viewLifecycleOwner) {
             it?.let {
                 monthlyAdapter.submitList(it)
-                budgetingViewModel.totalMonthlyBudgetedThisMonth = it.map { item -> item.budgetAllocation }.sum()
             }
         }
 
@@ -103,39 +105,29 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAd
         budgetingViewModel.yearlyBudgetingListData.observe(viewLifecycleOwner) {
             it?.let {
                 yearlyAdapter.submitList(it)
-                budgetingViewModel.totalYearlyBudgetedThisMonth = it.map { item -> item.budgetAllocation }.sum()
             }
         }
     }
 
-    private fun updateNotBudgetedValue() {
-        val budgetingAmountMonthly =
-            budgetingViewModel.budgetingAmountListMonthly.map { it.value.toDoubleOrNull() ?: 0.0 }.sumOf { it }
-        val budgetingAmountYearly =
-            budgetingViewModel.budgetingAmountListYearly.map { it.value.toDoubleOrNull() ?: 0.0 }.sumOf { it }
-        val totalUnbudgeted =
-            (budgetingViewModel.totalNotBudgeted.value ?: 0.0) -
-                    (budgetingAmountMonthly - budgetingViewModel.totalMonthlyBudgetedThisMonth) -
-                    (budgetingAmountYearly - budgetingViewModel.totalYearlyBudgetedThisMonth)
-        binding.textViewNotBudgetedAmount.text = "RM $totalUnbudgeted"
-
+    private fun setupNotBudgeted() {
         val typedValue = TypedValue()
         requireContext().theme.resolveAttribute(R.attr.gGreen, typedValue, true)
         val green = ContextCompat.getColor(requireContext(), typedValue.resourceId)
         requireContext().theme.resolveAttribute(R.attr.gRed, typedValue, true)
         val red = ContextCompat.getColor(requireContext(), typedValue.resourceId)
 
-        if (totalUnbudgeted < 0) {
-            binding.constraintLayoutNotBudgeted.setBackgroundColor(red)
-        } else {
-            binding.constraintLayoutNotBudgeted.setBackgroundColor(green)
-        }
-    }
-
-    private fun setupNotBudgeted() {
-        budgetingViewModel.totalNotBudgeted.observe(viewLifecycleOwner) {
-            it?.let {
-                updateNotBudgetedValue()
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    budgetingViewModel.currentTotalNotBudgeted.collect {
+                        binding.textViewNotBudgetedAmount.text = "RM $it"
+                        if (it < 0) {
+                            binding.constraintLayoutNotBudgeted.setBackgroundColor(red)
+                        } else {
+                            binding.constraintLayoutNotBudgeted.setBackgroundColor(green)
+                        }
+                    }
+                }
             }
         }
     }
@@ -148,12 +140,15 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAd
     override fun onAfterTextChanged(item: BudgetListAdapterData, editable: Editable?) {
         when (item.budgetTypeId) {
             1L -> {
-                budgetingViewModel.budgetingAmountListMonthly[item.budgetId] = editable.toString()
+                val budgetingAmountListMonthly = budgetingViewModel.budgetingAmountListMonthly.value.toMutableMap()
+                budgetingAmountListMonthly[item.budgetId] = editable.toString()
+                budgetingViewModel.budgetingAmountListMonthly.value = budgetingAmountListMonthly.toMap()
             }
             2L -> {
-                budgetingViewModel.budgetingAmountListYearly[item.budgetId] = editable.toString()
+                val budgetingAmountListYearly = budgetingViewModel.budgetingAmountListYearly.value.toMutableMap()
+                budgetingAmountListYearly[item.budgetId] = editable.toString()
+                budgetingViewModel.budgetingAmountListYearly.value = budgetingAmountListYearly.toMap()
             }
         }
-        updateNotBudgetedValue()
     }
 }

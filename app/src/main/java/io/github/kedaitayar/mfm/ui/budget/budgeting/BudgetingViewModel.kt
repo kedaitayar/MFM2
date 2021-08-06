@@ -6,10 +6,8 @@ import io.github.kedaitayar.mfm.data.entity.BudgetTransaction
 import io.github.kedaitayar.mfm.data.repository.BudgetRepository
 import io.github.kedaitayar.mfm.data.repository.SelectedDateRepository
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,7 +19,8 @@ class BudgetingViewModel
     private val budgetingEventChannel = Channel<BudgetingEvent>()
     val budgetingEvent = budgetingEventChannel.receiveAsFlow()
 
-    val selectedDate: LiveData<LocalDateTime> = selectedDateRepository.selectedDate
+    val selectedDate = selectedDateRepository.selectedDate
+
     val monthlyBudgetingListData = selectedDate.switchMap {
         budgetRepository.getMonthlyBudgetingListAdapterFlow(it.monthValue, it.year).asLiveData()
     }
@@ -30,14 +29,40 @@ class BudgetingViewModel
     }
     private val totalIncome = budgetRepository.getTotalIncome()
     private val totalBudgeted = budgetRepository.getTotalBudgetedAmount()
-    val totalNotBudgeted = combine(totalIncome, totalBudgeted) { income: Double?, budgeted: Double? ->
+    private val totalNotBudgeted = combine(totalIncome, totalBudgeted) { income: Double?, budgeted: Double? ->
         (income ?: 0.0) - (budgeted ?: 0.0)
-    }.asLiveData()
-
-    var totalMonthlyBudgetedThisMonth: Double = 0.0
-    var totalYearlyBudgetedThisMonth: Double = 0.0
-    var budgetingAmountListMonthly = mutableMapOf<Long, String>()
-    var budgetingAmountListYearly = mutableMapOf<Long, String>()
+    }
+    private val totalMonthlyBudgetedThisMonth = monthlyBudgetingListData.asFlow().flatMapLatest {
+        flow {
+            emit(it.map { item -> item.budgetAllocation }.sum())
+        }
+    }
+    private val totalYearlyBudgetedThisMonth = yearlyBudgetingListData.asFlow().flatMapLatest {
+        flow {
+            emit(it.map { item -> item.budgetAllocation }.sum())
+        }
+    }
+    val budgetingAmountListMonthly = MutableStateFlow(mapOf<Long, String>())
+    val budgetingAmountListYearly = MutableStateFlow(mapOf<Long, String>())
+    private val currentTotalMonthlyBudgetedThisMonth = budgetingAmountListMonthly.mapLatest { items ->
+        items.map { item ->
+            item.value.toDoubleOrNull() ?: 0.0
+        }.sumOf { it }
+    }
+    private val currentTotalYearlyBudgetedThisMonth = budgetingAmountListYearly.mapLatest { items ->
+        items.map { item ->
+            item.value.toDoubleOrNull() ?: 0.0
+        }.sumOf { it }
+    }
+    val currentTotalNotBudgeted = combine(
+        totalNotBudgeted,
+        totalMonthlyBudgetedThisMonth,
+        totalYearlyBudgetedThisMonth,
+        currentTotalMonthlyBudgetedThisMonth,
+        currentTotalYearlyBudgetedThisMonth
+    ) { totalNotBudgeted, totalMonthlyBudgetedThisMonth, totalYearlyBudgetedThisMonth, currentTotalMonthlyBudgetedThisMonth, currentTotalYearlyBudgetedThisMonth ->
+        totalNotBudgeted - (currentTotalMonthlyBudgetedThisMonth - totalMonthlyBudgetedThisMonth) - (currentTotalYearlyBudgetedThisMonth - totalYearlyBudgetedThisMonth)
+    }
 
     fun onSaveClick() {
         viewModelScope.launch {
@@ -46,7 +71,7 @@ class BudgetingViewModel
             if (monthlyBudgetingList != null) {
                 for (budgeting in monthlyBudgetingList) {
                     val budgetTransaction = BudgetTransaction(
-                        budgetTransactionAmount = ((budgetingAmountListMonthly[budgeting.budgetId])?.toDoubleOrNull()
+                        budgetTransactionAmount = ((budgetingAmountListMonthly.value[budgeting.budgetId])?.toDoubleOrNull()
                             ?: 0.0),
                         budgetTransactionBudgetId = budgeting.budgetId,
                         budgetTransactionMonth = date.monthValue,
@@ -60,7 +85,7 @@ class BudgetingViewModel
             if (yearlyBudgetingList != null) {
                 for (budgeting in yearlyBudgetingList) {
                     val budgetTransaction = BudgetTransaction(
-                        budgetTransactionAmount = ((budgetingAmountListYearly[budgeting.budgetId])?.toDoubleOrNull()
+                        budgetTransactionAmount = ((budgetingAmountListYearly.value[budgeting.budgetId])?.toDoubleOrNull()
                             ?: 0.0),
                         budgetTransactionBudgetId = budgeting.budgetId,
                         budgetTransactionMonth = date.monthValue,
