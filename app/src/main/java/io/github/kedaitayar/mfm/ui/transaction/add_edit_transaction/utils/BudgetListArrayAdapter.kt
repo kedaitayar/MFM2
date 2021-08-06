@@ -17,7 +17,7 @@ class BudgetListArrayAdapter(context: Context, resource: Int, private val object
     val format = DecimalFormatSymbols().apply {
         groupingSeparator = ' '
     }
-    val formatter = DecimalFormat(context.getString(R.string.currency_format)).apply {
+    private val formatter = DecimalFormat(context.getString(R.string.currency_format)).apply {
         decimalFormatSymbols = format
     }
 

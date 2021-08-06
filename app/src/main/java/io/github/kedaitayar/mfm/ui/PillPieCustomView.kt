@@ -23,7 +23,7 @@ class PillPieCustomView @JvmOverloads constructor(
             field = value
             invalidate()
         }
-    var pieColor = 0
+    private var pieColor = 0
         set(value) {
             field = value
             invalidate()

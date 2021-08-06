@@ -3,7 +3,7 @@ package io.github.kedaitayar.mfm.util
 import androidx.lifecycle.Observer
 
 class SnackbarEvent<out T>(private val content: T) {
-    var hasBeenHandled = false
+    private var hasBeenHandled = false
         private set
 
     fun getContentIfNotHandled(): T? {
