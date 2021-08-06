@@ -3,9 +3,9 @@ package io.github.kedaitayar.mfm.ui.budget.budgeting
 import android.os.Bundle
 import android.text.Editable
 import android.util.TypedValue
-import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -16,7 +16,6 @@ import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentBudgetingBinding
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
-import io.github.kedaitayar.mfm.util.exhaustive
 import kotlinx.coroutines.flow.collect
 import java.time.format.TextStyle
 import java.util.*
@@ -52,7 +51,7 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAd
 //                            .setAnchorView(binding)
                             .show()
                     }
-                }.exhaustive
+                }
             }
         }
     }
@@ -96,7 +95,6 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAd
             it?.let {
                 monthlyAdapter.submitList(it)
                 budgetingViewModel.totalMonthlyBudgetedThisMonth = it.map { item -> item.budgetAllocation }.sum()
-                monthlyAdapter.submitTotalBudgetedThisMonth(budgetingViewModel.totalMonthlyBudgetedThisMonth + budgetingViewModel.totalYearlyBudgetedThisMonth)
             }
         }
 
@@ -106,7 +104,6 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAd
             it?.let {
                 yearlyAdapter.submitList(it)
                 budgetingViewModel.totalYearlyBudgetedThisMonth = it.map { item -> item.budgetAllocation }.sum()
-                monthlyAdapter.submitTotalBudgetedThisMonth(budgetingViewModel.totalMonthlyBudgetedThisMonth + budgetingViewModel.totalYearlyBudgetedThisMonth)
             }
         }
     }

@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:paddingBottom="2dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingBottom="2dp">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_budget"
@@ -36,24 +36,29 @@
             style="@style/TextStyle3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Amount"
             android:inputType="numberDecimal"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
             android:selectAllOnFocus="true"
+            android:text="100.0"
             android:textAlignment="textEnd" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textview.MaterialTextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/text_view_goal"
-        style="@style/TextStyle3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="18dp"
+        style="@style/TextButton1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="sans-serif"
+        android:minHeight="0dp"
+        android:text="RM 100"
+        android:textAlignment="textEnd"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/text_input_layout_amount"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/text_input_layout_amount"
-        tools:text="RM 100" />
+        app:layout_constraintStart_toEndOf="@+id/text_input_layout_amount"
+        app:layout_constraintTop_toTopOf="@+id/text_input_layout_amount" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

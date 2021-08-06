@@ -14,7 +14,6 @@ class BudgetingListAdapter(private var listener: OnBudgetingListAdapterListener)
     ListAdapter<BudgetListAdapterData, BudgetingListAdapter.BudgetingListViewHolder>(
         BudgetingListDiffCallback()
     ) {
-    private var totalBudgeted = 0.0
 
     interface OnBudgetingListAdapterListener {
         fun onAfterTextChanged(item: BudgetListAdapterData, editable: Editable?)
@@ -33,14 +32,20 @@ class BudgetingListAdapter(private var listener: OnBudgetingListAdapterListener)
             binding.apply {
                 textViewBudget.text = item.budgetName
                 textInputEditAmount.setText(item.budgetAllocation.toString())
+                var goal = 0.0
                 when (item.budgetTypeId) {
                     1L -> {
                         textViewGoal.text = item.budgetGoal.toString()
+                        goal = item.budgetGoal
                     }
                     2L -> {
                         val remainingGoal = item.budgetGoal - item.budgetTotalPrevAllocation
                         textViewGoal.text = remainingGoal.toString()
+                        goal = remainingGoal
                     }
+                }
+                textViewGoal.setOnClickListener {
+                    textInputEditAmount.setText(goal.toString())
                 }
             }
         }
@@ -62,9 +67,6 @@ class BudgetingListAdapter(private var listener: OnBudgetingListAdapterListener)
         holder.bind(item)
     }
 
-    fun submitTotalBudgetedThisMonth(total: Double) {
-        totalBudgeted = total
-    }
 }
 
 private class BudgetingListDiffCallback : DiffUtil.ItemCallback<BudgetListAdapterData>() {
