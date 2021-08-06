@@ -39,6 +39,12 @@ android {
         }
     }
 
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "MFM_${variant.buildType.name}_${defaultConfig.versionName}.apk"
+        }
+    }
+
     compileOptions {
         //Java 8+ API desugaring to enable use of Java8 feature on any android sdk version
         coreLibraryDesugaringEnabled true
