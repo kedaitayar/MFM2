@@ -1,43 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
+    android:id="@+id/single_budgeting_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:layoutDescription="@xml/fragment_single_budgeting_xml_constraintlayout_scene"
     tools:context=".ui.budget.single_budgeting.SingleBudgetingFragment">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/text_view_budget_name"
-            style="@style/TextStyle2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="4dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="4dp"
-            android:text="Budget"
-            app:layout_constraintBottom_toTopOf="@+id/text_input_layout_amount"
-            app:layout_constraintStart_toStartOf="parent" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_budget_name"
+        style="@style/TextStyle2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="4dp"
+        android:ellipsize="end"
+        android:paddingTop="8dp"
+        android:text="Budget"
+        app:layout_constraintBottom_toTopOf="@+id/text_input_layout_amount"
+        app:layout_constraintEnd_toStartOf="@+id/text_view_budget_budgeted_goal"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/text_view_budget_total_budget_amount"
-            style="@style/TextStyle2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="RM 0.00"
-            app:layout_constraintBottom_toBottomOf="@+id/text_view_budget_name"
-            app:layout_constraintEnd_toEndOf="parent" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_budget_budgeted_goal"
+        style="@style/TextStyle2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="RM 0.00"
+        app:layout_constraintBottom_toBottomOf="@+id/text_view_budget_name"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_layout_amount"
-        style="@style/InputEditTextStyle1"
+        style="@style/InputEditTextStyleDense1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
         android:clickable="false"
         android:focusable="false"
         android:hint="Amount"
+        app:errorEnabled="true"
         app:layout_constraintBottom_toTopOf="@+id/chip_group"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -53,14 +56,18 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_layout_budget"
-        style="@style/DropDownMenuStyle1"
+        style="@style/DropDownMenuStyleDense1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:alpha="0"
         android:hint="Budget"
         android:visibility="gone"
+        app:errorEnabled="true"
         app:layout_constraintBottom_toTopOf="@+id/chip_group"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/autoComplete_budget"
@@ -71,31 +78,11 @@
             android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!--    <com.google.android.material.textfield.TextInputLayout-->
-    <!--        android:id="@+id/text_input_layout_budget_to"-->
-    <!--        style="@style/DropDownMenuStyle1"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:hint="To"-->
-    <!--        android:visibility="invisible"-->
-    <!--        app:layout_constraintBottom_toTopOf="@+id/chip_group"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        tools:visibility="invisible">-->
-
-    <!--        <com.google.android.material.textfield.MaterialAutoCompleteTextView-->
-    <!--            android:id="@+id/autoComplete_budget_to"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:cursorVisible="false"-->
-    <!--            android:focusable="false"-->
-    <!--            android:inputType="none" />-->
-    <!--    </com.google.android.material.textfield.TextInputLayout>-->
-
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chip_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toTopOf="@+id/keypad"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -241,4 +228,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-</androidx.constraintlayout.motion.widget.MotionLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

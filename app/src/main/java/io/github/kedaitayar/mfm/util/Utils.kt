@@ -2,8 +2,11 @@ package io.github.kedaitayar.mfm.util
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.text.Editable
+import android.util.TypedValue
+import android.view.View
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.core.content.res.use
@@ -43,3 +46,9 @@ fun Double.toCurrency(context: Context): String {
     }
     return resources.getString(R.string.currency_symbol, formatter.format(this))
 }
+
+fun View.dpToPx(dp: Float): Int = context.dpToPx(dp)
+fun Context.dpToPx(dp: Float): Int = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics).toInt()
+
+val Int.toDp: Int get() = (this / Resources.getSystem().displayMetrics.density).toInt()
+val Int.toPx: Int get() = (this * Resources.getSystem().displayMetrics.density).toInt()
