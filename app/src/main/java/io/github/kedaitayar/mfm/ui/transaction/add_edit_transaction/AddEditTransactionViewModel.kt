@@ -12,9 +12,7 @@ import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.data.repository.TransactionRepository
 import io.github.kedaitayar.mfm.util.exhaustive
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
 import javax.inject.Inject
@@ -26,15 +24,28 @@ constructor(
     private val transactionRepository: TransactionRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val now = OffsetDateTime.now()
+    var inputAccountFrom: AccountListAdapterData? = null
+    var inputBudget: BudgetListAdapterData? = null
+    var inputAccountTo: AccountListAdapterData? = null
+    var inputAmount: Double? = null
+    var inputDate = MutableStateFlow(OffsetDateTime.now())
+    var inputNote: String = ""
+
+
+    //    private val now = OffsetDateTime.now()
     private val addEditTransactionEventChannel = Channel<AddEditTransactionEvent>()
     val addEditTransactionEvent = addEditTransactionEventChannel.receiveAsFlow()
 
     val transaction = savedStateHandle.get<Transaction>("transaction")
     private val allAccountFlow = transactionRepository.getAccountListDataFlow()
     val allAccount = allAccountFlow.asLiveData()
-    private val monthlyBudgetFlow = transactionRepository.getBudgetMonthlyListAdapterFlow(now.monthValue, now.year)
-    private val yearlyBudgetFlow = transactionRepository.getBudgetYearlyListAdapterFlow(now.monthValue, now.year)
+
+    private val monthlyBudgetFlow = inputDate.flatMapLatest {
+        transactionRepository.getBudgetMonthlyListAdapterFlow(it.monthValue, it.year)
+    }
+    private val yearlyBudgetFlow = inputDate.flatMapLatest {
+        transactionRepository.getBudgetYearlyListAdapterFlow(it.monthValue, it.year)
+    }
     val allBudget =
         monthlyBudgetFlow.combine(yearlyBudgetFlow) { monthly: List<BudgetListAdapterData>, yearly: List<BudgetListAdapterData> ->
             monthly + yearly
@@ -50,13 +61,6 @@ constructor(
     val accountTo = allAccountFlow.map { value: List<AccountListAdapterData> ->
         value.find { accountListAdapterData -> accountListAdapterData.accountId == transaction!!.transactionAccountTransferTo }
     }.asLiveData()
-
-    var inputAccountFrom: AccountListAdapterData? = null
-    var inputBudget: BudgetListAdapterData? = null
-    var inputAccountTo: AccountListAdapterData? = null
-    var inputAmount: Double? = null
-    var inputDate: OffsetDateTime = OffsetDateTime.now()
-    var inputNote: String = ""
 
     fun onButtonSaveClick(transactionType: TransactionType) {
         viewModelScope.launch {
@@ -93,7 +97,7 @@ constructor(
                                     transactionAccountId = inputAccountFrom!!.accountId,
                                     transactionBudgetId = inputBudget!!.budgetId,
                                     transactionAmount = inputAmount!!,
-                                    transactionTime = inputDate,
+                                    transactionTime = inputDate.value,
                                     transactionNote = inputNote
                                 )
                             transaction?.let {
@@ -131,7 +135,7 @@ constructor(
                                 transaction?.copy(
                                     transactionAccountId = inputAccountFrom!!.accountId,
                                     transactionAmount = inputAmount!!,
-                                    transactionTime = inputDate,
+                                    transactionTime = inputDate.value,
                                     transactionNote = inputNote
                                 )
                             transaction?.let {
@@ -185,7 +189,7 @@ constructor(
                                     transactionAccountId = inputAccountFrom!!.accountId,
                                     transactionAccountTransferTo = inputAccountTo!!.accountId,
                                     transactionAmount = inputAmount!!,
-                                    transactionTime = inputDate,
+                                    transactionTime = inputDate.value,
                                     transactionNote = inputNote
                                 )
                             transaction?.let {
@@ -238,7 +242,7 @@ constructor(
                                 transactionBudgetId = inputBudget!!.budgetId,
                                 transactionAmount = inputAmount ?: 0.0,
                                 transactionType = 1,
-                                transactionTime = inputDate,
+                                transactionTime = inputDate.value,
                                 transactionNote = inputNote
                             )
                             val result = insert(transaction)
@@ -273,7 +277,7 @@ constructor(
                                 transactionAccountId = inputAccountFrom!!.accountId,
                                 transactionAmount = inputAmount ?: 0.0,
                                 transactionType = 2,
-                                transactionTime = inputDate,
+                                transactionTime = inputDate.value,
                                 transactionNote = inputNote
                             )
                             val result = insert(transaction)
@@ -325,7 +329,7 @@ constructor(
                                 transactionAmount = inputAmount ?: 0.0,
                                 transactionAccountTransferTo = inputAccountTo!!.accountId,
                                 transactionType = 3,
-                                transactionTime = inputDate,
+                                transactionTime = inputDate.value,
                                 transactionNote = inputNote
                             )
                             val result = insert(transaction)

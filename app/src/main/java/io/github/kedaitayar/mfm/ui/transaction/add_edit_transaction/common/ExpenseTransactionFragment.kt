@@ -56,7 +56,7 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
                 .build()
 
         val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-        binding.textInputEditDate.setText(addEditTransactionViewModel.inputDate.format(dateFormatter))
+        binding.textInputEditDate.setText(addEditTransactionViewModel.inputDate.value.format(dateFormatter))
 
         binding.textInputEditDate.setOnClickListener {
             hideKeyboard()
@@ -65,7 +65,7 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
         datePicker.addOnPositiveButtonClickListener {
             val instant = Instant.ofEpochMilli(it)
             val date = instant.atOffset(ZoneOffset.UTC)
-            addEditTransactionViewModel.inputDate = date
+            addEditTransactionViewModel.inputDate.value = date
             binding.textInputEditDate.setText(date.format(dateFormatter))
         }
     }
@@ -73,7 +73,8 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
     private fun setupInputListener() {
         binding.apply {
             autoCompleteAccount.setOnItemClickListener { parent, _, position, _ ->
-                addEditTransactionViewModel.inputAccountFrom = parent.getItemAtPosition(position) as AccountListAdapterData?
+                addEditTransactionViewModel.inputAccountFrom =
+                    parent.getItemAtPosition(position) as AccountListAdapterData?
             }
             autoCompleteBudget.setOnItemClickListener { parent, _, position, _ ->
                 addEditTransactionViewModel.inputBudget = parent.getItemAtPosition(position) as BudgetListAdapterData?
@@ -110,7 +111,7 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
         }
         val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
         addEditTransactionViewModel.transaction?.transactionTime?.let {
-            addEditTransactionViewModel.inputDate = it
+            addEditTransactionViewModel.inputDate.value = it
             binding.textInputEditDate.setText(it.format(dateFormatter))
         }
     }

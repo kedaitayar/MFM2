@@ -53,7 +53,7 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
                 .build()
 
         val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-        binding.textInputEditDate.setText(addEditTransactionViewModel.inputDate.format(dateFormatter))
+        binding.textInputEditDate.setText(addEditTransactionViewModel.inputDate.value.format(dateFormatter))
 
         binding.textInputEditDate.setOnClickListener {
             hideKeyboard()
@@ -62,7 +62,7 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
         datePicker.addOnPositiveButtonClickListener {
             val instant = Instant.ofEpochMilli(it)
             val date = instant.atOffset(ZoneOffset.UTC)
-            addEditTransactionViewModel.inputDate = date
+            addEditTransactionViewModel.inputDate.value = date
             binding.textInputEditDate.setText(date.format(dateFormatter))
         }
     }
@@ -107,7 +107,7 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
         }
         val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
         addEditTransactionViewModel.transaction?.transactionTime?.let {
-            addEditTransactionViewModel.inputDate = it
+            addEditTransactionViewModel.inputDate.value = it
             binding.textInputEditDate.setText(it.format(dateFormatter))
         }
     }
