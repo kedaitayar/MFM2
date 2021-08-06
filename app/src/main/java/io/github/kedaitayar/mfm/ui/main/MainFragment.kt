@@ -29,14 +29,14 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        exitTransition = MaterialElevationScale(true).apply {
-//            duration = 300
-//        }
-//        reenterTransition = MaterialElevationScale(true).apply {
-//            duration = 300
-//        }
-        exitTransition = Hold()
-        reenterTransition = Hold()
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = 300
+        }
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = 300
+        }
+//        exitTransition = Hold()
+//        reenterTransition = Hold()
     }
 
     override fun onCreateView(
