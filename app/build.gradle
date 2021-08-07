@@ -12,10 +12,10 @@ android {
 
     defaultConfig {
         applicationId "io.github.kedaitayar.mfm"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 30
-        versionCode 7
-        versionName "1.2.3-beta"
+        versionCode 8
+        versionName "1.2.4-beta"
 
 //        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner "io.github.kedaitayar.mfm.HiltTestRunner"
