@@ -36,16 +36,15 @@ class AddTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = MaterialContainerTransform()
-            .apply {
-                drawingViewId = R.id.nav_host
-                duration = 300
-                scrimColor = Color.TRANSPARENT
-                setAllContainerColors(requireContext().themeColor(R.attr.colorSurface))
-                interpolator = FastOutSlowInInterpolator()
-                fadeMode = MaterialContainerTransform.FADE_MODE_IN
-            }
-
+//        sharedElementEnterTransition = MaterialContainerTransform()
+//            .apply {
+//                drawingViewId = R.id.nav_host
+//                duration = 300
+//                scrimColor = Color.TRANSPARENT
+//                setAllContainerColors(requireContext().themeColor(R.attr.colorSurface))
+//                interpolator = FastOutSlowInInterpolator()
+//                fadeMode = MaterialContainerTransform.FADE_MODE_IN
+//            }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

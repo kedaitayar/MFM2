@@ -29,12 +29,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        exitTransition = MaterialElevationScale(false).apply {
-            duration = 300
-        }
-        reenterTransition = MaterialElevationScale(true).apply {
-            duration = 300
-        }
+//        exitTransition = MaterialElevationScale(false).apply {
+//            duration = 300
+//        }
+//        reenterTransition = MaterialElevationScale(true).apply {
+//            duration = 300
+//        }
 //        exitTransition = Hold()
 //        reenterTransition = Hold()
     }
@@ -67,7 +67,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         binding.fab.setOnClickListener {
             val action = MainFragmentDirections.actionMainFragmentToAddTransactionFragment()
             val extras = FragmentNavigatorExtras(binding.fab to "add_transaction_activity_transition")
-            findNavController().navigate(action, extras)
+//            findNavController().navigate(action, extras)
+            findNavController().navigate(action)
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -85,8 +86,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        postponeEnterTransition()
-        view.doOnPreDraw { startPostponedEnterTransition() }
+//        postponeEnterTransition()
+//        view.doOnPreDraw { startPostponedEnterTransition() }
     }
 
     fun hideFAB() {

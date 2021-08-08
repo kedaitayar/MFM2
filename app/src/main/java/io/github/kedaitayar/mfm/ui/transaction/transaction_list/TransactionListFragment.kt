@@ -120,7 +120,8 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
                     MainFragmentDirections.actionMainFragmentToEditTransactionFragment(transactionListAdapterData.toTransaction())
                 val extras =
                     FragmentNavigatorExtras(transactionCard to "edit_transaction_${transactionListAdapterData.transactionId}")
-                findNavController().navigate(action, extras)
+//                findNavController().navigate(action, extras)
+                findNavController().navigate(action)
             }
 //            override fun onPopupMenuButtonClick(
 //                transactionListAdapterData: TransactionListAdapterData,
