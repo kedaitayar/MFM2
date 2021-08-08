@@ -19,7 +19,8 @@ import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.utils.Accoun
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.util.toStringOrBlank
 import java.time.Instant
-import java.time.ZoneOffset
+import java.time.OffsetDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 private const val ARG_TRANSACTION =
@@ -60,8 +61,7 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
             datePicker.show(parentFragmentManager, "date_picker_03")
         }
         datePicker.addOnPositiveButtonClickListener {
-            val instant = Instant.ofEpochMilli(it)
-            val date = instant.atOffset(ZoneOffset.UTC)
+            val date = OffsetDateTime.ofInstant(Instant.ofEpochMilli(it), ZoneId.systemDefault())
             addEditTransactionViewModel.inputDate.value = date
             binding.textInputEditDate.setText(date.format(dateFormatter))
         }
@@ -70,10 +70,12 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
     private fun setupInputListener() {
         binding.apply {
             autoCompleteTransferFrom.setOnItemClickListener { parent, _, position, _ ->
-                addEditTransactionViewModel.inputAccountFrom = parent.getItemAtPosition(position) as AccountListAdapterData?
+                addEditTransactionViewModel.inputAccountFrom =
+                    parent.getItemAtPosition(position) as AccountListAdapterData?
             }
             autoCompleteTransferTo.setOnItemClickListener { parent, _, position, id ->
-                addEditTransactionViewModel.inputAccountTo = parent.getItemAtPosition(position) as AccountListAdapterData?
+                addEditTransactionViewModel.inputAccountTo =
+                    parent.getItemAtPosition(position) as AccountListAdapterData?
             }
             textInputEditAmount.addTextChangedListener {
                 addEditTransactionViewModel.inputAmount = it.toString().toDoubleOrNull()

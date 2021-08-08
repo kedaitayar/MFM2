@@ -21,7 +21,8 @@ import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.utils.Budget
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.util.toStringOrBlank
 import java.time.Instant
-import java.time.ZoneOffset
+import java.time.OffsetDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 private const val ARG_TRANSACTION =
@@ -63,8 +64,7 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
             datePicker.show(parentFragmentManager, "date_picker_01")
         }
         datePicker.addOnPositiveButtonClickListener {
-            val instant = Instant.ofEpochMilli(it)
-            val date = instant.atOffset(ZoneOffset.UTC)
+            val date = OffsetDateTime.ofInstant(Instant.ofEpochMilli(it), ZoneId.systemDefault())
             addEditTransactionViewModel.inputDate.value = date
             binding.textInputEditDate.setText(date.format(dateFormatter))
         }

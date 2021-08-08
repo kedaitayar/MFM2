@@ -28,7 +28,7 @@ constructor(
     var inputBudget: BudgetListAdapterData? = null
     var inputAccountTo: AccountListAdapterData? = null
     var inputAmount: Double? = null
-    var inputDate = MutableStateFlow(OffsetDateTime.now())
+    val inputDate = MutableStateFlow(OffsetDateTime.now())
     var inputNote: String = ""
 
 

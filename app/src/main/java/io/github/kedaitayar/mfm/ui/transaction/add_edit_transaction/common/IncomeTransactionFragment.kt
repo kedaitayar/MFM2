@@ -19,7 +19,8 @@ import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.utils.Accoun
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.util.toStringOrBlank
 import java.time.Instant
-import java.time.ZoneOffset
+import java.time.OffsetDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 private const val ARG_TRANSACTION = "io.github.kedaitayar.mfm.ui.transaction.IncomeTransactionFragment.TransactionId"
@@ -60,8 +61,7 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
             datePicker.show(parentFragmentManager, "date_picker_02")
         }
         datePicker.addOnPositiveButtonClickListener {
-            val instant = Instant.ofEpochMilli(it)
-            val date = instant.atOffset(ZoneOffset.UTC)
+            val date = OffsetDateTime.ofInstant(Instant.ofEpochMilli(it), ZoneId.systemDefault())
             addEditTransactionViewModel.inputDate.value = date
             binding.textInputEditDate.setText(date.format(dateFormatter))
         }
@@ -70,7 +70,8 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
     private fun setupInputListener() {
         binding.apply {
             autoCompleteAccount.setOnItemClickListener { parent, _, position, _ ->
-                addEditTransactionViewModel.inputAccountFrom = parent.getItemAtPosition(position) as AccountListAdapterData?
+                addEditTransactionViewModel.inputAccountFrom =
+                    parent.getItemAtPosition(position) as AccountListAdapterData?
             }
             textInputEditAmount.addTextChangedListener {
                 addEditTransactionViewModel.inputAmount = it.toString().toDoubleOrNull()
