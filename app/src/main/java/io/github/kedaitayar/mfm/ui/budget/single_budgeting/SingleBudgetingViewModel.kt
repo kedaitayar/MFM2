@@ -52,7 +52,6 @@ class SingleBudgetingViewModel @Inject constructor(
     }
 
     fun onSubmit() {
-        Log.i(TAG, "onSubmit: $budget")
         val selectedDateValue = selectedDate.value
         val amount = inputAmount.value.toDoubleOrNull()
         if (budget == null || selectedDateValue == null) return
@@ -73,7 +72,8 @@ class SingleBudgetingViewModel @Inject constructor(
                     budgetTransactionBudgetId = budget.budgetId
                 )
                 viewModelScope.launch {
-                    val result = basicRepository.update(budgetTransaction)
+//                    val result = basicRepository.update(budgetTransaction)
+                    val result = basicRepository.upsert(budgetTransaction)
                     singleBudgetingEventChannel.send(SingleBudgetingEvent.NavigateBackWithResult(result))
                 }
             }
@@ -92,7 +92,7 @@ class SingleBudgetingViewModel @Inject constructor(
                     budgetTransactionBudgetId = budget.budgetId
                 )
                 viewModelScope.launch {
-                    val result = basicRepository.update(budgetTransaction)
+                    val result = basicRepository.upsert(budgetTransaction)
                     singleBudgetingEventChannel.send(SingleBudgetingEvent.NavigateBackWithResult(result))
                 }
             }
@@ -124,8 +124,8 @@ class SingleBudgetingViewModel @Inject constructor(
                     budgetTransactionBudgetId = toBudget.budgetId
                 )
                 viewModelScope.launch {
-                    val result = basicRepository.update(budgetTransaction)
-                    val result2 = basicRepository.update(budgetTransaction2)
+                    val result = basicRepository.upsert(budgetTransaction)
+                    val result2 = basicRepository.upsert(budgetTransaction2)
                     if (result == result2) {
                         singleBudgetingEventChannel.send(SingleBudgetingEvent.NavigateBackWithResult(result))
                     } else {
@@ -164,8 +164,8 @@ class SingleBudgetingViewModel @Inject constructor(
                     budgetTransactionBudgetId = fromBudget.budgetId
                 )
                 viewModelScope.launch {
-                    val result = basicRepository.update(budgetTransaction)
-                    val result2 = basicRepository.update(budgetTransaction2)
+                    val result = basicRepository.upsert(budgetTransaction)
+                    val result2 = basicRepository.upsert(budgetTransaction2)
                     if (result == result2) {
                         singleBudgetingEventChannel.send(SingleBudgetingEvent.NavigateBackWithResult(result))
                     } else {
@@ -187,7 +187,7 @@ class SingleBudgetingViewModel @Inject constructor(
     }
 
     sealed class SingleBudgetingEvent {
-        data class NavigateBackWithResult(val result: Int) : SingleBudgetingEvent()
+        data class NavigateBackWithResult(val result: Boolean) : SingleBudgetingEvent()
         data class InvalidInput(val amountErrorMessage: String? = null, val budgetErrorMessage: String? = null) :
             SingleBudgetingEvent()
     }

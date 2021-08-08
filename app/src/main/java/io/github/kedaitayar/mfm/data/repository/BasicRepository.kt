@@ -57,6 +57,10 @@ class BasicRepository @Inject constructor(
         return basicDao.delete(budgetTransaction)
     }
 
+    suspend fun upsert(budgetTransaction: BudgetTransaction): Boolean {
+        return basicDao.upsert(budgetTransaction)
+    }
+
     suspend fun insert(transaction: Transaction): Long {
         return basicDao.insert(transaction)
     }
@@ -80,4 +84,5 @@ class BasicRepository @Inject constructor(
     suspend fun update(transactionType: TransactionType): Int {
         return basicDao.update(transactionType)
     }
+
 }

@@ -26,10 +26,10 @@ interface BasicDao {
     fun getAllAccountFlow(): Flow<List<Account>>
 
     @Query("SELECT * FROM account WHERE accountId = :accountId")
-    fun getAccountByIdFlow(accountId : Long): Flow<Account>
+    fun getAccountByIdFlow(accountId: Long): Flow<Account>
 
     @Query("SELECT * FROM account WHERE accountId = :accountId")
-    suspend fun getAccountById(accountId : Long): Account
+    suspend fun getAccountById(accountId: Long): Account
 
     //budget
 
@@ -73,7 +73,7 @@ interface BasicDao {
     @Query("SELECT * FROM budgettransaction")
     fun getAllBudgetTransaction(): LiveData<List<BudgetTransaction>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(budgetTransaction: BudgetTransaction): Long
 
     @Update
@@ -81,6 +81,18 @@ interface BasicDao {
 
     @Delete
     suspend fun delete(budgetTransaction: BudgetTransaction): Int
+
+    @androidx.room.Transaction
+    suspend fun upsert(budgetTransaction: BudgetTransaction): Boolean {
+        val id = insert(budgetTransaction)
+        return if (id == -1L) {
+            val result = update(budgetTransaction)
+            result >= 1
+        } else {
+            id >= 1
+        }
+    }
+
 
     //budget type
 

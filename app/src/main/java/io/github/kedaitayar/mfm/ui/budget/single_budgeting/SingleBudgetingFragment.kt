@@ -68,7 +68,7 @@ class SingleBudgetingFragment : BottomSheetDialogFragment() {
             singleBudgetingViewModel.singleBudgetingEvent.collect {
                 when (it) {
                     is SingleBudgetingViewModel.SingleBudgetingEvent.NavigateBackWithResult -> {
-                        if (it.result == 1) {
+                        if (it.result) {
                             mainViewModel.showSnackbar("Budget updated", Snackbar.LENGTH_SHORT)
                         } else {
                             mainViewModel.showSnackbar("Budget update failed", Snackbar.LENGTH_SHORT)
