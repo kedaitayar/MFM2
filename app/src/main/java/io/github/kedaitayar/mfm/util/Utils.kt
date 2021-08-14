@@ -48,7 +48,15 @@ fun Double.toCurrency(context: Context): String {
 }
 
 fun View.dpToPx(dp: Float): Int = context.dpToPx(dp)
-fun Context.dpToPx(dp: Float): Int = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics).toInt()
+fun Context.dpToPx(dp: Float): Int =
+    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics).toInt()
 
 val Int.toDp: Int get() = (this / Resources.getSystem().displayMetrics.density).toInt()
 val Int.toPx: Int get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+/**
+ * if value is null, return 0.0, if not return the original value
+ */
+fun Double?.notNull(): Double {
+    return (this ?: 0.0)
+}

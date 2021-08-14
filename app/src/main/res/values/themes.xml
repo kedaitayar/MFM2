@@ -3,9 +3,9 @@
     <style name="Theme.MFM" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">#e57373</item>
         <item name="colorPrimaryVariant">#af4448</item>
-        <item name="colorSecondary">#73e5e5</item>
-        <item name="colorSecondaryVariant">#39b3b3</item>
-        <item name="android:colorBackground">@color/white_50</item>
+        <item name="colorSecondary">#ffa4a2</item>
+<!--        <item name="colorSecondaryVariant">#39b3b3</item>-->
+        <item name="android:colorBackground">#eeeeee</item>
         <item name="colorSurface">@color/white_50</item>
         <item name="colorError">@color/red_600</item>
         <item name="colorOnPrimary">@color/black_900</item>
@@ -23,5 +23,8 @@
         <item name="gRed">@color/gRedLight</item>
         <item name="onGRed">@color/black_900</item>
         <item name="customBackgroundColor">@color/customBackgroundColorLight</item>
+        <item name="greenOnSurface">@color/greenOnSurfaceLight</item>
+        <item name="yellowOnSurface">@color/yellowOnSurfaceLight</item>
+        <item name="redOnSurface">@color/redOnSurfaceLight</item>
     </style>
 </resources>

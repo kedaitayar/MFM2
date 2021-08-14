@@ -40,15 +40,15 @@ class DashboardRepository @Inject constructor(
         return accountDao.getAccountListData()
     }
 
-    fun getTotalBudgetedAmount(): Flow<Double> {
+    fun getTotalBudgetedAmount(): Flow<Double?> {
         return accountDao.getTotalBudgetedAmount()
     }
 
-    fun getTotalIncome(): Flow<Double> {
+    fun getTotalIncome(): Flow<Double?> {
         return accountDao.getTotalIncome()
     }
 
-    fun getMonthSpending(timeFrom: OffsetDateTime, timeTo: OffsetDateTime): Flow<Double> {
+    fun getMonthSpending(timeFrom: OffsetDateTime, timeTo: OffsetDateTime): Flow<Double?> {
         return accountDao.getMonthSpending(timeFrom, timeTo)
     }
 

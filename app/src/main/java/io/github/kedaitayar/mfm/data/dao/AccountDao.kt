@@ -179,10 +179,10 @@ interface AccountDao {
     fun getAccountListDataFlow(): Flow<List<AccountListAdapterData>>
 
     @Query("SELECT SUM(budgetTransactionAmount) FROM budgettransaction")
-    fun getTotalBudgetedAmount(): Flow<Double>
+    fun getTotalBudgetedAmount(): Flow<Double?>
 
     @Query("SELECT SUM(transactionAmount) FROM `transaction` WHERE transactionType = 2")
-    fun getTotalIncome(): Flow<Double>
+    fun getTotalIncome(): Flow<Double?>
 
     @Query(
         """
@@ -192,7 +192,7 @@ interface AccountDao {
         AND transactionType = 1
     """
     )
-    fun getMonthSpending(timeFrom: OffsetDateTime, timeTo: OffsetDateTime): Flow<Double>
+    fun getMonthSpending(timeFrom: OffsetDateTime, timeTo: OffsetDateTime): Flow<Double?>
 
     @Query(
         """
@@ -219,26 +219,36 @@ interface AccountDao {
         """
         SELECT
             SUM(budgetGoal) as budgetGoal,
-            SUM(budgetTransactionAmount) as budgetTransactionAmount
-        FROM
-            budget 
-            LEFT JOIN
-                budgettype 
-                ON budgetType = budgetTypeId 
-            LEFT JOIN
-                budgettransaction 
-                ON budgetId = budgetTransactionBudgetId 
-        WHERE
-            (
-                budgetTransactionMonth = :month 
-                AND budgetTransactionYear = :year 
-                AND budgetTypeId != 2
-            )
-            OR 
-            (
-                budgetTransactionYear = :year 
-                AND budgetTypeId = 2
-            )
+            SUM(budgetTransactionAmount) as budgetTransactionAmount,
+            SUM(uncompletedGoal) as uncompletedGoal
+        FROM (
+            SELECT
+                budgetGoal,
+                budgetTransactionAmount,
+                CASE
+                    WHEN (budgetGoal - budgetTransactionAmount) > 0 THEN  (budgetGoal - budgetTransactionAmount)
+                    WHEN (budgetGoal - budgetTransactionAmount) <= 0 THEN 0
+                END uncompletedGoal
+            FROM
+                budget 
+                LEFT JOIN
+                    budgettype 
+                    ON budgetType = budgetTypeId 
+                LEFT JOIN
+                    budgettransaction 
+                    ON budgetId = budgetTransactionBudgetId 
+            WHERE
+                (
+                    budgetTransactionMonth = :month 
+                    AND budgetTransactionYear = :year 
+                    AND budgetTypeId != 2
+                )
+                /*OR 
+                (
+                    budgetTransactionYear = :year 
+                    AND budgetTypeId = 2
+                )*/
+        )
     """
     )
     fun getUncompletedBudget(month: Int, year: Int): Flow<BudgetedAndGoal>

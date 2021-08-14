@@ -1,11 +1,9 @@
 package io.github.kedaitayar.mfm.ui.transaction.transaction_list
 
-import android.graphics.Color
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -21,12 +19,18 @@ class TransactionListAdapter :
     ) {
     private var listener: OnItemClickListener? = null
     private var colorOnSurface = 0
+    private var colorGreen = 0
+    private var colorRed = 0
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         val typedValue = TypedValue()
         recyclerView.context.theme.resolveAttribute(R.attr.colorOnSurface, typedValue, true)
         colorOnSurface = ContextCompat.getColor(recyclerView.context, typedValue.resourceId)
+        recyclerView.context.theme.resolveAttribute(R.attr.greenOnSurface, typedValue, true)
+        colorGreen = ContextCompat.getColor(recyclerView.context, typedValue.resourceId)
+        recyclerView.context.theme.resolveAttribute(R.attr.redOnSurface, typedValue, true)
+        colorRed = ContextCompat.getColor(recyclerView.context, typedValue.resourceId)
     }
 
     interface OnItemClickListener {
@@ -61,16 +65,19 @@ class TransactionListAdapter :
                 textViewTransactionAmount.text = "RM ${item.transactionAmount}"
                 textViewTransactionDate.text =
                     "${item.transactionTime?.dayOfMonth ?: 0}/${item.transactionTime?.monthValue ?: 0}/${item.transactionTime?.year ?: 0}"
+                if (item.transactionNote.isNotEmpty()) {
+                    textViewTransactionNote.text = "- ${item.transactionNote}"
+                }
                 when (item.transactionTypeId) {
                     1 -> {
                         textViewTransactionBudget.text = item.transactionBudgetName
                         textViewTransactionAccountTo.visibility = View.GONE
-                        textViewTransactionAmount.setTextColor(Color.parseColor("#d50000"))
+                        textViewTransactionAmount.setTextColor(colorRed)
                     }
                     2 -> {
                         textViewTransactionBudget.text = item.transactionTypeName
                         textViewTransactionAccountTo.visibility = View.GONE
-                        textViewTransactionAmount.setTextColor(Color.parseColor("#00c853"))
+                        textViewTransactionAmount.setTextColor(colorGreen)
                     }
                     3 -> {
                         textViewTransactionBudget.text = item.transactionTypeName

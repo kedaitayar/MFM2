@@ -1,16 +1,17 @@
 package io.github.kedaitayar.mfm.ui.dashboard.account.main_account
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ebner.roomdatabasebackup.core.RoomBackup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -22,21 +23,22 @@ import io.github.kedaitayar.mfm.databinding.FragmentAccountDashboardBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.ui.main.MainViewModel
 import io.github.kedaitayar.mfm.util.exhaustive
+import io.github.kedaitayar.mfm.util.notNull
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+
+private const val TAG = "AccountDashboardFragmen"
 
 @AndroidEntryPoint
 class AccountDashboardFragment : Fragment(R.layout.fragment_account_dashboard) {
     private val accountDashboardViewModel: AccountDashboardViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
-    private var _binding: FragmentAccountDashboardBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentAccountDashboardBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentAccountDashboardBinding.bind(view)
-
         childFragmentManager.beginTransaction().replace(R.id.account_list_fragment_container, AccountListFragment())
             .commit()
 
@@ -121,14 +123,16 @@ class AccountDashboardFragment : Fragment(R.layout.fragment_account_dashboard) {
     }
 
     private fun setupEventListener() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            accountDashboardViewModel.accountDashboardEvent.collect { event ->
-                when (event) {
-                    AccountDashboardViewModel.AccountDashboardEvent.NavigateToAddAccount -> {
-                        val action = MainFragmentDirections.actionMainFragmentToAddEditAccountFragment()
-                        findNavController().navigate(action)
-                    }
-                }.exhaustive
+        viewLifecycleOwner.lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                accountDashboardViewModel.accountDashboardEvent.collect { event ->
+                    when (event) {
+                        AccountDashboardViewModel.AccountDashboardEvent.NavigateToAddAccount -> {
+                            val action = MainFragmentDirections.actionMainFragmentToAddEditAccountFragment()
+                            findNavController().navigate(action)
+                        }
+                    }.exhaustive
+                }
             }
         }
     }
@@ -141,31 +145,35 @@ class AccountDashboardFragment : Fragment(R.layout.fragment_account_dashboard) {
         val formatter = DecimalFormat(resources.getString(R.string.currency_format)).apply {
             decimalFormatSymbols = format
         }
-        accountDashboardViewModel.thisMonthSpending.observe(viewLifecycleOwner) {
-            it?.let {
-                binding.textViewSpendingThisMonthAmount.text =
-                    resources.getString(R.string.currency_symbol, formatter.format(it))
-            }
-        }
-        accountDashboardViewModel.nextMonthBudgeted.observe(viewLifecycleOwner) {
-            it?.let {
-                binding.textViewBudgetedNextMonthAmount.text =
-                    resources.getString(R.string.currency_symbol, formatter.format(it))
-            }
-        }
-        accountDashboardViewModel.totalBudgetedAndGoal.observe(viewLifecycleOwner) {
-            it?.let {
-                binding.textViewUncompletedBudget.text = resources.getString(
-                    R.string.currency_symbol,
-                    formatter.format(it.budgetGoal - it.budgetTransactionAmount)
-                )
-                binding.ringView.setRingProgress((it.budgetTransactionAmount / it.budgetGoal * 100).toInt())
-            }
-        }
-        accountDashboardViewModel.notBudgetedAmount.observe(viewLifecycleOwner) {
-            it?.let {
-                binding.textViewNotBudgetedAmount.text =
-                    resources.getString(R.string.currency_symbol, formatter.format(it))
+        viewLifecycleOwner.lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    accountDashboardViewModel.thisMonthSpending.collect {
+                        binding.textViewSpendingThisMonthAmount.text =
+                            resources.getString(R.string.currency_symbol, formatter.format(it.notNull()))
+                    }
+                }
+                launch {
+                    accountDashboardViewModel.totalBudgetedAndGoal.collect {
+                        binding.textViewUncompletedBudget.text = resources.getString(
+                            R.string.currency_symbol,
+                            formatter.format(it.uncompletedGoal.notNull())
+                        )
+                        binding.ringView.setRingProgress(((it.budgetGoal.notNull() - it.uncompletedGoal.notNull()) / it.budgetGoal.notNull() * 100).toInt())
+                    }
+                }
+                launch {
+                    accountDashboardViewModel.nextMonthBudgeted.collect {
+                        binding.textViewBudgetedNextMonthAmount.text =
+                            resources.getString(R.string.currency_symbol, formatter.format(it.notNull()))
+                    }
+                }
+                launch {
+                    accountDashboardViewModel.notBudgetedAmount.collect {
+                        binding.textViewNotBudgetedAmount.text =
+                            resources.getString(R.string.currency_symbol, formatter.format(it))
+                    }
+                }
             }
         }
     }
@@ -174,10 +182,5 @@ class AccountDashboardFragment : Fragment(R.layout.fragment_account_dashboard) {
         binding.buttonAddAccount.setOnClickListener {
             accountDashboardViewModel.onAddNewAccountClick()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

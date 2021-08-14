@@ -17,4 +17,7 @@
     <attr name="onGYellow" format="color"/>
     <attr name="gRed" format="color"/>
     <attr name="onGRed" format="color"/>
+    <attr name="greenOnSurface" format="color"/>
+    <attr name="yellowOnSurface" format="color"/>
+    <attr name="redOnSurface" format="color"/>
 </resources>

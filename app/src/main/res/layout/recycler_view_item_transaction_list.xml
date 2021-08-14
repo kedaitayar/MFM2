@@ -12,9 +12,12 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/text_view_transaction_budget"
             style="@style/TextStyle2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintEnd_toStartOf="@+id/text_view_transaction_amount"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Income" />
@@ -40,6 +43,20 @@
             app:layout_constraintTop_toBottomOf="@+id/text_view_transaction_budget"
             tools:text="Cash"
             tools:visibility="visible" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/text_view_transaction_note"
+            style="@style/TextStyle6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:alpha="0.54"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintBottom_toBottomOf="@+id/text_view_transaction_account"
+            app:layout_constraintEnd_toStartOf="@id/text_view_transaction_date"
+            app:layout_constraintStart_toEndOf="@+id/text_view_transaction_account_to"
+            tools:text="Notes" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/text_view_transaction_amount"

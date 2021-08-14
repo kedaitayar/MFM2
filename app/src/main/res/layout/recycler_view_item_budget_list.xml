@@ -61,7 +61,7 @@
         android:padding="0dp"
         app:icon="@drawable/ic_baseline_more_vert_24"
         app:iconPadding="0dp"
-        app:iconTint="@color/black_900"
+        app:iconTint="?colorOnSurface"
         app:layout_constraintBottom_toBottomOf="@+id/text_view_budget_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/text_view_budget_name" />

@@ -7,12 +7,14 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.kedaitayar.mfm.data.podata.BudgetedAndGoal
 import io.github.kedaitayar.mfm.data.repository.DashboardRepository
+import io.github.kedaitayar.mfm.util.notNull
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
+import java.time.ZoneId
 import java.time.ZoneOffset
 import javax.inject.Inject
 
@@ -21,27 +23,25 @@ class AccountDashboardViewModel @Inject constructor(
     private val dashboardRepository: DashboardRepository
 ) : ViewModel() {
     private val now = OffsetDateTime.now()
-    val thisMonthSpending: LiveData<Double> = getThisMonthSpendingData().asLiveData()
-    val totalBudgetedAndGoal: LiveData<BudgetedAndGoal> = getUncompletedBudget().asLiveData()
-    val nextMonthBudgeted: LiveData<Double> = getMonthBudgeted().asLiveData()
-    private val totalIncome: Flow<Double?> = dashboardRepository.getTotalIncome()
-    private val totalBudgetedAmount: Flow<Double?> = dashboardRepository.getTotalBudgetedAmount()
-    private val notBudgetedAmountFlow = combine(totalIncome, totalBudgetedAmount) { totalIncome, totalBudgetedAmount ->
-        (totalIncome ?: 0.0) - (totalBudgetedAmount ?: 0.0)
+    val thisMonthSpending = getThisMonthSpendingData()
+    val totalBudgetedAndGoal = getUncompletedBudget()
+    val nextMonthBudgeted = getMonthBudgeted()
+    private val totalIncome = dashboardRepository.getTotalIncome()
+    private val totalBudgetedAmount = dashboardRepository.getTotalBudgetedAmount()
+    val notBudgetedAmount = combine(totalIncome, totalBudgetedAmount) { totalIncome, totalBudgetedAmount ->
+        totalIncome.notNull() - totalBudgetedAmount.notNull()
     }
-    val notBudgetedAmount = notBudgetedAmountFlow.asLiveData()
-
     private val accountDashboardEventChannel = Channel<AccountDashboardEvent>()
     val accountDashboardEvent = accountDashboardEventChannel.receiveAsFlow()
 
-    private fun getThisMonthSpendingData(): Flow<Double> {
+    private fun getThisMonthSpendingData(): Flow<Double?> {
         val timeFrom =
-            OffsetDateTime.of(now.year, now.monthValue, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+            OffsetDateTime.of(now.year, now.monthValue, 1, 0, 0, 0, 0, OffsetDateTime.now().offset)
         val timeTo = timeFrom.plusMonths(1).minusNanos(1)
         return dashboardRepository.getMonthSpending(timeFrom, timeTo)
     }
 
-    private fun getMonthBudgeted(): Flow<Double> {
+    private fun getMonthBudgeted(): Flow<Double?> {
         val now = OffsetDateTime.now()
         return dashboardRepository.getMonthBudgeted(now.monthValue + 1, now.year)
     }
@@ -58,6 +58,6 @@ class AccountDashboardViewModel @Inject constructor(
     }
 
     sealed class AccountDashboardEvent {
-        object NavigateToAddAccount: AccountDashboardEvent()
+        object NavigateToAddAccount : AccountDashboardEvent()
     }
 }
