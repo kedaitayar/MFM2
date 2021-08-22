@@ -87,7 +87,6 @@ class AccountBudgetChartFragment : Fragment(R.layout.fragment_account_budget_cha
                 }
                 launch {
                     accountBudgetChartViewModel.accountTransactionBudgetFlow.collect {
-                        Timber.d(it.toString())
                         adapter.submitList(it)
                     }
                 }

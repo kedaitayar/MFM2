@@ -9,19 +9,21 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.podata.AccountTransactionChartData
 import io.github.kedaitayar.mfm.data.repository.DashboardRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flatMapLatest
+import io.github.kedaitayar.mfm.data.repository.SelectedDateRepository
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.time.LocalDate
 import java.time.OffsetDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class AccountTransactionGraphViewModel @Inject constructor(
     private val dashboardRepository: DashboardRepository,
+    private val selectedDateRepository: SelectedDateRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    private val selectedOffsetDate = selectedDateRepository.selectedOffsetDate
     var account = MutableStateFlow(
         savedStateHandle.get<Account>(AccountDetailFragment.ACCOUNT_STATE_KEY) ?: Account(accountId = -1)
     )
@@ -30,13 +32,16 @@ class AccountTransactionGraphViewModel @Inject constructor(
             savedStateHandle.set(AccountDetailFragment.ACCOUNT_STATE_KEY, value.value)
         }
 
-    private val accountTransactionChartDataFlow = account.flatMapLatest {
-        getAccountTransactionChartData(it.accountId)
-    }
+    private val accountTransactionChartDataFlow = account.combine(selectedOffsetDate) { account, date ->
+        getAccountTransactionChartData(account.accountId, date)
+    }.flattenMerge()
+
     val accountTransactionGraphCombinedData = MutableLiveData<CombinedData>()
     var green = 0
     var red = 0
     var colorOnSurface = 0
+
+
 
     init {
         setupGraphData()
@@ -61,25 +66,38 @@ class AccountTransactionGraphViewModel @Inject constructor(
                             (list.firstOrNull()?.accountTransactionTransferOutPrevMonth ?: 0.0) +
                             (list.firstOrNull()?.accountTransactionTransferInPrevMonth ?: 0.0)
 
-                val now = OffsetDateTime.now()
                 // insert data to both entries according to its day
-                for (day in 1 until OffsetDateTime.now().month.maxLength()) {
-                    val moneyIn: Double = (dataMap[day]?.accountTransactionIncome ?: 0.0) +
-                            (dataMap[day]?.accountTransactionTransferIn ?: 0.0)
-                    val moneyOut: Double = (dataMap[day]?.accountTransactionExpense ?: 0.0) +
-                            (dataMap[day]?.accountTransactionTransferOut ?: 0.0)
+//                for (day in 1 until OffsetDateTime.now().month.maxLength()) {
+//                    val moneyIn: Double = (dataMap[day]?.accountTransactionIncome ?: 0.0) +
+//                            (dataMap[day]?.accountTransactionTransferIn ?: 0.0)
+//                    val moneyOut: Double = (dataMap[day]?.accountTransactionExpense ?: 0.0) +
+//                            (dataMap[day]?.accountTransactionTransferOut ?: 0.0)
+//                    barEntries.add(
+//                        BarEntry(
+//                            day - 1f,
+//                            floatArrayOf(moneyIn.toFloat(), -moneyOut.toFloat())
+//                        )
+//                    )
+//                    total += moneyIn
+//                    total -= moneyOut
+//                    lineEntries.add(Entry(day - 1f, total.toFloat()))
+//                }
+
+                for (item in list) {
+                    val moneyIn = item.accountTransactionIncome + item.accountTransactionTransferIn
+                    val moneyOut = item.accountTransactionExpense + item.accountTransactionTransferOut
+                    val day = LocalDate.parse(item.accountTransactionDate).dayOfMonth.toFloat()
                     barEntries.add(
                         BarEntry(
-                            day - 1f,
+                            day,
                             floatArrayOf(moneyIn.toFloat(), -moneyOut.toFloat())
                         )
                     )
                     total += moneyIn
                     total -= moneyOut
-                    if (day <= now.dayOfMonth) {
-                        lineEntries.add(Entry(day - 1f, total.toFloat()))
-                    }
+                    lineEntries.add(Entry(day - 1f, total.toFloat()))
                 }
+
 
                 val barDataSet = BarDataSet(barEntries, "bardataset label")
                 barDataSet.colors = arrayListOf(
@@ -110,8 +128,10 @@ class AccountTransactionGraphViewModel @Inject constructor(
         }
     }
 
-    private fun getAccountTransactionChartData(accountId: Long): Flow<List<AccountTransactionChartData>> {
-        val now = OffsetDateTime.now()
-        return dashboardRepository.getAccountTransactionChartData(accountId, now.monthValue, now.year)
+    private fun getAccountTransactionChartData(
+        accountId: Long,
+        dateTime: OffsetDateTime
+    ): Flow<List<AccountTransactionChartData>> {
+        return dashboardRepository.getAccountTransactionChartData(accountId, dateTime.monthValue, dateTime.year)
     }
 }

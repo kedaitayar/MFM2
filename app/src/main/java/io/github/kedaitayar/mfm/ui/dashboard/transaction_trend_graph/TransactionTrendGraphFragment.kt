@@ -39,6 +39,7 @@ class TransactionTrendGraphFragment : Fragment(R.layout.fragment_transaction_tre
 
     private fun setupCombinedGraph() {
         binding.combinedChart.apply {
+            setTouchEnabled(false)
             description.isEnabled = false
             drawOrder = arrayOf(
                 CombinedChart.DrawOrder.BAR,

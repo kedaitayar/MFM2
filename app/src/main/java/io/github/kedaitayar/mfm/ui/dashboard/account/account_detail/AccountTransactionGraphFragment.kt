@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.formatter.ValueFormatter
@@ -20,8 +21,7 @@ private const val ARG_ACCOUNT =
 @AndroidEntryPoint
 class AccountTransactionGraphFragment : Fragment(R.layout.fragment_account_transaction_graph) {
     private val accountTransactionGraphViewModel: AccountTransactionGraphViewModel by viewModels()
-    private var _binding: FragmentAccountTransactionGraphBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentAccountTransactionGraphBinding by viewBinding()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +32,6 @@ class AccountTransactionGraphFragment : Fragment(R.layout.fragment_account_trans
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentAccountTransactionGraphBinding.bind(view)
-
         initViewModelColor()
         setupCombinedGraph()
     }
@@ -45,7 +43,8 @@ class AccountTransactionGraphFragment : Fragment(R.layout.fragment_account_trans
         requireContext().theme.resolveAttribute(R.attr.gRed, typedValue, true)
         accountTransactionGraphViewModel.red = ContextCompat.getColor(requireContext(), typedValue.resourceId)
         requireContext().theme.resolveAttribute(R.attr.colorOnSurface, typedValue, true)
-        accountTransactionGraphViewModel.colorOnSurface = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+        accountTransactionGraphViewModel.colorOnSurface =
+            ContextCompat.getColor(requireContext(), typedValue.resourceId)
     }
 
     private fun setupCombinedGraph() {
@@ -54,6 +53,7 @@ class AccountTransactionGraphFragment : Fragment(R.layout.fragment_account_trans
         val colorOnSurface = ContextCompat.getColor(requireContext(), typedValue.resourceId)
 
         binding.combinedChart.apply {
+            setTouchEnabled(false)
             description.isEnabled = false
             drawOrder = arrayOf(
                 CombinedChart.DrawOrder.BAR,
@@ -96,11 +96,6 @@ class AccountTransactionGraphFragment : Fragment(R.layout.fragment_account_trans
                 }
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     companion object {
