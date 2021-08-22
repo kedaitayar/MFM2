@@ -16,9 +16,7 @@ import javax.inject.Inject
 class MainBudgetViewModel
 @Inject constructor(
     private val budgetRepository: BudgetRepository,
-    private val selectedDateRepository: SelectedDateRepository
 ) : ViewModel() {
-    val selectedDate: LiveData<LocalDateTime> = selectedDateRepository.selectedDate
     private val now: OffsetDateTime = OffsetDateTime.now()
 
     fun onReclaimUnusedBudgetClick() {
@@ -41,15 +39,6 @@ class MainBudgetViewModel
                 budgetRepository.update(budgetTransaction)
             }
         }
-    }
-
-    //selected date
-    fun increaseMonth() {
-        selectedDateRepository.increaseMonth()
-    }
-
-    fun decreaseMonth() {
-        selectedDateRepository.decreaseMonth()
     }
 
     private suspend fun getBudgetTransactionJoinTransactionSuspend() =

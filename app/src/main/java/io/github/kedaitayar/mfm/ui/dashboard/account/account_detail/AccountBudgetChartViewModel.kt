@@ -1,24 +1,24 @@
 package io.github.kedaitayar.mfm.ui.dashboard.account.account_detail
 
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import com.github.mikephil.charting.data.PieEntry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.podata.AccountTransactionBudgetData
 import io.github.kedaitayar.mfm.data.repository.DashboardRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import io.github.kedaitayar.mfm.data.repository.SelectedDateRepository
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
-import java.time.ZoneOffset
 import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
 @HiltViewModel
 class AccountBudgetChartViewModel @Inject constructor(
     private val dashboardRepository: DashboardRepository,
+    private val selectedDateRepository: SelectedDateRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    private val selectedOffsetDate = selectedDateRepository.selectedOffsetDate
     var account = MutableStateFlow(
         savedStateHandle.get<Account>(AccountDetailFragment.ACCOUNT_STATE_KEY) ?: Account(accountId = -1)
     )
@@ -27,48 +27,33 @@ class AccountBudgetChartViewModel @Inject constructor(
             savedStateHandle.set(AccountDetailFragment.ACCOUNT_STATE_KEY, value.value)
         }
 
-    @ExperimentalCoroutinesApi
-    private val accountTransactionBudgetFlow = account.flatMapLatest {
-        getAccountTransactionBudget(it.accountId)
-    }
-    @ExperimentalCoroutinesApi
-    val accountTransactionBudget = accountTransactionBudgetFlow.asLiveData()
+    val accountTransactionBudgetFlow: Flow<List<AccountTransactionBudgetData>> =
+        account.combine(selectedOffsetDate) { account, date ->
+//            getAccountTransactionBudget(account.accountId, date.atZone(ZoneId.systemDefault()).toOffsetDateTime())
+            getAccountTransactionBudget(account.accountId, date)
+        }.flattenMerge()
 
-    @ExperimentalCoroutinesApi
-    val totalTransactionAmount = accountTransactionBudgetFlow.map { list ->
+    val pieEntries: Flow<List<PieEntry>> = accountTransactionBudgetFlow.flatMapLatest {
+        flow {
+            val tempPieEntry = mutableListOf<PieEntry>()
+            for (item in it) {
+                tempPieEntry.add(PieEntry(item.transactionAmount ?: 0.0f, item.budgetName))
+            }
+            emit(tempPieEntry)
+        }
+    }
+
+    val totalTransactionAmount = accountTransactionBudgetFlow.mapLatest { list ->
         list.sumOf { item ->
             item.transactionAmount?.toDouble() ?: 0.0
         }
-    }.asLiveData()
-
-    val pieEntries = MutableLiveData<List<PieEntry>>()
-
-    init {
-        setupAccountBudgetChartData()
     }
 
-    @ExperimentalCoroutinesApi
-    private fun setupAccountBudgetChartData() {
-        viewModelScope.launch {
-            accountTransactionBudgetFlow.collect { list ->
-                val tempPieEntry = mutableListOf<PieEntry>()
-                tempPieEntry.clear()
-                for (item in list) {
-                    val transactionAmount = item.transactionAmount ?: 0.0f
-                    val pieEntry = PieEntry(transactionAmount, item.budgetName)
-                    tempPieEntry.add(pieEntry)
-//                    pieEntries.postValue(tempPieEntry)
-                    pieEntries.value = tempPieEntry
-                }
-            }
-        }
-    }
-
-    private fun getAccountTransactionBudget(accountId: Long): Flow<List<AccountTransactionBudgetData>> {
-        val now = OffsetDateTime.now()
-        val timeFrom =
-            OffsetDateTime.of(now.year, now.monthValue, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
-        val timeTo = timeFrom.plusMonths(1).minusNanos(1)
-        return dashboardRepository.getAccountTransactionBudget(accountId, timeFrom, timeTo)
+    private fun getAccountTransactionBudget(
+        accountId: Long,
+        dateTime: OffsetDateTime
+    ): Flow<List<AccountTransactionBudgetData>> {
+        val timeTo = dateTime.plusMonths(1).minusNanos(1)
+        return dashboardRepository.getAccountTransactionBudget(accountId, dateTime, timeTo)
     }
 }

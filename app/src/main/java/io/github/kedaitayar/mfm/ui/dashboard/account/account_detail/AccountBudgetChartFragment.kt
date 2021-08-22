@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
@@ -13,6 +16,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.databinding.FragmentAccountBudgetChartBinding
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 private const val ARG_ACCOUNT =
@@ -21,8 +29,7 @@ private const val ARG_ACCOUNT =
 @AndroidEntryPoint
 class AccountBudgetChartFragment : Fragment(R.layout.fragment_account_budget_chart) {
     private val accountBudgetChartViewModel: AccountBudgetChartViewModel by viewModels()
-    private var _binding: FragmentAccountBudgetChartBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentAccountBudgetChartBinding by viewBinding()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +40,6 @@ class AccountBudgetChartFragment : Fragment(R.layout.fragment_account_budget_cha
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentAccountBudgetChartBinding.bind(view)
         setupPieChartAndBudgetList()
     }
 
@@ -54,17 +60,17 @@ class AccountBudgetChartFragment : Fragment(R.layout.fragment_account_budget_cha
             isEnabled = false
         }
 
-        if (accountBudgetChartViewModel.account.value.accountId != -1L) {
-            val colors = ArrayList<Int>()
-            for (c in ColorTemplate.VORDIPLOM_COLORS) colors.add(c)
-            for (c in ColorTemplate.JOYFUL_COLORS) colors.add(c)
-            for (c in ColorTemplate.COLORFUL_COLORS) colors.add(c)
-            for (c in ColorTemplate.LIBERTY_COLORS) colors.add(c)
-            for (c in ColorTemplate.PASTEL_COLORS) colors.add(c)
+        val colors = ArrayList<Int>()
+        for (c in ColorTemplate.VORDIPLOM_COLORS) colors.add(c)
+        for (c in ColorTemplate.JOYFUL_COLORS) colors.add(c)
+        for (c in ColorTemplate.COLORFUL_COLORS) colors.add(c)
+        for (c in ColorTemplate.LIBERTY_COLORS) colors.add(c)
+        for (c in ColorTemplate.PASTEL_COLORS) colors.add(c)
 
-            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                accountBudgetChartViewModel.pieEntries.observe(viewLifecycleOwner) {
-                    it?.let { list ->
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    accountBudgetChartViewModel.pieEntries.collect { list ->
                         val dataSet = PieDataSet(list, "dataset label")
                         dataSet.colors = colors
                         val data = PieData(dataSet)
@@ -74,23 +80,19 @@ class AccountBudgetChartFragment : Fragment(R.layout.fragment_account_budget_cha
                         binding.pieChart.invalidate()
                     }
                 }
-                accountBudgetChartViewModel.totalTransactionAmount.observe(viewLifecycleOwner) {
-                    it?.let {
+                launch {
+                    accountBudgetChartViewModel.totalTransactionAmount.collect {
                         adapter.setTotalTransactionAmount(it)
                     }
                 }
-                accountBudgetChartViewModel.accountTransactionBudget.observe(viewLifecycleOwner) {
-                    it?.let {
+                launch {
+                    accountBudgetChartViewModel.accountTransactionBudgetFlow.collect {
+                        Timber.d(it.toString())
                         adapter.submitList(it)
                     }
                 }
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     companion object {

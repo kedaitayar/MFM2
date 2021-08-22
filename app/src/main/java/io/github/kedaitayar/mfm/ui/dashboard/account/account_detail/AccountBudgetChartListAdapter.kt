@@ -78,6 +78,7 @@ private class AccountBudgetChartListDiffCallback :
         oldItem: AccountTransactionBudgetData,
         newItem: AccountTransactionBudgetData
     ): Boolean {
-        return oldItem == newItem
+//        return oldItem == newItem
+        return false //TODO: temporary implementation, need to check the budget percentage if it still the same, due to it depend on totalTransactionAmount which is not available DiffCallback
     }
 }

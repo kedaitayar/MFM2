@@ -268,6 +268,7 @@ interface AccountDao {
             AND NOT transactionType = 3
             AND transactionTime BETWEEN :timeFrom AND :timeTo
         GROUP BY transactionBudgetId
+        ORDER BY transactionAmount DESC
     """)
     fun getAccountTransactionBudget(accountId: Long, timeFrom: OffsetDateTime, timeTo: OffsetDateTime): Flow<List<AccountTransactionBudgetData>>
 }
