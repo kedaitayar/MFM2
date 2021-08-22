@@ -18,9 +18,6 @@ import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.databinding.FragmentAccountBudgetChartBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 private const val ARG_ACCOUNT =

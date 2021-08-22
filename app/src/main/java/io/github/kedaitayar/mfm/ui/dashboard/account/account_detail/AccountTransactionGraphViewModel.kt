@@ -12,7 +12,6 @@ import io.github.kedaitayar.mfm.data.repository.DashboardRepository
 import io.github.kedaitayar.mfm.data.repository.SelectedDateRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import javax.inject.Inject
@@ -40,7 +39,6 @@ class AccountTransactionGraphViewModel @Inject constructor(
     var green = 0
     var red = 0
     var colorOnSurface = 0
-
 
 
     init {
