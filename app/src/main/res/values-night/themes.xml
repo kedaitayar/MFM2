@@ -5,7 +5,7 @@
         <item name="colorPrimaryVariant">#af4448</item>
         <item name="colorSecondary">#ffa4a2</item>
         <!--        <item name="colorSecondaryVariant">#39b3b3</item>-->
-        <item name="android:colorBackground">#121212</item>
+        <item name="android:colorBackground">@color/black_800</item>
         <item name="colorSurface">@color/black_800</item>
         <item name="colorError">@color/red_200</item>
         <item name="colorOnPrimary">@color/black_900</item>

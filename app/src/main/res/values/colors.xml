@@ -19,7 +19,7 @@
     <!--Color on secondary (light), color on background (light),-->
     <!--color on surface (light)-->
     <color name="black_900">#000000</color>
-    <color name="notWhite">#E1E2E1</color>
+    <color name="notWhite">#EEEEEE</color>
 
     <color name="gGreenLight">#4caf50</color>
     <color name="gGreenDark">#57a25a</color>
