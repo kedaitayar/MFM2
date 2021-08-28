@@ -66,7 +66,10 @@ class TransactionListAdapter :
                 textViewTransactionDate.text =
                     "${item.transactionTime?.dayOfMonth ?: 0}/${item.transactionTime?.monthValue ?: 0}/${item.transactionTime?.year ?: 0}"
                 if (item.transactionNote.isNotEmpty()) {
+                    textViewTransactionNote.visibility = View.VISIBLE
                     textViewTransactionNote.text = "- ${item.transactionNote}"
+                } else {
+                    textViewTransactionNote.visibility = View.GONE
                 }
                 when (item.transactionTypeId) {
                     1 -> {
