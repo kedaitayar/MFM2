@@ -7,28 +7,63 @@ import android.widget.Button
 import android.widget.PopupMenu
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentBudgetListBinding
+import io.github.kedaitayar.mfm.databinding.RecyclerViewItemBudgetListBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 
 @AndroidEntryPoint
 class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
     private val budgetListViewModel: BudgetListViewModel by viewModels()
-    private var _binding: FragmentBudgetListBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentBudgetListBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentBudgetListBinding.bind(view)
         val adapter = BudgetListAdapter()
         adapter.setBudgetType(budgetListViewModel.budgetType ?: 0)
         setupRecyclerView(adapter)
     }
 
     private fun setupRecyclerView(adapter: BudgetListAdapter) {
+        val simpleItemTouchCallback =
+            object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    val from = viewHolder.bindingAdapterPosition
+                    val to = target.bindingAdapterPosition
+                    (recyclerView.adapter as BudgetListAdapter).notifyItemMoved(from, to)
+                    //TODO: update database that position change
+                    return true
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    //not handled
+                }
+
+                override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+                    super.onSelectedChanged(viewHolder, actionState)
+                    if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+                        (viewHolder as BudgetListAdapter.BudgetListViewHolder).onDragHandler()
+                    }
+                }
+
+                override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+                    super.clearView(recyclerView, viewHolder)
+                    (viewHolder as BudgetListAdapter.BudgetListViewHolder).onClearViewHandler()
+                }
+            }
+        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView)
+
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         budgetListViewModel.budgetList.observe(viewLifecycleOwner) {

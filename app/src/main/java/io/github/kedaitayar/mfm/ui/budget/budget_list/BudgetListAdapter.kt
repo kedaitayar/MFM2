@@ -63,11 +63,18 @@ class BudgetListAdapter :
             }
         }
 
+        fun onDragHandler() {
+            binding.root.isDragged = true
+        }
+
+        fun onClearViewHandler() {
+            binding.root.isDragged = false
+        }
+
         fun bind(item: BudgetListAdapterData) {
             binding.apply {
                 textViewBudgetName.text = item.budgetName
                 textViewBudgeted.text = item.budgetAllocation.toString()
-//                val goalPercentage = ((item.budgetAllocation / item.budgetGoal) * 100).toInt()
                 val goalPercentage = when (budgetType) {
                     1 -> {
                         ((item.budgetAllocation / item.budgetGoal) * 100).toInt()
@@ -83,11 +90,6 @@ class BudgetListAdapter :
                 } else {
                     textViewBudgeted.bgColor = yellow
                 }
-//                if (item.budgetUsed <= item.budgetAllocation) {
-//                    textViewAvailable.background.setTint(green)
-//                } else {
-//                    textViewAvailable.background.setTint(red)
-//                }
                 when (budgetType) {
                     1 -> {
                         val availableBudget = item.budgetAllocation - item.budgetUsed
