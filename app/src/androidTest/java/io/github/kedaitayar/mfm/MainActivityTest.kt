@@ -642,34 +642,34 @@ class MainActivityTest {
             .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
         //delete budget
-//        onView(
-//            allOf(
-//                hasSibling(allOf(withId(R.id.text_view_budget_name), withText(budget))),
-//                withId(R.id.text_view_budgeted)
-//            )
-//        )
-//            .check(matches(withText(budgetedAfter)))
-//
-//        onView(
-//            allOf(
-//                hasSibling(allOf(withId(R.id.text_view_budget_name), withText(budget))),
-//                withId(R.id.button_more)
-//            )
-//        )
-//            .perform(click())
         onView(
             allOf(
-                withId(R.id.button_more),
-                childAtPosition(
-                    childAtPosition(
-                        withId(R.id.recycler_view),
-                        1
-                    ),
-                    3
-                ),
-                isDisplayed()
+                hasSibling(allOf(withId(R.id.text_view_budget_name), withText(budget))),
+                withId(R.id.text_view_budgeted)
             )
-        ).perform(click())
+        )
+            .check(matches(withText(budgetedAfter)))
+
+        onView(
+            allOf(
+                hasSibling(allOf(withId(R.id.text_view_budget_name), withText(budget))),
+                withId(R.id.button_more)
+            )
+        )
+            .perform(click())
+//        onView(
+//            allOf(
+//                withId(R.id.button_more),
+//                childAtPosition(
+//                    childAtPosition(
+//                        withId(R.id.recycler_view),
+//                        1
+//                    ),
+//                    3
+//                ),
+//                isDisplayed()
+//            )
+//        ).perform(click())
 
         waiter.await(100, TimeUnit.MILLISECONDS)
 

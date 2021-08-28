@@ -13,7 +13,7 @@ import io.github.kedaitayar.mfm.data.entity.*
 
 @Database(
     entities = [Account::class, Transaction::class, TransactionType::class, Budget::class, BudgetTransaction::class, BudgetType::class, BudgetDeadline::class],
-    version = 8,
+    version = 9,
     exportSchema = true
 )
 @TypeConverters(Converters::class)
@@ -39,7 +39,7 @@ abstract class MFMDatabase : RoomDatabase() {
 //                    .addCallback(DatabaseCallback(scope))
 //                    .fallbackToDestructiveMigration()
                     .createFromAsset("database/mfm_db.db")
-                    .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
+                    .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9)
                     .build()
                 INSTANCE = instance
                 instance

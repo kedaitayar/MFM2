@@ -102,3 +102,13 @@ val MIGRATION_7_8 = object : Migration(7, 8) {
         database.execSQL("ALTER TABLE `Transaction` ADD COLUMN `transactionNote` TEXT NOT NULL DEFAULT ''")
     }
 }
+
+val MIGRATION_8_9 = object : Migration(8, 9) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("CREATE TABLE `Budget_backup` (`budgetId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `budgetGoal` REAL NOT NULL, `budgetName` TEXT NOT NULL, `budgetType` INTEGER NOT NULL, `budgetPosition` INTEGER NOT NULL)")
+        database.execSQL("INSERT INTO `Budget_backup` (`budgetId`, `budgetGoal`, `budgetName`, `budgetType`, `budgetPosition`) SELECT `budgetId`, `budgetGoal`, `budgetName`, `budgetType`, `budgetId` as `budgetPosition` FROM `Budget`")
+        database.execSQL("DROP TABLE `Budget`")
+        database.execSQL("ALTER TABLE `Budget_backup` RENAME TO `Budget`")
+        database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_Budget_budgetName` ON `Budget` (`budgetName`)")
+    }
+}
