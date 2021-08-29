@@ -3,17 +3,20 @@ package io.github.kedaitayar.mfm.ui.budget.budgeting
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.kedaitayar.mfm.data.entity.BudgetTransaction
+import io.github.kedaitayar.mfm.data.repository.BasicRepository
 import io.github.kedaitayar.mfm.data.repository.BudgetRepository
 import io.github.kedaitayar.mfm.data.repository.SelectedDateRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class BudgetingViewModel
 @Inject constructor(
     private val budgetRepository: BudgetRepository,
+    private val basicRepository: BasicRepository,
     private val selectedDateRepository: SelectedDateRepository
 ) : ViewModel() {
     private val budgetingEventChannel = Channel<BudgetingEvent>()
@@ -77,10 +80,10 @@ class BudgetingViewModel
                         budgetTransactionMonth = date.monthValue,
                         budgetTransactionYear = date.year
                     )
-                    budgetRepository.insert(budgetTransaction)
+//                    budgetRepository.insert(budgetTransaction)
+                    basicRepository.upsert(budgetTransaction)
                 }
             }
-
             val yearlyBudgetingList = yearlyBudgetingListData.value
             if (yearlyBudgetingList != null) {
                 for (budgeting in yearlyBudgetingList) {
@@ -91,7 +94,8 @@ class BudgetingViewModel
                         budgetTransactionMonth = date.monthValue,
                         budgetTransactionYear = date.year
                     )
-                    budgetRepository.insert(budgetTransaction)
+//                    budgetRepository.insert(budgetTransaction)
+                    basicRepository.upsert(budgetTransaction)
                 }
             }
             budgetingEventChannel.send(BudgetingEvent.NavigateBack)
