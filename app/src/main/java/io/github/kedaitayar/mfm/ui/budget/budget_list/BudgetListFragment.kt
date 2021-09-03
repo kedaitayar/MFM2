@@ -1,10 +1,10 @@
 package io.github.kedaitayar.mfm.ui.budget.budget_list
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Button
 import android.widget.PopupMenu
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -15,7 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentBudgetListBinding
-import io.github.kedaitayar.mfm.databinding.RecyclerViewItemBudgetListBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 
 @AndroidEntryPoint
@@ -40,8 +39,8 @@ class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
                 ): Boolean {
                     val from = viewHolder.bindingAdapterPosition
                     val to = target.bindingAdapterPosition
-                    (recyclerView.adapter as BudgetListAdapter).notifyItemMoved(from, to)
-                    //TODO: update database that position change
+                    (recyclerView.adapter as BudgetListAdapter).moveItem(from, to)
+
                     return true
                 }
 
@@ -58,7 +57,9 @@ class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
 
                 override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
                     super.clearView(recyclerView, viewHolder)
+                    val currentList = (recyclerView.adapter as BudgetListAdapter).currentList
                     (viewHolder as BudgetListAdapter.BudgetListViewHolder).onClearViewHandler()
+                    budgetListViewModel.updateBudgetListPosition(currentList)
                 }
             }
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)

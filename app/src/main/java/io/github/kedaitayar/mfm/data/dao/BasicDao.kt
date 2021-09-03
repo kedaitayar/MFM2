@@ -54,6 +54,12 @@ interface BasicDao {
     @Query("SELECT * FROM budget WHERE budgetId = :budgetId")
     suspend fun getBudgetById(budgetId: Long): Budget
 
+    @Update(entity = Budget::class)
+    suspend fun updatePosition(budgetPosition: BudgetPosition): Int
+
+    @Update(entity = Budget::class)
+    suspend fun updatePosition(budgetPosition: List<BudgetPosition>): Int
+
     //budget deadline
 
     @Query("SELECT * FROM budgetdeadline")

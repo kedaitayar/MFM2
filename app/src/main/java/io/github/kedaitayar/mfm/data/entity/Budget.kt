@@ -15,3 +15,8 @@ data class Budget(
     val budgetName: String = "",
     val budgetType: Int = 1,
 )
+
+data class BudgetPosition(
+    val budgetId: Long = 0,
+    val budgetPosition: Long = 0,
+)

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import io.github.kedaitayar.mfm.data.dao.BasicDao
 import io.github.kedaitayar.mfm.data.dao.BudgetDao
 import io.github.kedaitayar.mfm.data.entity.Budget
+import io.github.kedaitayar.mfm.data.entity.BudgetPosition
 import io.github.kedaitayar.mfm.data.entity.BudgetTransaction
 import io.github.kedaitayar.mfm.data.entity.BudgetType
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
@@ -34,6 +35,14 @@ class BudgetRepository @Inject constructor(
 
     fun getAllBudget(): LiveData<List<Budget>> {
         return basicDao.getAllBudget()
+    }
+
+    suspend fun updatePosition(budgetPosition: BudgetPosition): Int {
+        return basicDao.updatePosition(budgetPosition)
+    }
+
+    suspend fun updatePosition(budgetPositionList: List<BudgetPosition>): Int {
+        return basicDao.updatePosition(budgetPositionList)
     }
 
 

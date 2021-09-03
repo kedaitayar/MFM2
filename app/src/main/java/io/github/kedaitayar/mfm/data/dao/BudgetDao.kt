@@ -20,7 +20,8 @@ interface BudgetDao {
             tbl.transactionAmount AS budgetUsed,
             budgetTypeId,
             budgetTypeName,
-            0 AS budgetTotalPrevAllocation
+            0 AS budgetTotalPrevAllocation,
+            budgetPosition
         FROM
             budget
             LEFT JOIN
@@ -56,7 +57,8 @@ interface BudgetDao {
             tbl.transactionAmount AS budgetUsed,
             budgetTypeId,
             budgetTypeName,
-            0 AS budgetTotalPrevAllocation
+            0 AS budgetTotalPrevAllocation,
+            budgetPosition
         FROM
             budget
             LEFT JOIN
@@ -90,6 +92,7 @@ interface BudgetDao {
                     AND budgetTransactionYear = :year
             )
             AND budgetType = 1
+        ORDER BY budgetPosition ASC
     """
     )
     fun getBudgetMonthlyListAdapterFlow(
@@ -110,7 +113,8 @@ interface BudgetDao {
             SUM(budgetUsed) AS budgetUsed,
             budgetTypeId,
             budgetTypeName,
-            SUM(budgetTotalPrevAllocation) AS budgetTotalPrevAllocation 
+            SUM(budgetTotalPrevAllocation) AS budgetTotalPrevAllocation,
+            budgetPosition
         FROM
             (
                 SELECT
@@ -121,7 +125,8 @@ interface BudgetDao {
                     0 AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    SUM(budgetTransactionAmount) AS budgetTotalPrevAllocation 
+                    SUM(budgetTransactionAmount) AS budgetTotalPrevAllocation,
+                    budgetPosition
                 FROM
                     Budget 
                     LEFT JOIN
@@ -145,7 +150,8 @@ interface BudgetDao {
                     0 AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    0 AS budgetTotalPrevAllocation 
+                    0 AS budgetTotalPrevAllocation ,
+                    budgetPosition
                 FROM
                     Budget 
                     LEFT JOIN
@@ -167,7 +173,8 @@ interface BudgetDao {
                     transactionAmount AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    0 AS budgetTotalPrevAllocation 
+                    0 AS budgetTotalPrevAllocation,
+                    budgetPosition
                 FROM
                     `Transaction` 
                     LEFT JOIN
@@ -188,7 +195,8 @@ interface BudgetDao {
                     0 AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    0 AS budgetTotalPrevAllocation 
+                    0 AS budgetTotalPrevAllocation,
+                    budgetPosition
                 FROM
                     Budget 
                     LEFT JOIN
@@ -213,6 +221,7 @@ interface BudgetDao {
             )
         GROUP BY
             budgetId
+        ORDER BY budgetPosition ASC
     """
     )
     fun getBudgetYearlyListAdapterFlow(
@@ -232,7 +241,8 @@ interface BudgetDao {
             tbl.transactionAmount AS budgetUsed,
             budgetTypeId,
             budgetTypeName,
-            0 AS budgetTotalPrevAllocation
+            0 AS budgetTotalPrevAllocation,
+            budgetPosition
         FROM
             budget
             LEFT JOIN
@@ -268,7 +278,8 @@ interface BudgetDao {
             tbl.transactionAmount AS budgetUsed,
             budgetTypeId,
             budgetTypeName,
-            0 AS budgetTotalPrevAllocation
+            0 AS budgetTotalPrevAllocation,
+            budgetPosition
         FROM
             budget
             LEFT JOIN
@@ -302,6 +313,7 @@ interface BudgetDao {
                     AND budgetTransactionYear = :year
             )
             AND budgetType = 1
+        ORDER BY budgetPosition ASC
     """
     )
     fun getBudgetMonthlyListAdapter(
@@ -322,7 +334,8 @@ interface BudgetDao {
             SUM(budgetUsed) AS budgetUsed,
             budgetTypeId,
             budgetTypeName,
-            SUM(budgetTotalPrevAllocation) AS budgetTotalPrevAllocation 
+            SUM(budgetTotalPrevAllocation) AS budgetTotalPrevAllocation,
+            budgetPosition
         FROM
             (
                 SELECT
@@ -333,7 +346,8 @@ interface BudgetDao {
                     0 AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    SUM(budgetTransactionAmount) AS budgetTotalPrevAllocation 
+                    SUM(budgetTransactionAmount) AS budgetTotalPrevAllocation,
+                    budgetPosition
                 FROM
                     Budget 
                     LEFT JOIN
@@ -357,7 +371,8 @@ interface BudgetDao {
                     0 AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    0 AS budgetTotalPrevAllocation 
+                    0 AS budgetTotalPrevAllocation,
+                    budgetPosition
                 FROM
                     Budget 
                     LEFT JOIN
@@ -379,7 +394,8 @@ interface BudgetDao {
                     transactionAmount AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    0 AS budgetTotalPrevAllocation 
+                    0 AS budgetTotalPrevAllocation,
+                    budgetPosition
                 FROM
                     `Transaction` 
                     LEFT JOIN
@@ -400,7 +416,8 @@ interface BudgetDao {
                     0 AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    0 AS budgetTotalPrevAllocation 
+                    0 AS budgetTotalPrevAllocation,
+                    budgetPosition
                 FROM
                     Budget 
                     LEFT JOIN
@@ -425,6 +442,7 @@ interface BudgetDao {
             )
         GROUP BY
             budgetId
+        ORDER BY budgetPosition ASC
     """
     )
     fun getBudgetYearlyListAdapter(
@@ -445,7 +463,8 @@ interface BudgetDao {
             SUM(budgetUsed) AS budgetUsed,
             budgetTypeId,
             budgetTypeName,
-            SUM(budgetTotalPrevAllocation) AS budgetTotalPrevAllocation 
+            SUM(budgetTotalPrevAllocation) AS budgetTotalPrevAllocation,
+            budgetPosition
         FROM
             (
                 SELECT
@@ -456,7 +475,8 @@ interface BudgetDao {
                     tbl.transactionAmount AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    0 AS budgetTotalPrevAllocation 
+                    0 AS budgetTotalPrevAllocation,
+                    budgetPosition
                 FROM
                     budget 
                     LEFT JOIN
@@ -510,7 +530,8 @@ interface BudgetDao {
                     tbl.transactionAmount AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    0 AS budgetTotalPrevAllocation 
+                    0 AS budgetTotalPrevAllocation,
+                    budgetPosition
                 FROM
                     budget 
                     LEFT JOIN
@@ -550,7 +571,8 @@ interface BudgetDao {
                     0 AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    SUM(budgetTransactionAmount) AS budgetTotalPrevAllocation 
+                    SUM(budgetTransactionAmount) AS budgetTotalPrevAllocation,
+                    budgetPosition
                 FROM
                     Budget 
                     LEFT JOIN
@@ -581,7 +603,8 @@ interface BudgetDao {
     ): LiveData<List<BudgetListAdapterData>>
 
 
-    @Query("""
+    @Query(
+        """
         SELECT
             budgetId,
             budgetName,
@@ -590,7 +613,8 @@ interface BudgetDao {
             tbl.transactionAmount AS budgetUsed,
             budgetTypeId,
             budgetTypeName,
-            0 AS budgetTotalPrevAllocation 
+            0 AS budgetTotalPrevAllocation,
+            budgetPosition
         FROM
             budget 
             LEFT JOIN
@@ -630,7 +654,8 @@ interface BudgetDao {
                 tbl.transactionAmount AS budgetUsed,
                 budgetTypeId,
                 budgetTypeName,
-                0 AS budgetTotalPrevAllocation 
+                0 AS budgetTotalPrevAllocation,
+                budgetPosition
             FROM
                 budget 
             LEFT JOIN
@@ -666,7 +691,8 @@ interface BudgetDao {
                             AND budgetTransactionMonth = :month
                             AND budgetTransactionYear = :year
                     )
-    """)
+    """
+    )
     fun getMonthlyBudgetingListAdapterDO(
         month: Int,
         year: Int,
@@ -674,7 +700,8 @@ interface BudgetDao {
         timeTo: OffsetDateTime
     ): LiveData<List<BudgetListAdapterData>>
 
-    @Query("""
+    @Query(
+        """
         SELECT
             budgetId,
             budgetName,
@@ -683,7 +710,8 @@ interface BudgetDao {
             SUM(budgetUsed) AS budgetUsed,
             budgetTypeId,
             budgetTypeName,
-            SUM(budgetTotalPrevAllocation) AS budgetTotalPrevAllocation 
+            SUM(budgetTotalPrevAllocation) AS budgetTotalPrevAllocation,
+            budgetPosition
         FROM
             (
                 SELECT
@@ -694,7 +722,8 @@ interface BudgetDao {
                     tbl.transactionAmount AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    0 AS budgetTotalPrevAllocation 
+                    0 AS budgetTotalPrevAllocation,
+                    budgetPosition
                 FROM
                     budget 
                     LEFT JOIN
@@ -738,7 +767,8 @@ interface BudgetDao {
                     tbl.transactionAmount AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    0 AS budgetTotalPrevAllocation 
+                    0 AS budgetTotalPrevAllocation,
+                    budgetPosition
                 FROM
                     budget 
                     LEFT JOIN
@@ -786,7 +816,8 @@ interface BudgetDao {
                     0 AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    SUM(budgetTransactionAmount) AS budgetTotalPrevAllocation 
+                    SUM(budgetTransactionAmount) AS budgetTotalPrevAllocation,
+                    budgetPosition
                 FROM
                     Budget 
                     LEFT JOIN
@@ -804,7 +835,8 @@ interface BudgetDao {
             )
         GROUP BY
             budgetId
-    """)
+    """
+    )
     fun getYearlyBudgetingListAdapterDO(
         month: Int,
         year: Int,
@@ -812,7 +844,8 @@ interface BudgetDao {
         timeTo: OffsetDateTime
     ): LiveData<List<BudgetListAdapterData>>
 
-    @Query("""
+    @Query(
+        """
         SELECT
             budgetId,
             budgetName,
@@ -821,7 +854,8 @@ interface BudgetDao {
             tbl.transactionAmount AS budgetUsed,
             budgetTypeId,
             budgetTypeName,
-            0 AS budgetTotalPrevAllocation 
+            0 AS budgetTotalPrevAllocation,
+            budgetPosition
         FROM
             budget 
             LEFT JOIN
@@ -861,7 +895,8 @@ interface BudgetDao {
                 tbl.transactionAmount AS budgetUsed,
                 budgetTypeId,
                 budgetTypeName,
-                0 AS budgetTotalPrevAllocation 
+                0 AS budgetTotalPrevAllocation,
+                budgetPosition
             FROM
                 budget 
             LEFT JOIN
@@ -897,7 +932,9 @@ interface BudgetDao {
                             AND budgetTransactionMonth = :month
                             AND budgetTransactionYear = :year
                     )
-    """)
+        ORDER BY budgetPosition ASC
+    """
+    )
     fun getMonthlyBudgetingListAdapterFlow(
         month: Int,
         year: Int,
@@ -905,7 +942,8 @@ interface BudgetDao {
         timeTo: OffsetDateTime
     ): Flow<List<BudgetListAdapterData>>
 
-    @Query("""
+    @Query(
+        """
         SELECT
             budgetId,
             budgetName,
@@ -914,7 +952,8 @@ interface BudgetDao {
             SUM(budgetUsed) AS budgetUsed,
             budgetTypeId,
             budgetTypeName,
-            SUM(budgetTotalPrevAllocation) AS budgetTotalPrevAllocation 
+            SUM(budgetTotalPrevAllocation) AS budgetTotalPrevAllocation,
+            budgetPosition
         FROM
             (
                 SELECT
@@ -925,7 +964,8 @@ interface BudgetDao {
                     tbl.transactionAmount AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    0 AS budgetTotalPrevAllocation 
+                    0 AS budgetTotalPrevAllocation,
+                    budgetPosition
                 FROM
                     budget 
                     LEFT JOIN
@@ -969,7 +1009,8 @@ interface BudgetDao {
                     tbl.transactionAmount AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    0 AS budgetTotalPrevAllocation 
+                    0 AS budgetTotalPrevAllocation,
+                    budgetPosition
                 FROM
                     budget 
                     LEFT JOIN
@@ -1017,7 +1058,8 @@ interface BudgetDao {
                     0 AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    SUM(budgetTransactionAmount) AS budgetTotalPrevAllocation 
+                    SUM(budgetTransactionAmount) AS budgetTotalPrevAllocation,
+                    budgetPosition
                 FROM
                     Budget 
                     LEFT JOIN
@@ -1035,7 +1077,9 @@ interface BudgetDao {
             )
         GROUP BY
             budgetId
-    """)
+        ORDER BY budgetPosition ASC
+    """
+    )
     fun getYearlyBudgetingListAdapterFlow(
         month: Int,
         year: Int,
@@ -1043,7 +1087,8 @@ interface BudgetDao {
         timeTo: OffsetDateTime
     ): Flow<List<BudgetListAdapterData>>
 
-    @Query("""
+    @Query(
+        """
         SELECT budgetId, budgetName, budgetType, budgetTransactionMonth, budgetTransactionYear, budgetTransactionAmount, transactionAmount
         FROM Budget
         LEFT JOIN
@@ -1062,10 +1107,12 @@ interface BudgetDao {
             ON BudgetTransaction.budgetTransactionMonth = tbl.month
             AND BudgetTransaction.budgetTransactionYear = tbl.year
             AND Budget.budgetId = tbl.transactionBudgetId
-    """)
+    """
+    )
     fun getBudgetTransactionJoinTransaction(): LiveData<List<BudgetTransactionJoinTransaction>>
 
-    @Query("""
+    @Query(
+        """
         SELECT budgetId, budgetName, budgetType, budgetTransactionMonth, budgetTransactionYear, budgetTransactionAmount, transactionAmount
         FROM Budget
         LEFT JOIN
@@ -1084,10 +1131,12 @@ interface BudgetDao {
             ON BudgetTransaction.budgetTransactionMonth = tbl.month
             AND BudgetTransaction.budgetTransactionYear = tbl.year
             AND Budget.budgetId = tbl.transactionBudgetId
-    """)
+    """
+    )
     fun getBudgetTransactionJoinTransactionFlow(): Flow<List<BudgetTransactionJoinTransaction>>
 
-    @Query("""
+    @Query(
+        """
         SELECT budgetId, budgetName, budgetType, budgetTransactionMonth, budgetTransactionYear, budgetTransactionAmount, transactionAmount
         FROM Budget
         LEFT JOIN
@@ -1106,7 +1155,8 @@ interface BudgetDao {
             ON BudgetTransaction.budgetTransactionMonth = tbl.month
             AND BudgetTransaction.budgetTransactionYear = tbl.year
             AND Budget.budgetId = tbl.transactionBudgetId
-    """)
+    """
+    )
     suspend fun getBudgetTransactionJoinTransactionSuspend(): List<BudgetTransactionJoinTransaction>
 
     @Query("SELECT SUM(budgetTransactionAmount) FROM budgettransaction")

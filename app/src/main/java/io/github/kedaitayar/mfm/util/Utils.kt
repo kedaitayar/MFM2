@@ -11,6 +11,8 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.core.content.res.use
 import io.github.kedaitayar.mfm.R
+import io.github.kedaitayar.mfm.data.entity.Budget
+import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
@@ -59,4 +61,14 @@ val Int.toPx: Int get() = (this * Resources.getSystem().displayMetrics.density).
  */
 fun Double?.notNull(): Double {
     return (this ?: 0.0)
+}
+
+fun BudgetListAdapterData.toBudget(): Budget {
+    return Budget(
+        budgetId = this.budgetId,
+        budgetPosition = this.budgetPosition,
+        budgetGoal = this.budgetGoal,
+        budgetName = this.budgetName,
+        budgetType = this.budgetTypeId.toInt()
+    )
 }

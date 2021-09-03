@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.RecyclerViewItemBudgetListBinding
+import java.util.*
 
 class BudgetListAdapter :
     ListAdapter<BudgetListAdapterData, BudgetListAdapter.BudgetListViewHolder>(
@@ -22,6 +23,12 @@ class BudgetListAdapter :
     private var yellow = 0
     private var red = 0
     private var onSurface = 0
+
+    fun moveItem(fromPosition: Int, toPosition: Int) {
+        val mutableCurrentList = currentList.toMutableList()
+        Collections.swap(mutableCurrentList, fromPosition, toPosition)
+        submitList(mutableCurrentList)
+    }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)

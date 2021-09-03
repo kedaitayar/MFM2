@@ -1,15 +1,14 @@
 package io.github.kedaitayar.mfm.ui.budget.budget_list
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.kedaitayar.mfm.data.entity.BudgetPosition
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.data.repository.BudgetRepository
 import io.github.kedaitayar.mfm.data.repository.SelectedDateRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -26,6 +25,16 @@ class BudgetListViewModel
     val budgetType = savedStateHandle.get<Int>(BudgetListFragment.ARG_BUDGET_TYPE)
     private val selectedDate: LiveData<LocalDateTime> = selectedDateRepository.selectedDate
     val budgetList = getBudgetListData()
+
+    fun updateBudgetListPosition(budgetList: List<BudgetListAdapterData>) {
+        viewModelScope.launch {
+            val budgetPositionList = mutableListOf<BudgetPosition>()
+            for ((index, item) in budgetList.withIndex()) {
+                budgetPositionList.add(BudgetPosition(budgetId = item.budgetId, budgetPosition = index.toLong()))
+            }
+            budgetRepository.updatePosition(budgetPositionList)
+        }
+    }
 
     private fun getBudgetListData(): LiveData<List<BudgetListAdapterData>> {
         return when (budgetType) {
