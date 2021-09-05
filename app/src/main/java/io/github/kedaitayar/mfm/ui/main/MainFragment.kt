@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.transition.Hold
@@ -24,8 +25,7 @@ import kotlinx.coroutines.flow.collect
 @AndroidEntryPoint
 class MainFragment : Fragment(R.layout.fragment_main) {
     private val mainViewModel: MainViewModel by activityViewModels()
-    private var _binding: FragmentMainBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentMainBinding by viewBinding()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,11 +39,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 //        reenterTransition = Hold()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+//        postponeEnterTransition()
+//        view.doOnPreDraw { startPostponedEnterTransition() }
+
         val viewPager = binding.viewPagerMain
 
         viewPager.adapter = MainViewPagerAdapter(this)
@@ -66,7 +66,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         binding.fab.setOnClickListener {
             val action = MainFragmentDirections.actionMainFragmentToAddTransactionFragment()
-            val extras = FragmentNavigatorExtras(binding.fab to "add_transaction_activity_transition")
+//            val extras = FragmentNavigatorExtras(binding.fab to "add_transaction_activity_transition")
 //            findNavController().navigate(action, extras)
             findNavController().navigate(action)
         }
@@ -81,13 +81,20 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
         }
 
-        return binding.root
+        setupAppBar()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-//        postponeEnterTransition()
-//        view.doOnPreDraw { startPostponedEnterTransition() }
+    private fun setupAppBar() {
+        binding.topAppBar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.setting -> {
+                    val actions = MainFragmentDirections.actionMainFragmentToSettingFragment()
+                    findNavController().navigate(actions)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     fun hideFAB() {
@@ -107,11 +114,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             BUDGET_PAGE_INDEX -> "Budget"
             else -> null
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun showSnackBar(text: String, length: Int) {

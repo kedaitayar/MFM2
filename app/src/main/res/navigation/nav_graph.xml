@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_mainFragment_to_singleBudgetingFragment"
             app:destination="@id/singleBudgetingFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
     </fragment>
     <fragment
         android:id="@+id/addEditAccountFragment"
@@ -97,4 +100,9 @@
             android:name="budget"
             app:argType="io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData" />
     </dialog>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="io.github.kedaitayar.mfm.ui.setting.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" />
 </navigation>
