@@ -14,8 +14,8 @@ android {
         applicationId "io.github.kedaitayar.mfm"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 11
-        versionName "1.2.7-beta"
+        versionCode 12
+        versionName "1.2.8-beta"
 
 //        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner "io.github.kedaitayar.mfm.HiltTestRunner"

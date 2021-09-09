@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 11,
-      "versionName": "1.2.7-beta",
-      "outputFile": "MFM_release_1.2.7-beta.apk"
+      "versionCode": 12,
+      "versionName": "1.2.8-beta",
+      "outputFile": "MFM_release_1.2.8-beta.apk"
     }
   ],
   "elementType": "File"
