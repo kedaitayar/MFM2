@@ -16,6 +16,9 @@ interface BasicDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(account: Account): Long
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert2(account: Account): Long
+
     @Update
     suspend fun update(account: Account): Int
 
@@ -111,6 +114,9 @@ interface BasicDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(budgetType: BudgetType): Long
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert2(budgetType: BudgetType): Long
+
     @Update
     suspend fun update(budgetType: BudgetType): Int
 
@@ -144,6 +150,9 @@ interface BasicDao {
 
     @Insert
     suspend fun insert(transactionType: TransactionType): Long
+
+    @Insert
+    fun insert2(transactionType: TransactionType): Long
 
     @Update
     suspend fun update(transactionType: TransactionType): Int

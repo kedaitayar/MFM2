@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase
 import io.github.kedaitayar.mfm.data.dao.AccountDao
 import io.github.kedaitayar.mfm.data.dao.BasicDao
 import io.github.kedaitayar.mfm.data.dao.BudgetDao
@@ -36,9 +37,21 @@ abstract class MFMDatabase : RoomDatabase() {
                     MFMDatabase::class.java,
                     DATABASE_NAME
                 )
-//                    .addCallback(DatabaseCallback(scope))
+                    .addCallback(object : RoomDatabase.Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            super.onCreate(db)
+                            ioThread {
+                                getDatabase(context).basicDao().insert2(BudgetType(budgetTypeId = 1, budgetTypeName = "Monthly"))
+                                getDatabase(context).basicDao().insert2(BudgetType(budgetTypeId = 2, budgetTypeName = "Yearly"))
+                                getDatabase(context).basicDao().insert2(TransactionType(transactionTypeId = 1, transactionTypeName = "Expense"))
+                                getDatabase(context).basicDao().insert2(TransactionType(transactionTypeId = 2, transactionTypeName = "Income"))
+                                getDatabase(context).basicDao().insert2(TransactionType(transactionTypeId = 3, transactionTypeName = "Transfer"))
+                                getDatabase(context).basicDao().insert2(Account(accountId = 1, accountName = "Cash"))
+                            }
+                        }
+                    })
 //                    .fallbackToDestructiveMigration()
-                    .createFromAsset("database/mfm_db.db")
+//                    .createFromAsset("database/mfm_db.db")
                     .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9)
                     .build()
                 INSTANCE = instance
