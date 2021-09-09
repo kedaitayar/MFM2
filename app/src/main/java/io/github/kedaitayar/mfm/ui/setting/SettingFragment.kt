@@ -17,7 +17,6 @@ import io.github.kedaitayar.mfm.ui.main.MainViewModel
 import timber.log.Timber
 
 class SettingFragment : Fragment(R.layout.fragment_setting) {
-    private val mainViewModel: MainViewModel by activityViewModels()
     val binding: FragmentSettingBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,7 +55,7 @@ class SettingFragment : Fragment(R.layout.fragment_setting) {
                     if (success) {
                         restartApp(Intent(requireContext(), MainActivity::class.java))
                     } else {
-                        mainViewModel.showSnackbar("There an error. Error message: $message", Snackbar.LENGTH_SHORT)
+                        showSnackBar("There an error. Error message: $message", Snackbar.LENGTH_SHORT)
                     }
                 }
             }
@@ -75,10 +74,14 @@ class SettingFragment : Fragment(R.layout.fragment_setting) {
                     if (success) {
                         restartApp(Intent(requireContext(), MainActivity::class.java))
                     } else {
-                        mainViewModel.showSnackbar("There an error. Error message: $message", Snackbar.LENGTH_SHORT)
+                        showSnackBar("There an error. Error message: $message", Snackbar.LENGTH_SHORT)
                     }
                 }
             }
             .restore()
+    }
+
+    private fun showSnackBar(text: String, length: Int) {
+        Snackbar.make(binding.root, text, length).show()
     }
 }
