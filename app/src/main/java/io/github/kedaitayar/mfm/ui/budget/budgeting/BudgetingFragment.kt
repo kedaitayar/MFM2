@@ -18,6 +18,7 @@ import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentBudgetingBinding
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
+import io.github.kedaitayar.mfm.util.toCurrency
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.time.format.TextStyle
@@ -25,7 +26,8 @@ import java.util.*
 
 
 @AndroidEntryPoint
-class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAdapter.OnBudgetingListAdapterListener {
+class BudgetingFragment : Fragment(R.layout.fragment_budgeting),
+                          BudgetingListAdapter.OnBudgetingListAdapterListener {
     private val budgetingViewModel: BudgetingViewModel by viewModels()
     private var _binding: FragmentBudgetingBinding? = null
     private val binding get() = _binding!!
@@ -120,7 +122,11 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAd
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     budgetingViewModel.currentTotalNotBudgeted.collect {
-                        binding.textViewNotBudgetedAmount.text = "RM $it"
+                        binding.textViewNotBudgetedAmount.text =
+                            requireContext().resources.getString(
+                                R.string.currency_symbol,
+                                it.toCurrency(requireContext())
+                            )
                         if (it < 0) {
                             binding.constraintLayoutNotBudgeted.setBackgroundColor(red)
                         } else {
@@ -140,14 +146,18 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting), BudgetingListAd
     override fun onAfterTextChanged(item: BudgetListAdapterData, editable: Editable?) {
         when (item.budgetTypeId) {
             1L -> {
-                val budgetingAmountListMonthly = budgetingViewModel.budgetingAmountListMonthly.value.toMutableMap()
+                val budgetingAmountListMonthly =
+                    budgetingViewModel.budgetingAmountListMonthly.value.toMutableMap()
                 budgetingAmountListMonthly[item.budgetId] = editable.toString()
-                budgetingViewModel.budgetingAmountListMonthly.value = budgetingAmountListMonthly.toMap()
+                budgetingViewModel.budgetingAmountListMonthly.value =
+                    budgetingAmountListMonthly.toMap()
             }
             2L -> {
-                val budgetingAmountListYearly = budgetingViewModel.budgetingAmountListYearly.value.toMutableMap()
+                val budgetingAmountListYearly =
+                    budgetingViewModel.budgetingAmountListYearly.value.toMutableMap()
                 budgetingAmountListYearly[item.budgetId] = editable.toString()
-                budgetingViewModel.budgetingAmountListYearly.value = budgetingAmountListYearly.toMap()
+                budgetingViewModel.budgetingAmountListYearly.value =
+                    budgetingAmountListYearly.toMap()
             }
         }
     }

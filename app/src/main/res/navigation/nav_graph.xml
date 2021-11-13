@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_mainFragment_to_settingFragment"
             app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_quickTransactionSelectionDialogFragment"
+            app:destination="@id/quickTransactionSelectionDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/addEditAccountFragment"
@@ -62,7 +65,13 @@
         android:id="@+id/addTransactionFragment"
         android:name="io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transaction.AddTransactionFragment"
         android:label="fragment_add_transaction"
-        tools:layout="@layout/fragment_add_transaction" />
+        tools:layout="@layout/fragment_add_transaction" >
+        <argument
+            android:name="quickTransaction"
+            app:argType="io.github.kedaitayar.mfm.data.entity.QuickTransaction"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/addBudgetFragment"
         android:name="io.github.kedaitayar.mfm.ui.budget.add_edit_budget.AddBudgetFragment"
@@ -104,5 +113,38 @@
         android:id="@+id/settingFragment"
         android:name="io.github.kedaitayar.mfm.ui.setting.SettingFragment"
         android:label="fragment_setting"
-        tools:layout="@layout/fragment_setting" />
+        tools:layout="@layout/fragment_setting" >
+        <action
+            android:id="@+id/action_settingFragment_to_quickTransactionMainFragment"
+            app:destination="@id/quickTransactionMainFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/quickTransactionSelectionDialogFragment"
+        android:name="io.github.kedaitayar.mfm.ui.transaction.quick_transaction.QuickTransactionSelectionDialogFragment"
+        android:label="fragment_quick_transaction_selection_dialog"
+        tools:layout="@layout/fragment_quick_transaction_selection_dialog" >
+        <action
+            android:id="@+id/action_quickTransactionSelectionDialogFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/quickTransactionMainFragment"
+        android:name="io.github.kedaitayar.mfm.ui.setting.quickTransaction.QuickTransactionMainFragment"
+        android:label="fragment_quick_transaction_main"
+        tools:layout="@layout/fragment_quick_transaction_main" >
+        <action
+            android:id="@+id/action_quickTransactionMainFragment_to_addEditQuickTransactionFragment"
+            app:destination="@id/addEditQuickTransactionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addEditQuickTransactionFragment"
+        android:name="io.github.kedaitayar.mfm.ui.setting.quickTransaction.addEditQuickTransaction.AddEditQuickTransactionFragment"
+        android:label="fragment_add_edit_quick_transaction"
+        tools:layout="@layout/fragment_add_edit_quick_transaction">
+        <argument
+            android:name="quickTransaction"
+            android:defaultValue="@null"
+            app:argType="io.github.kedaitayar.mfm.data.podata.QuickTransactionListAdapterData"
+            app:nullable="true" />
+    </fragment>
 </navigation>

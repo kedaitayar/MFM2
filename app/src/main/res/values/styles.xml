@@ -89,9 +89,9 @@
 
     <style name="CardView1" parent="Widget.MaterialComponents.CardView">
         <item name="cardElevation">1dp</item>
-        <item name="android:layout_marginTop">4dp</item>
-        <item name="android:layout_marginStart">4dp</item>
-        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
         <item name="android:layout_marginBottom">0dp</item>
     </style>
 
@@ -107,5 +107,21 @@
         <item name="android:layout_width">64dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">28sp</item>
+    </style>
+
+    <style name="ShapeAppearance.MFM.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="ShapeAppearance.MFM.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="ShapeAppearance.MFM.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.MFM.FloatingActionButton" parent="ShapeAppearance.MFM.SmallComponent">
+        <item name="cornerSize">16dp</item>
     </style>
 </resources>

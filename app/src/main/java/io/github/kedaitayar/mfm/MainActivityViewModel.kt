@@ -7,10 +7,10 @@ import io.github.kedaitayar.mfm.data.repository.BasicRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class MainActivityViewModel 
+class MainActivityViewModel
 @Inject constructor(
     private val basicRepository: BasicRepository
-): ViewModel(){
+) : ViewModel() {
     suspend fun insert(account: Account): Long {
         return basicRepository.insert(account)
     }
@@ -81,5 +81,17 @@ class MainActivityViewModel
 
     suspend fun update(transactionType: TransactionType): Int {
         return basicRepository.update(transactionType)
+    }
+
+    suspend fun insert(quickTransaction: QuickTransaction): Long {
+        return basicRepository.insert(quickTransaction)
+    }
+
+    suspend fun delete(quickTransaction: QuickTransaction): Int {
+        return basicRepository.delete(quickTransaction)
+    }
+
+    suspend fun update(quickTransaction: QuickTransaction): Int {
+        return basicRepository.delete(quickTransaction)
     }
 }

@@ -27,8 +27,9 @@ private const val ARG_TRANSACTION =
     "io.github.kedaitayar.mfm.ui.transaction.TransferTransactionFragment.TransactionId"
 
 @AndroidEntryPoint
-class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transaction), AddTransactionChild,
-    EditTransactionChild {
+class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transaction),
+                                    AddTransactionChild,
+                                    EditTransactionChild {
     private val addEditTransactionViewModel: AddEditTransactionViewModel by viewModels(ownerProducer = { requireParentFragment() })
     private var _binding: FragmentTransferTransactionBinding? = null
     private val binding get() = _binding!!
@@ -41,7 +42,7 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
         setupDateInput()
         setupInputListener()
 
-        if (addEditTransactionViewModel.transaction != null) {
+        if (addEditTransactionViewModel.transaction != null || addEditTransactionViewModel.quickTransaction != null) {
             setupEditTransactionValue()
         }
     }
@@ -54,7 +55,11 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
                 .build()
 
         val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-        binding.textInputEditDate.setText(addEditTransactionViewModel.inputDate.value.format(dateFormatter))
+        binding.textInputEditDate.setText(
+            addEditTransactionViewModel.inputDate.value.format(
+                dateFormatter
+            )
+        )
 
         binding.textInputEditDate.setOnClickListener {
             hideKeyboard()
@@ -103,6 +108,10 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
             addEditTransactionViewModel.inputAmount = it
             binding.textInputEditAmount.setText(it.toString())
         }
+        addEditTransactionViewModel.quickTransaction?.transactionAmount?.let {
+            addEditTransactionViewModel.inputAmount = it
+            binding.textInputEditAmount.setText(it.toString())
+        }
         addEditTransactionViewModel.transaction?.transactionNote?.let {
             addEditTransactionViewModel.inputNote = it
             binding.textInputEditNote.setText(it)
@@ -138,6 +147,15 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
         super.onResume()
         if (parentFragment is AddTransactionFragment) {
             (parentFragment as AddTransactionFragment).setCurrentPage(this)
+        }
+        binding.apply {
+            addEditTransactionViewModel.inputAccountFrom?.let {
+                autoCompleteTransferFrom.setText(it.accountName, false)
+            }
+            addEditTransactionViewModel.inputAccountTo?.let {
+                autoCompleteTransferTo.setText(it.accountName, false)
+            }
+            textInputEditAmount.setText(addEditTransactionViewModel.inputAmount?.toString())
         }
     }
 

@@ -30,7 +30,7 @@ private const val ARG_TRANSACTION =
 
 @AndroidEntryPoint
 class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transaction),
-    AddTransactionChild, EditTransactionChild {
+                                   AddTransactionChild, EditTransactionChild {
     private val addEditTransactionViewModel: AddEditTransactionViewModel by viewModels(ownerProducer = { requireParentFragment() })
     private var _binding: FragmentExpenseTransactionBinding? = null
     private val binding get() = _binding!!
@@ -44,7 +44,7 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
         setupDateInput()
         setupInputListener()
 
-        if (addEditTransactionViewModel.transaction != null) {
+        if (addEditTransactionViewModel.transaction != null || addEditTransactionViewModel.quickTransaction != null) {
             setupEditTransactionValue()
         }
     }
@@ -57,7 +57,11 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
                 .build()
 
         val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-        binding.textInputEditDate.setText(addEditTransactionViewModel.inputDate.value.format(dateFormatter))
+        binding.textInputEditDate.setText(
+            addEditTransactionViewModel.inputDate.value.format(
+                dateFormatter
+            )
+        )
 
         binding.textInputEditDate.setOnClickListener {
             hideKeyboard()
@@ -77,7 +81,8 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
                     parent.getItemAtPosition(position) as AccountListAdapterData?
             }
             autoCompleteBudget.setOnItemClickListener { parent, _, position, _ ->
-                addEditTransactionViewModel.inputBudget = parent.getItemAtPosition(position) as BudgetListAdapterData?
+                addEditTransactionViewModel.inputBudget =
+                    parent.getItemAtPosition(position) as BudgetListAdapterData?
             }
             textInputEditAmount.addTextChangedListener {
                 addEditTransactionViewModel.inputAmount = it.toString().toDoubleOrNull()
@@ -102,6 +107,10 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
             }
         }
         addEditTransactionViewModel.transaction?.transactionAmount?.let {
+            addEditTransactionViewModel.inputAmount = it
+            binding.textInputEditAmount.setText(it.toString())
+        }
+        addEditTransactionViewModel.quickTransaction?.transactionAmount?.let {
             addEditTransactionViewModel.inputAmount = it
             binding.textInputEditAmount.setText(it.toString())
         }
@@ -154,6 +163,15 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
         super.onResume()
         if (parentFragment is AddTransactionFragment) {
             (parentFragment as AddTransactionFragment).setCurrentPage(this)
+        }
+        binding.apply {
+            addEditTransactionViewModel.inputAccountFrom?.let {
+                autoCompleteAccount.setText(it.accountName, false)
+            }
+            addEditTransactionViewModel.inputBudget?.let {
+                autoCompleteBudget.setText(it.budgetName, false)
+            }
+            textInputEditAmount.setText(addEditTransactionViewModel.inputAmount?.toString())
         }
     }
 

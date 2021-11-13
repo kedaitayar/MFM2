@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.RecyclerViewItemBudgetListBinding
+import io.github.kedaitayar.mfm.util.toCurrency
 import java.util.*
 
 class BudgetListAdapter :
@@ -81,7 +82,8 @@ class BudgetListAdapter :
         fun bind(item: BudgetListAdapterData) {
             binding.apply {
                 textViewBudgetName.text = item.budgetName
-                textViewBudgeted.text = item.budgetAllocation.toString()
+                textViewBudgeted.text =
+                    item.budgetAllocation.toCurrency(textViewBudgeted.context, false)
                 val goalPercentage = when (budgetType) {
                     1 -> {
                         ((item.budgetAllocation / item.budgetGoal) * 100).toInt()
@@ -100,11 +102,13 @@ class BudgetListAdapter :
                 when (budgetType) {
                     1 -> {
                         val availableBudget = item.budgetAllocation - item.budgetUsed
-                        textViewAvailable.text = availableBudget.toString()
+                        textViewAvailable.text =
+                            availableBudget.toCurrency(textViewAvailable.context, false)
                         textViewAvailable.background.setTint(if (availableBudget >= 0) green else red)
                     }
                     2 -> {
-                        val availableBudget = item.budgetAllocation + item.budgetTotalPrevAllocation - item.budgetUsed
+                        val availableBudget =
+                            item.budgetAllocation + item.budgetTotalPrevAllocation - item.budgetUsed
                         textViewAvailable.text = availableBudget.toString()
                         textViewAvailable.background.setTint(if (availableBudget >= 0) green else red)
                     }

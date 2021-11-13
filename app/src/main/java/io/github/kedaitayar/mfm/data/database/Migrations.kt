@@ -112,3 +112,16 @@ val MIGRATION_8_9 = object : Migration(8, 9) {
         database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_Budget_budgetName` ON `Budget` (`budgetName`)")
     }
 }
+
+val MIGRATION_9_10 = object : Migration(9, 10) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("CREATE TABLE IF NOT EXISTS `QuickTransaction` (`quickTransactionId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `quickTransactionName` TEXT NOT NULL, `transactionAmount` REAL NOT NULL, `transactionType` INTEGER NOT NULL, `transactionAccountId` INTEGER NOT NULL, `transactionBudgetId` INTEGER, `transactionAccountTransferTo` INTEGER, FOREIGN KEY(`transactionAccountId`) REFERENCES `Account`(`accountId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`transactionBudgetId`) REFERENCES `Budget`(`budgetId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`transactionAccountTransferTo`) REFERENCES `Account`(`accountId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+    }
+}
+
+val MIGRATION_10_11 = object : Migration(10, 11) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("ALTER TABLE `QuickTransaction` ADD COLUMN `transactionNote` TEXT NOT NULL DEFAULT ''")
+    }
+
+}

@@ -7,8 +7,11 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.transition.MaterialContainerTransform
@@ -21,12 +24,13 @@ import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.util.exhaustive
 import io.github.kedaitayar.mfm.util.themeColor
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.lang.ref.WeakReference
 
 @AndroidEntryPoint
 class AddTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
-    private var _binding: FragmentAddTransactionBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentAddTransactionBinding by viewBinding()
     private val addEditTransactionViewModel: AddEditTransactionViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
 
@@ -49,73 +53,105 @@ class AddTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentAddTransactionBinding.bind(view)
 
-        val tabLayout = binding.tabLayout
-        val viewPager = binding.viewPager
+        setupTopBar()
+        setupButton()
+        setupViewPagerAdapter()
+        setupEventListener()
+    }
 
-        viewPager.adapter = AddTransactionPagerAdapter(this)
-
+    private fun setupTopBar() {
         binding.topAppBar.apply {
             setNavigationIcon(R.drawable.ic_baseline_close_24)
             setNavigationOnClickListener {
                 hideKeyboard()
-//                findNavController().navigateUp()
+    //                findNavController().navigateUp()
                 requireActivity().onBackPressed()
             }
             title = "Add Transaction"
         }
+    }
 
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = getTabTitle(position)
-        }.attach()
-
+    private fun setupButton() {
         binding.buttonSave.setOnClickListener {
             currentPage?.onButtonAddClick()
         }
-        setupEventListener()
+    }
+
+    private fun setupViewPagerAdapter() {
+        binding.apply {
+            viewPager.adapter = AddTransactionPagerAdapter(this@AddTransactionFragment)
+            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                tab.text = getTabTitle(position)
+            }.attach()
+        }
+        addEditTransactionViewModel.quickTransaction?.let {
+            binding.viewPager.post {
+                binding.viewPager.setCurrentItem(it.transactionType - 1, false)
+            }
+        }
     }
 
     private fun setupEventListener() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            addEditTransactionViewModel.addEditTransactionEvent.collect { event: AddEditTransactionViewModel.AddEditTransactionEvent ->
-                when (event) {
-                    is AddEditTransactionViewModel.AddEditTransactionEvent.NavigateBackWithAddResult -> {
-                        if (event.result > 0L) {
-                            mainViewModel.showSnackbar("Transaction added", Snackbar.LENGTH_SHORT)
-                        } else {
-                            mainViewModel.showSnackbar("Transaction add failed", Snackbar.LENGTH_SHORT)
-                        }
-                        hideKeyboard()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                addEditTransactionViewModel.addEditTransactionEvent.collect { event: AddEditTransactionViewModel.AddEditTransactionEvent ->
+                    when (event) {
+                        is AddEditTransactionViewModel.AddEditTransactionEvent.NavigateBackWithAddResult -> {
+                            if (event.result > 0L) {
+                                mainViewModel.showSnackbar(
+                                    "Transaction added",
+                                    Snackbar.LENGTH_SHORT
+                                )
+                            } else {
+                                mainViewModel.showSnackbar(
+                                    "Transaction add failed",
+                                    Snackbar.LENGTH_SHORT
+                                )
+                            }
+                            hideKeyboard()
 //                        findNavController().navigateUp()
-                        requireActivity().onBackPressed()
-                    }
-                    is AddEditTransactionViewModel.AddEditTransactionEvent.NavigateBackWithDeleteResult -> {
-                        if (event.result == 1) {
-                            mainViewModel.showSnackbar("Transaction deleted", Snackbar.LENGTH_SHORT)
-                        } else {
-                            mainViewModel.showSnackbar("Transaction delete failed", Snackbar.LENGTH_SHORT)
+                            requireActivity().onBackPressed()
                         }
-                        hideKeyboard()
+                        is AddEditTransactionViewModel.AddEditTransactionEvent.NavigateBackWithDeleteResult -> {
+                            if (event.result == 1) {
+                                mainViewModel.showSnackbar(
+                                    "Transaction deleted",
+                                    Snackbar.LENGTH_SHORT
+                                )
+                            } else {
+                                mainViewModel.showSnackbar(
+                                    "Transaction delete failed",
+                                    Snackbar.LENGTH_SHORT
+                                )
+                            }
+                            hideKeyboard()
 //                        findNavController().navigateUp()
-                        requireActivity().onBackPressed()
-                    }
-                    is AddEditTransactionViewModel.AddEditTransactionEvent.NavigateBackWithEditResult -> {
-                        if (event.result == 1) {
-                            mainViewModel.showSnackbar("Transaction updated", Snackbar.LENGTH_SHORT)
-                        } else {
-                            mainViewModel.showSnackbar("Transaction update failed", Snackbar.LENGTH_SHORT)
+                            requireActivity().onBackPressed()
                         }
-                        hideKeyboard()
+                        is AddEditTransactionViewModel.AddEditTransactionEvent.NavigateBackWithEditResult -> {
+                            if (event.result == 1) {
+                                mainViewModel.showSnackbar(
+                                    "Transaction updated",
+                                    Snackbar.LENGTH_SHORT
+                                )
+                            } else {
+                                mainViewModel.showSnackbar(
+                                    "Transaction update failed",
+                                    Snackbar.LENGTH_SHORT
+                                )
+                            }
+                            hideKeyboard()
 //                        findNavController().navigateUp()
-                        requireActivity().onBackPressed()
-                    }
-                    is AddEditTransactionViewModel.AddEditTransactionEvent.ShowSnackbar -> {
-                        Snackbar.make(requireView(), event.msg, event.length)
-                            .setAnchorView(binding.buttonSave)
-                            .show()
-                    }
-                }.exhaustive
+                            requireActivity().onBackPressed()
+                        }
+                        is AddEditTransactionViewModel.AddEditTransactionEvent.ShowSnackbar -> {
+                            Snackbar.make(requireView(), event.msg, event.length)
+                                .setAnchorView(binding.buttonSave)
+                                .show()
+                        }
+                    }.exhaustive
+                }
             }
         }
     }
@@ -133,10 +169,5 @@ class AddTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
     // to set the ref to current page
     fun setCurrentPage(page: AddTransactionChild) {
         _currentPage = WeakReference(page)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

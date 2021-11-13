@@ -52,15 +52,12 @@
                     android:id="@+id/button_add_budget"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="14dp"
-                    android:background="@android:color/transparent"
+                    android:layout_marginEnd="8dp"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
-                    android:padding="0dp"
+                    android:padding="8dp"
                     app:icon="@drawable/ic_round_add_24"
                     app:iconPadding="0dp"
-                    app:iconSize="32dp"
-                    app:iconTint="?colorOnSurface"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/button_budgeting" />
 
@@ -75,6 +72,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/button_budgeting">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -84,8 +82,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="4dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:text="Monthly Budget"
                         app:layout_constraintEnd_toStartOf="@+id/text_view_budgeted"
                         app:layout_constraintStart_toStartOf="parent"
@@ -151,8 +149,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="4dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:text="Yearly Budget"
                         app:layout_constraintEnd_toStartOf="@+id/text_view_budgeted2"
                         app:layout_constraintStart_toStartOf="parent"

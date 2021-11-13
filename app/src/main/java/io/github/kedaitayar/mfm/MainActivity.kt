@@ -17,6 +17,26 @@ class MainActivity : AppCompatActivity() {
 //        setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+//        runBlocking {
+//            mainActivityViewModel.insert(
+//                QuickTransaction(
+//                    quickTransactionName = "lunch",
+//                    transactionAmount = 10.0,
+//                    transactionType = 1,
+//                    transactionAccountId = 1,
+//                    transactionBudgetId = 1
+//                )
+//            )
+//            mainActivityViewModel.insert(
+//                QuickTransaction(
+//                    quickTransactionName = "toll",
+//                    transactionAmount = 2.0,
+//                    transactionType = 1,
+//                    transactionAccountId = 4,
+//                    transactionBudgetId = 17
+//                )
+//            )
+//        }
 //        initialData()
 //        testData()
 //        testData2()
@@ -2396,7 +2416,16 @@ class MainActivity : AppCompatActivity() {
             val transaction1 = Transaction(
                 transactionId = 1,
                 transactionAmount = 1000.0,
-                transactionTime = OffsetDateTime.of(now.year, now.monthValue - 1, 1, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
+                transactionTime = OffsetDateTime.of(
+                    now.year,
+                    now.monthValue - 1,
+                    1,
+                    0,
+                    1,
+                    0,
+                    0,
+                    ZoneOffset.ofTotalSeconds(0)
+                ),
                 transactionType = 2,
                 transactionAccountId = 1,
                 transactionBudgetId = null,
@@ -2406,7 +2435,16 @@ class MainActivity : AppCompatActivity() {
             val transaction2 = Transaction(
                 transactionId = 2,
                 transactionAmount = 200.0,
-                transactionTime = OffsetDateTime.of(now.year, now.monthValue - 1, 2, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
+                transactionTime = OffsetDateTime.of(
+                    now.year,
+                    now.monthValue - 1,
+                    2,
+                    0,
+                    1,
+                    0,
+                    0,
+                    ZoneOffset.ofTotalSeconds(0)
+                ),
                 transactionType = 3,
                 transactionAccountId = 1,
                 transactionBudgetId = null,
@@ -2416,7 +2454,16 @@ class MainActivity : AppCompatActivity() {
             val transaction3 = Transaction(
                 transactionId = 3,
                 transactionAmount = 5.0,
-                transactionTime = OffsetDateTime.of(now.year, now.monthValue - 1, 3, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
+                transactionTime = OffsetDateTime.of(
+                    now.year,
+                    now.monthValue - 1,
+                    3,
+                    0,
+                    1,
+                    0,
+                    0,
+                    ZoneOffset.ofTotalSeconds(0)
+                ),
                 transactionType = 1,
                 transactionAccountId = 1,
                 transactionBudgetId = 1,
@@ -2425,7 +2472,16 @@ class MainActivity : AppCompatActivity() {
             val transaction4 = Transaction(
                 transactionId = 4,
                 transactionAmount = 30.0,
-                transactionTime = OffsetDateTime.of(now.year, now.monthValue - 1, 4, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
+                transactionTime = OffsetDateTime.of(
+                    now.year,
+                    now.monthValue - 1,
+                    4,
+                    0,
+                    1,
+                    0,
+                    0,
+                    ZoneOffset.ofTotalSeconds(0)
+                ),
                 transactionType = 1,
                 transactionAccountId = 1,
                 transactionBudgetId = 2,
@@ -2434,7 +2490,16 @@ class MainActivity : AppCompatActivity() {
             val transaction5 = Transaction(
                 transactionId = 5,
                 transactionAmount = 50.0,
-                transactionTime = OffsetDateTime.of(now.year, now.monthValue - 1, 4, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
+                transactionTime = OffsetDateTime.of(
+                    now.year,
+                    now.monthValue - 1,
+                    4,
+                    0,
+                    1,
+                    0,
+                    0,
+                    ZoneOffset.ofTotalSeconds(0)
+                ),
                 transactionType = 1,
                 transactionAccountId = 1,
                 transactionBudgetId = 3,
@@ -2443,7 +2508,16 @@ class MainActivity : AppCompatActivity() {
             val transaction6 = Transaction(
                 transactionId = 6,
                 transactionAmount = 15.0,
-                transactionTime = OffsetDateTime.of(now.year, now.monthValue, 3, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
+                transactionTime = OffsetDateTime.of(
+                    now.year,
+                    now.monthValue,
+                    3,
+                    0,
+                    1,
+                    0,
+                    0,
+                    ZoneOffset.ofTotalSeconds(0)
+                ),
                 transactionType = 1,
                 transactionAccountId = 1,
                 transactionBudgetId = 1,
@@ -2452,7 +2526,16 @@ class MainActivity : AppCompatActivity() {
             val transaction7 = Transaction(
                 transactionId = 7,
                 transactionAmount = 40.0,
-                transactionTime = OffsetDateTime.of(now.year, now.monthValue, 4, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
+                transactionTime = OffsetDateTime.of(
+                    now.year,
+                    now.monthValue,
+                    4,
+                    0,
+                    1,
+                    0,
+                    0,
+                    ZoneOffset.ofTotalSeconds(0)
+                ),
                 transactionType = 1,
                 transactionAccountId = 1,
                 transactionBudgetId = 2,
@@ -2461,7 +2544,16 @@ class MainActivity : AppCompatActivity() {
             val transaction8 = Transaction(
                 transactionId = 8,
                 transactionAmount = 50.0,
-                transactionTime = OffsetDateTime.of(now.year, now.monthValue, 5, 0, 1, 0, 0, ZoneOffset.ofTotalSeconds(0)),
+                transactionTime = OffsetDateTime.of(
+                    now.year,
+                    now.monthValue,
+                    5,
+                    0,
+                    1,
+                    0,
+                    0,
+                    ZoneOffset.ofTotalSeconds(0)
+                ),
                 transactionType = 1,
                 transactionAccountId = 1,
                 transactionBudgetId = 5,

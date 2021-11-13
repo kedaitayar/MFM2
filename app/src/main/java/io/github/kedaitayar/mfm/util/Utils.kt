@@ -38,7 +38,7 @@ fun Context.themeColor(
     }
 }
 
-fun Double.toCurrency(context: Context): String {
+fun Double.toCurrency(context: Context, symbol: Boolean = true): String {
     val resources = context.resources
     val format = DecimalFormatSymbols().apply {
         groupingSeparator = ' '
@@ -46,7 +46,8 @@ fun Double.toCurrency(context: Context): String {
     val formatter = DecimalFormat(resources.getString(R.string.currency_format)).apply {
         decimalFormatSymbols = format
     }
-    return resources.getString(R.string.currency_symbol, formatter.format(this))
+    if (symbol) return resources.getString(R.string.currency_symbol, formatter.format(this))
+    return formatter.format(this)
 }
 
 fun View.dpToPx(dp: Float): Int = context.dpToPx(dp)

@@ -6,10 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import io.github.kedaitayar.mfm.data.dao.AccountDao
-import io.github.kedaitayar.mfm.data.dao.BasicDao
-import io.github.kedaitayar.mfm.data.dao.BudgetDao
-import io.github.kedaitayar.mfm.data.dao.TransactionDao
+import io.github.kedaitayar.mfm.data.dao.*
 import io.github.kedaitayar.mfm.data.database.MFMDatabase
 import io.github.kedaitayar.mfm.data.repository.SelectedDateRepository
 import javax.inject.Singleton
@@ -42,6 +39,11 @@ class RoomModule {
     @Provides
     fun provideBasicDao(mfmDatabase: MFMDatabase): BasicDao {
         return mfmDatabase.basicDao()
+    }
+
+    @Provides
+    fun provideQuickTransactionDao(mfmDatabase: MFMDatabase): QuickTransactionDao {
+        return mfmDatabase.quickTransactionDao()
     }
 
     @Singleton

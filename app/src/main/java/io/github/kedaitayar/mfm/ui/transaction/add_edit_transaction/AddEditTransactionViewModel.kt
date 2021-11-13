@@ -6,6 +6,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.kedaitayar.mfm.data.entity.QuickTransaction
 import io.github.kedaitayar.mfm.data.entity.Transaction
 import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
@@ -24,6 +25,7 @@ constructor(
     private val transactionRepository: TransactionRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    val quickTransaction = savedStateHandle.get<QuickTransaction>("quickTransaction")
     var inputAccountFrom: AccountListAdapterData? = null
     var inputBudget: BudgetListAdapterData? = null
     var inputAccountTo: AccountListAdapterData? = null
@@ -31,8 +33,6 @@ constructor(
     val inputDate = MutableStateFlow(OffsetDateTime.now())
     var inputNote: String = ""
 
-
-    //    private val now = OffsetDateTime.now()
     private val addEditTransactionEventChannel = Channel<AddEditTransactionEvent>()
     val addEditTransactionEvent = addEditTransactionEventChannel.receiveAsFlow()
 
@@ -52,14 +52,29 @@ constructor(
         }.asLiveData()
 
     val accountFrom = allAccountFlow.map { value: List<AccountListAdapterData> ->
-        value.find { accountListAdapterData -> accountListAdapterData.accountId == transaction!!.transactionAccountId }
+        if (transaction != null) {
+            return@map value.find { accountListAdapterData -> accountListAdapterData.accountId == transaction.transactionAccountId }
+        } else if (quickTransaction != null) {
+            return@map value.find { accountListAdapterData -> accountListAdapterData.accountId == quickTransaction.transactionAccountId }
+        }
+        return@map null
     }.asLiveData()
     val budget = monthlyBudgetFlow.combine(yearlyBudgetFlow) { monthly, yearly ->
         val budget = monthly + yearly
-        budget.find { budgetListAdapterData -> budgetListAdapterData.budgetId == transaction!!.transactionBudgetId }
+        if (transaction != null) {
+            return@combine budget.find { budgetListAdapterData -> budgetListAdapterData.budgetId == transaction.transactionBudgetId }
+        } else if (quickTransaction != null) {
+            return@combine budget.find { budgetListAdapterData -> budgetListAdapterData.budgetId == quickTransaction.transactionBudgetId }
+        }
+        return@combine null
     }.asLiveData()
     val accountTo = allAccountFlow.map { value: List<AccountListAdapterData> ->
-        value.find { accountListAdapterData -> accountListAdapterData.accountId == transaction!!.transactionAccountTransferTo }
+        if (transaction != null) {
+            return@map value.find { accountListAdapterData -> accountListAdapterData.accountId == transaction.transactionAccountTransferTo }
+        } else if (quickTransaction != null) {
+            return@map value.find { accountListAdapterData -> accountListAdapterData.accountId == quickTransaction.transactionAccountTransferTo }
+        }
+        return@map null
     }.asLiveData()
 
     fun onButtonSaveClick(transactionType: TransactionType) {
@@ -348,8 +363,13 @@ constructor(
     fun onDeleteClick() {
         viewModelScope.launch {
             if (transaction != null) {
-                val result = transactionRepository.delete(Transaction(transactionId = transaction.transactionId))
-                addEditTransactionEventChannel.send(AddEditTransactionEvent.NavigateBackWithDeleteResult(result))
+                val result =
+                    transactionRepository.delete(Transaction(transactionId = transaction.transactionId))
+                addEditTransactionEventChannel.send(
+                    AddEditTransactionEvent.NavigateBackWithDeleteResult(
+                        result
+                    )
+                )
             }
         }
     }

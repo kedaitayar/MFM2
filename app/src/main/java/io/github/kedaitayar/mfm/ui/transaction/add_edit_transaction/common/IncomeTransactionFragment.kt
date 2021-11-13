@@ -41,7 +41,7 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
         setupDateInput()
         setupInputListener()
 
-        if (addEditTransactionViewModel.transaction != null) {
+        if (addEditTransactionViewModel.transaction != null || addEditTransactionViewModel.quickTransaction != null) {
             setupEditTransactionValue()
         }
     }
@@ -93,6 +93,10 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
             addEditTransactionViewModel.inputAmount = it
             binding.textInputEditAmount.setText(it.toString())
         }
+        addEditTransactionViewModel.quickTransaction?.transactionAmount?.let {
+            addEditTransactionViewModel.inputAmount = it
+            binding.textInputEditAmount.setText(it.toString())
+        }
         addEditTransactionViewModel.transaction?.transactionNote?.let {
             addEditTransactionViewModel.inputNote = it
             binding.textInputEditNote.setText(it)
@@ -121,6 +125,12 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
         super.onResume()
         if (parentFragment is AddTransactionFragment) {
             (parentFragment as AddTransactionFragment).setCurrentPage(this)
+        }
+        binding.apply {
+            addEditTransactionViewModel.inputAccountFrom?.let {
+                autoCompleteAccount.setText(it.accountName, false)
+            }
+            textInputEditAmount.setText(addEditTransactionViewModel.inputAmount?.toString())
         }
     }
 

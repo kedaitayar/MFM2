@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ebner.roomdatabasebackup.core.RoomBackup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -13,7 +14,9 @@ import io.github.kedaitayar.mfm.MainActivity
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.database.MFMDatabase
 import io.github.kedaitayar.mfm.databinding.FragmentSettingBinding
+import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.ui.main.MainViewModel
+import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import timber.log.Timber
 
 class SettingFragment : Fragment(R.layout.fragment_setting) {
@@ -21,6 +24,38 @@ class SettingFragment : Fragment(R.layout.fragment_setting) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupTopbar()
+        backupSetup()
+        restoreSetup()
+        setupQuickTransaction()
+    }
+
+    private fun setupTopbar() {
+        binding.topAppBar.apply {
+            setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+            setNavigationOnClickListener {
+                hideKeyboard()
+                requireActivity().onBackPressed()
+            }
+            title = "Setting"
+        }
+    }
+
+    private fun setupQuickTransaction() {
+        binding.quickTransaction.setOnClickListener {
+            val action = SettingFragmentDirections.actionSettingFragmentToQuickTransactionMainFragment()
+            findNavController().navigate(action)
+        }
+    }
+
+    private fun restoreSetup() {
+        binding.restore.setOnClickListener {
+            restore()
+        }
+    }
+
+    private fun backupSetup() {
         binding.backup.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Backup")
@@ -36,10 +71,6 @@ class SettingFragment : Fragment(R.layout.fragment_setting) {
                     backup()
                 }
                 .show()
-        }
-
-        binding.restore.setOnClickListener {
-            restore()
         }
     }
 

@@ -85,4 +85,16 @@ class BasicRepository @Inject constructor(
         return basicDao.update(transactionType)
     }
 
+    suspend fun insert(quickTransaction: QuickTransaction): Long {
+        return basicDao.insert(quickTransaction)
+    }
+
+    suspend fun delete(quickTransaction: QuickTransaction): Int {
+        return basicDao.delete(quickTransaction)
+    }
+
+    suspend fun update(quickTransaction: QuickTransaction): Int {
+        return basicDao.update(quickTransaction)
+    }
+
 }

@@ -160,4 +160,17 @@ interface BasicDao {
     @Delete
     suspend fun delete(transactionType: TransactionType): Int
 
+    //quick transaction
+    @Query("SELECT * FROM `quicktransaction`")
+    fun getAllQuickTransaction(): Flow<List<QuickTransaction>>
+
+    @Insert
+    suspend fun insert(quickTransaction: QuickTransaction): Long
+
+    @Update
+    suspend fun update(quickTransaction: QuickTransaction): Int
+
+    @Delete
+    suspend fun delete(quickTransaction: QuickTransaction): Int
+
 }

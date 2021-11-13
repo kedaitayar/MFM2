@@ -26,5 +26,12 @@
         <item name="greenOnSurface">@color/greenOnSurfaceLight</item>
         <item name="yellowOnSurface">@color/yellowOnSurfaceLight</item>
         <item name="redOnSurface">@color/redOnSurfaceLight</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MFM.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MFM.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MFM.LargeComponent</item>
+        <item name="floatingActionButtonStyle">@style/FloatingActionButtonStyle</item>
+    </style>
+    <style name="FloatingActionButtonStyle" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MFM.FloatingActionButton</item>
     </style>
 </resources>

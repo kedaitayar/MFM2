@@ -12,7 +12,20 @@ interface TransactionDao {
 
     @Query(
         """
-        SELECT *, account.accountName AS transactionAccountName, budget.budgetName AS transactionBudgetName, account2.accountName AS transactionAccountTransferToName, transactionType.transactionTypeName as transactionTypeName
+        SELECT 
+            transactionId,
+            transactionAmount,
+            transactionTime,
+            transactionTypeId,
+            transactionTypeName,
+            transactionAccountId,
+            account.accountName AS transactionAccountName,
+            transactionBudgetId,
+            budget.budgetName AS transactionBudgetName,
+            transactionAccountTransferTo,
+            account2.accountName AS transactionAccountTransferToName, 
+            transactionType.transactionTypeName as transactionTypeName,
+            transactionNote
         FROM `transaction`
         LEFT JOIN account ON transactionAccountId = account.accountId
         LEFT JOIN budget ON transactionBudgetId = budget.budgetId
