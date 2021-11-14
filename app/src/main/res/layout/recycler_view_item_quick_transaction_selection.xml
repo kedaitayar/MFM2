@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="0dp"
@@ -17,10 +18,10 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="16dp"
             android:paddingVertical="16dp"
-            android:text="quick transaction"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/image_view_transaction_type"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="quick transaction" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_view_transaction_type"
@@ -30,7 +31,8 @@
             android:src="@drawable/ic_wallet_out_24"
             app:layout_constraintBottom_toBottomOf="@+id/text_view_quick_transaction_name"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/text_view_quick_transaction_name" />
+            app:layout_constraintTop_toTopOf="@+id/text_view_quick_transaction_name"
+            app:tint="?attr/colorOnSurface" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

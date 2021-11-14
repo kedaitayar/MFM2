@@ -162,3 +162,4 @@ fabric.properties
 # End of https://www.toptal.com/developers/gitignore/api/androidstudio
 /ui design/
 /db file/test db/mfm_db-2021-08-07-06 40 03.sqlite3
+/db file/
