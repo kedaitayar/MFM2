@@ -51,15 +51,20 @@ class TransactionTrendGraphFragment : Fragment(R.layout.fragment_transaction_tre
             setDrawGridBackground(false)
             legend.isEnabled = false
             xAxis.position = XAxis.XAxisPosition.BOTH_SIDED
+            xAxis.setDrawGridLines(false)
             val typedValue = TypedValue()
             requireContext().theme.resolveAttribute(R.attr.colorOnSurface, typedValue, true)
             val colorOnSurface = ContextCompat.getColor(requireContext(), typedValue.resourceId)
             xAxis.textColor = colorOnSurface
             xAxis.valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
-                    return "week ${value.toInt()}"
+                    if (value == 50f) {
+                        return "now"
+                    }
+                    return "weeks ${50 - value.toInt()} ago"
                 }
             }
+            xAxis.labelRotationAngle = 16f
             extraBottomOffset = 5f
             extraTopOffset = 5f
             axisLeft.setDrawGridLines(false)

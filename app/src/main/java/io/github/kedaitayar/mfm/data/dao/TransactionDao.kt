@@ -37,17 +37,20 @@ interface TransactionDao {
     fun getTransactionListData(): PagingSource<Int, TransactionListAdapterData>
 //    fun getTransactionListData(): Flow<List<TransactionListAdapterData>>
 
-    @Query("""
+    @Query(
+        """
         SELECT
             STRFTIME('%W', transactionTime) AS transactionWeek,
             Sum(transactionAmount) AS transactionAmount,
             0 AS transactionAmountPrevYear,
-            transactionType 
+            transactionType,
+            CAST((JulianDay("now") - JulianDay(transactionTime))/7 As Integer) AS transactionAgeInWeek
         FROM
             `transaction` 
         WHERE
             transactionType != 3 
-            AND STRFTIME('%Y', transactionTime) = :year
+            --AND STRFTIME('%Y', transactionTime) = :year
+            AND transactionTime > DATE('now', '-1 years')
         GROUP BY
             STRFTIME('%W', transactionTime),
             transactionType 
@@ -56,26 +59,32 @@ interface TransactionDao {
             '-1' AS transactionWeek,
             0 AS transactionAmount,
             Sum(transactionAmount) AS transactionAmountPrevYear,
-            transactionType 
+            transactionType,
+            '-1' AS transactionAgeInWeek
         FROM
             (
                 SELECT
                     STRFTIME('%W', transactionTime) AS transactionWeek,
                     Sum(transactionAmount) AS transactionAmount,
-                    transactionType 
+                    transactionType,
+                    transactionTime
                 FROM
                     `transaction` 
                 WHERE
                     transactionType != 3 
-                    AND STRFTIME('%Y', transactionTime) < :year
+                    --AND STRFTIME('%Y', transactionTime) < :year
+                    AND transactionTime < DATE('now', '-2 years')
                 GROUP BY
                     STRFTIME('%W', transactionTime),
                     transactionType 
-                ORDER BY
-                    STRFTIME('%W', transactionTime) 
+                --ORDER BY
+                    --STRFTIME('%W', transactionTime) 
             )
         GROUP BY
             transactionType
-    """)
-    fun getTransactionGraphData(year: String): Flow<List<TransactionGraphData>> // year as string is because of the STRFTIME function return string
+        ORDER BY
+            transactionAgeInWeek
+    """
+    )
+    fun getTransactionGraphData(): Flow<List<TransactionGraphData>> // year as string is because of the STRFTIME function return string
 }

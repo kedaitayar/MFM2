@@ -95,8 +95,8 @@ class TransactionRepository @Inject constructor(
         return basicDao.getBudgetByIdFlow(budgetId)
     }
 
-    fun getTransactionGraphData(year: String): Flow<List<TransactionGraphData>> {
-        return transactionDao.getTransactionGraphData(year)
+    fun getTransactionGraphData(): Flow<List<TransactionGraphData>> {
+        return transactionDao.getTransactionGraphData()
     }
 
     // transactionType

@@ -1,6 +1,8 @@
 package io.github.kedaitayar.mfm.ui.dashboard.transaction_trend_graph
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.kedaitayar.mfm.data.podata.TransactionGraphData
@@ -12,16 +14,14 @@ import java.time.OffsetDateTime
 import java.time.temporal.WeekFields
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.set
 
 @HiltViewModel
 class TransactionTrendGraphViewModel @Inject constructor(
-    private val transactionRepository: TransactionRepository
+    transactionRepository: TransactionRepository
 ) : ViewModel() {
-    private val now = OffsetDateTime.now()
-    private val weekField = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()
-    private val weekNow = now.get(weekField)
     private val transactionYearlyTrendGraphFlow: Flow<List<TransactionGraphData>> =
-        transactionRepository.getTransactionGraphData(now.year.toString())
+        transactionRepository.getTransactionGraphData()
     val transactionGraphCombinedData = MutableLiveData<CombinedData>()
     var green = 0
     var red = 0
@@ -42,30 +42,28 @@ class TransactionTrendGraphViewModel @Inject constructor(
                 for (item in it) {
                     when (item.transactionType) {
                         1 -> {
-                            dataMapExpense[item.transactionWeek] = item
+                            dataMapExpense[item.transactionAgeInWeek] = item
                         }
                         2 -> {
-                            dataMapIncome[item.transactionWeek] = item
+                            dataMapIncome[item.transactionAgeInWeek] = item
                         }
                     }
                 }
                 total = (dataMapIncome[-1]?.transactionAmountPrevYear
                     ?: 0.0) - (dataMapExpense[-1]?.transactionAmountPrevYear ?: 0.0)
 
-                for (week in 1 until 53) {
+                for (week in 0 until 53) {
                     val barEntry = BarEntry(
-                        week.toFloat(),
+                        (week + 1).toFloat(),
                         floatArrayOf(
-                            dataMapIncome[week]?.transactionAmount?.toFloat() ?: 0f,
-                            -(dataMapExpense[week]?.transactionAmount?.toFloat() ?: 0f)
+                            dataMapIncome[53 - week]?.transactionAmount?.toFloat() ?: 0f,
+                            -(dataMapExpense[53 - week]?.transactionAmount?.toFloat() ?: 0f)
                         )
                     )
                     barEntries.add(barEntry)
-                    total = total + (dataMapIncome[week]?.transactionAmount
-                        ?: 0.0) - (dataMapExpense[week]?.transactionAmount ?: 0.0)
-                    if (week <= weekNow) {
-                        lineEntries.add(Entry(week.toFloat(), total.toFloat()))
-                    }
+                    total = total + (dataMapIncome[53 - week]?.transactionAmount
+                        ?: 0.0) - (dataMapExpense[53 - week]?.transactionAmount ?: 0.0)
+                    lineEntries.add(Entry((week).toFloat(), total.toFloat()))
                 }
 
                 val barDataSet = BarDataSet(barEntries, "bardataset label")
@@ -79,11 +77,10 @@ class TransactionTrendGraphViewModel @Inject constructor(
                 val lineDataSet = LineDataSet(lineEntries, "line label")
                 lineDataSet.apply {
                     setDrawValues(false)
-                    mode = LineDataSet.Mode.LINEAR
+                    mode = LineDataSet.Mode.HORIZONTAL_BEZIER
                     color = colorOnSurface
-                    setCircleColor(colorOnSurface)
                     lineWidth = 2f
-                    circleRadius = 2f
+                    setDrawCircles(false)
                 }
                 val lineData = LineData(lineDataSet)
 
