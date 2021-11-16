@@ -52,18 +52,24 @@ class TransactionTrendGraphViewModel @Inject constructor(
                 total = (dataMapIncome[-1]?.transactionAmountPrevYear
                     ?: 0.0) - (dataMapExpense[-1]?.transactionAmountPrevYear ?: 0.0)
 
+                val tempLineData = mutableListOf<Float>()
+
                 for (week in 0 until 53) {
                     val barEntry = BarEntry(
-                        (week + 1).toFloat(),
+                        week.toFloat(),
                         floatArrayOf(
-                            dataMapIncome[53 - week]?.transactionAmount?.toFloat() ?: 0f,
-                            -(dataMapExpense[53 - week]?.transactionAmount?.toFloat() ?: 0f)
+                            dataMapIncome[week]?.transactionAmount?.toFloat() ?: 0f,
+                            -(dataMapExpense[week]?.transactionAmount?.toFloat() ?: 0f)
                         )
                     )
                     barEntries.add(barEntry)
                     total = total + (dataMapIncome[53 - week]?.transactionAmount
                         ?: 0.0) - (dataMapExpense[53 - week]?.transactionAmount ?: 0.0)
-                    lineEntries.add(Entry((week).toFloat(), total.toFloat()))
+                    tempLineData.add(total.toFloat())
+                }
+
+                tempLineData.reversed().forEachIndexed { index, fl ->
+                    lineEntries.add(Entry((index + 1).toFloat(), fl))
                 }
 
                 val barDataSet = BarDataSet(barEntries, "bardataset label")
