@@ -3,6 +3,7 @@ package io.github.kedaitayar.mfm.data.dao
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
+import io.github.kedaitayar.mfm.data.podata.MonthlySpendingData
 import io.github.kedaitayar.mfm.data.podata.TransactionGraphData
 import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData
 import kotlinx.coroutines.flow.Flow
@@ -87,4 +88,16 @@ interface TransactionDao {
     """
     )
     fun getTransactionGraphData(): Flow<List<TransactionGraphData>> // year as string is because of the STRFTIME function return string
+
+    @Query(
+        """
+        SELECT SUM(transactionAmount) as monthSpending , strftime('%Y-%m-%dT%H:%M:%SZ',transactionTime, 'start of month') as month
+        FROM `transaction` 
+        WHERE transactionType = 1 
+            AND transactionTime > DATE('now', '-1 years')
+        GROUP BY STRFTIME('%Y-%m', transactionTime)
+        ORDER BY transactionTime DESC
+    """
+    )
+    fun getMonthlySpendingGraphData(): Flow<List<MonthlySpendingData>>
 }

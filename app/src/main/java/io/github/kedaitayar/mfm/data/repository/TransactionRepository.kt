@@ -12,10 +12,7 @@ import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.entity.Budget
 import io.github.kedaitayar.mfm.data.entity.Transaction
 import io.github.kedaitayar.mfm.data.entity.TransactionType
-import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
-import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
-import io.github.kedaitayar.mfm.data.podata.TransactionGraphData
-import io.github.kedaitayar.mfm.data.podata.TransactionListAdapterData
+import io.github.kedaitayar.mfm.data.podata.*
 import kotlinx.coroutines.flow.Flow
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -97,6 +94,10 @@ class TransactionRepository @Inject constructor(
 
     fun getTransactionGraphData(): Flow<List<TransactionGraphData>> {
         return transactionDao.getTransactionGraphData()
+    }
+
+    fun getMonthlySpendingGraphData(): Flow<List<MonthlySpendingData>> {
+        return transactionDao.getMonthlySpendingGraphData()
     }
 
     // transactionType

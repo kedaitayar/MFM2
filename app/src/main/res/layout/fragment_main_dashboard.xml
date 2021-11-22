@@ -25,6 +25,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragment_container_monthly_spending"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
