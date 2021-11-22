@@ -43,14 +43,6 @@ class MonthlySpendingFragment : Fragment(R.layout.fragment_monthly_spending) {
                             true
                         )
                         barDataSet.color = typedValue.data
-                        barDataSet.valueTextSize = 10f
-                        val barData = BarData(barDataSet)
-                        setTouchEnabled(false)
-                        description.isEnabled = false
-                        setDrawGridBackground(false)
-                        legend.isEnabled = false
-                        xAxis.position = XAxis.XAxisPosition.BOTH_SIDED
-                        xAxis.setDrawGridLines(false)
                         requireContext().theme.resolveAttribute(
                             R.attr.colorOnSurface,
                             typedValue,
@@ -58,6 +50,15 @@ class MonthlySpendingFragment : Fragment(R.layout.fragment_monthly_spending) {
                         )
                         val colorOnSurface =
                             ContextCompat.getColor(requireContext(), typedValue.resourceId)
+                        barDataSet.valueTextSize = 10f
+                        barDataSet.valueTextColor = colorOnSurface
+                        val barData = BarData(barDataSet)
+                        setTouchEnabled(false)
+                        description.isEnabled = false
+                        setDrawGridBackground(false)
+                        legend.isEnabled = false
+                        xAxis.position = XAxis.XAxisPosition.BOTH_SIDED
+                        xAxis.setDrawGridLines(false)
                         xAxis.textColor = colorOnSurface
                         val monthsMap = mutableMapOf<Int, String>(
                             1 to "Jan",
