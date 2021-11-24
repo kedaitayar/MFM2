@@ -12,7 +12,11 @@ import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
-class BudgetListArrayAdapter(context: Context, resource: Int, private val objects: List<BudgetListAdapterData>) :
+class BudgetListArrayAdapter(
+    context: Context,
+    resource: Int,
+    private val objects: List<BudgetListAdapterData>
+) :
     ArrayAdapter<BudgetListAdapterData>(context, resource, objects) {
     val format = DecimalFormatSymbols().apply {
         groupingSeparator = ' '
@@ -27,13 +31,39 @@ class BudgetListArrayAdapter(context: Context, resource: Int, private val object
         val budget: BudgetListAdapterData? = getItem(position)
         val textView = currentItemView as TextView
         budget?.let {
-            val budgetAvailableBalance = budget.budgetAllocation - budget.budgetUsed
-            textView.text = "${budget.budgetName} (${
-                context.getString(
-                    R.string.currency_symbol,
-                    formatter.format(budgetAvailableBalance)
-                )
-            })"
+            when (it.budgetTypeId) {
+                1L -> {
+                    val availableBudget = it.budgetAllocation - it.budgetUsed
+                    textView.text =
+                        "${budget.budgetName} (${
+                            context.getString(
+                                R.string.currency_symbol,
+                                formatter.format(availableBudget)
+                            )
+                        })"
+                }
+                2L -> {
+                    val availableBudget =
+                        it.budgetAllocation + it.budgetTotalPrevAllocation - it.budgetUsed
+                    textView.text =
+                        "${budget.budgetName} (${
+                            context.getString(
+                                R.string.currency_symbol,
+                                formatter.format(availableBudget)
+                            )
+                        })"
+                }
+            }
+//            var budgetAvailableBalance = budget.budgetAllocation - budget.budgetUsed
+//            if (it.budgetTypeId == 2L) {
+//                budgetAvailableBalance += it.budgetTotalPrevAllocation
+//            }
+//            textView.text = "${budget.budgetName} (${
+//                context.getString(
+//                    R.string.currency_symbol,
+//                    formatter.format(budgetAvailableBalance)
+//                )
+//            })"
         }
         return currentItemView
     }

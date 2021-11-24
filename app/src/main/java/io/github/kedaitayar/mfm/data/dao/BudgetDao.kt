@@ -150,7 +150,7 @@ interface BudgetDao {
                     0 AS budgetUsed,
                     budgetTypeId,
                     budgetTypeName,
-                    0 AS budgetTotalPrevAllocation ,
+                    0 AS budgetTotalPrevAllocation,
                     budgetPosition
                 FROM
                     Budget 
