@@ -1,8 +1,6 @@
 package io.github.kedaitayar.mfm.ui.dashboard.account.main_account
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.kedaitayar.mfm.data.podata.BudgetedAndGoal
@@ -14,8 +12,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,11 +22,13 @@ class AccountDashboardViewModel @Inject constructor(
     val thisMonthSpending = getThisMonthSpendingData()
     val totalBudgetedAndGoal = getUncompletedBudget()
     val nextMonthBudgeted = getMonthBudgeted()
+    val thisMonthBudgeted = dashboardRepository.getThisMonthBudgetedAmount()
     private val totalIncome = dashboardRepository.getTotalIncome()
     private val totalBudgetedAmount = dashboardRepository.getTotalBudgetedAmount()
-    val notBudgetedAmount = combine(totalIncome, totalBudgetedAmount) { totalIncome, totalBudgetedAmount ->
-        totalIncome.notNull() - totalBudgetedAmount.notNull()
-    }
+    val notBudgetedAmount =
+        combine(totalIncome, totalBudgetedAmount) { totalIncome, totalBudgetedAmount ->
+            totalIncome.notNull() - totalBudgetedAmount.notNull()
+        }
     private val accountDashboardEventChannel = Channel<AccountDashboardEvent>()
     val accountDashboardEvent = accountDashboardEventChannel.receiveAsFlow()
 

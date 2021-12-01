@@ -253,7 +253,8 @@ interface AccountDao {
     )
     fun getUncompletedBudget(month: Int, year: Int): Flow<BudgetedAndGoal>
 
-    @Query("""
+    @Query(
+        """
         SELECT
             sum(transactionAmount) AS transactionAmount, 
             transactionType, 
@@ -269,6 +270,22 @@ interface AccountDao {
             AND transactionTime BETWEEN :timeFrom AND :timeTo
         GROUP BY transactionBudgetId
         ORDER BY transactionAmount DESC
-    """)
-    fun getAccountTransactionBudget(accountId: Long, timeFrom: OffsetDateTime, timeTo: OffsetDateTime): Flow<List<AccountTransactionBudgetData>>
+    """
+    )
+    fun getAccountTransactionBudget(
+        accountId: Long,
+        timeFrom: OffsetDateTime,
+        timeTo: OffsetDateTime
+    ): Flow<List<AccountTransactionBudgetData>>
+
+    @Query(
+        """
+        SELECT SUM(budgetTransactionAmount)
+        FROM budgettransaction
+        WHERE budgetTransactionMonth = strftime("%m", "now")
+            AND budgetTransactionYear = strftime("%Y", "now")
+        GROUP BY budgetTransactionMonth, budgetTransactionYear
+    """
+    )
+    fun getThisMonthBudgetedAmount(): Flow<Float>
 }

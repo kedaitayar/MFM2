@@ -3,8 +3,8 @@ package io.github.kedaitayar.mfm.data.repository
 import androidx.lifecycle.LiveData
 import io.github.kedaitayar.mfm.data.dao.AccountDao
 import io.github.kedaitayar.mfm.data.dao.BasicDao
-import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.data.entity.Account
+import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.data.podata.AccountTransactionBudgetData
 import io.github.kedaitayar.mfm.data.podata.AccountTransactionChartData
 import io.github.kedaitayar.mfm.data.podata.BudgetedAndGoal
@@ -60,6 +60,10 @@ class DashboardRepository @Inject constructor(
         return accountDao.getUncompletedBudget(month, year)
     }
 
+    fun getThisMonthBudgetedAmount(): Flow<Float> {
+        return accountDao.getThisMonthBudgetedAmount()
+    }
+
     fun getAccountTransactionBudget(
         accountId: Long,
         timeFrom: OffsetDateTime,
@@ -76,6 +80,11 @@ class DashboardRepository @Inject constructor(
         val timeFrom = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
         val timeTo = timeFrom.plusMonths(1).minusNanos(1)
         val timeToPrevMonth = timeFrom.minusNanos(1)
-        return accountDao.getAccountTransactionChartData(accountId, timeFrom, timeTo, timeToPrevMonth)
+        return accountDao.getAccountTransactionChartData(
+            accountId,
+            timeFrom,
+            timeTo,
+            timeToPrevMonth
+        )
     }
 }

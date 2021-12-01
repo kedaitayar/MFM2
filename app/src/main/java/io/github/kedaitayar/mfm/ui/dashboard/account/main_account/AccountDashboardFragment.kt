@@ -15,6 +15,7 @@ import io.github.kedaitayar.mfm.databinding.FragmentAccountDashboardBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.util.exhaustive
 import io.github.kedaitayar.mfm.util.notNull
+import io.github.kedaitayar.mfm.util.toCurrency
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
@@ -29,7 +30,8 @@ class AccountDashboardFragment : Fragment(R.layout.fragment_account_dashboard) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        childFragmentManager.beginTransaction().replace(R.id.account_list_fragment_container, AccountListFragment())
+        childFragmentManager.beginTransaction()
+            .replace(R.id.account_list_fragment_container, AccountListFragment())
             .commit()
 
         setupDashboardInfo()
@@ -43,7 +45,8 @@ class AccountDashboardFragment : Fragment(R.layout.fragment_account_dashboard) {
                 accountDashboardViewModel.accountDashboardEvent.collect { event ->
                     when (event) {
                         AccountDashboardViewModel.AccountDashboardEvent.NavigateToAddAccount -> {
-                            val action = MainFragmentDirections.actionMainFragmentToAddEditAccountFragment()
+                            val action =
+                                MainFragmentDirections.actionMainFragmentToAddEditAccountFragment()
                             findNavController().navigate(action)
                         }
                     }.exhaustive
@@ -63,9 +66,13 @@ class AccountDashboardFragment : Fragment(R.layout.fragment_account_dashboard) {
         viewLifecycleOwner.lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    accountDashboardViewModel.thisMonthSpending.collect {
+//                    accountDashboardViewModel.thisMonthSpending.collect {
+//                        binding.textViewSpendingThisMonthAmount.text =
+//                            resources.getString(R.string.currency_symbol, formatter.format(it.notNull()))
+//                    }
+                    accountDashboardViewModel.thisMonthBudgeted.collect {
                         binding.textViewSpendingThisMonthAmount.text =
-                            resources.getString(R.string.currency_symbol, formatter.format(it.notNull()))
+                            it.toDouble().toCurrency(requireContext())
                     }
                 }
                 launch {
@@ -80,7 +87,10 @@ class AccountDashboardFragment : Fragment(R.layout.fragment_account_dashboard) {
                 launch {
                     accountDashboardViewModel.nextMonthBudgeted.collect {
                         binding.textViewBudgetedNextMonthAmount.text =
-                            resources.getString(R.string.currency_symbol, formatter.format(it.notNull()))
+                            resources.getString(
+                                R.string.currency_symbol,
+                                formatter.format(it.notNull())
+                            )
                     }
                 }
                 launch {
