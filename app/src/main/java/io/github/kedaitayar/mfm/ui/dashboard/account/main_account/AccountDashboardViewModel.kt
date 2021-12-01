@@ -40,8 +40,8 @@ class AccountDashboardViewModel @Inject constructor(
     }
 
     private fun getMonthBudgeted(): Flow<Double?> {
-        val now = OffsetDateTime.now()
-        return dashboardRepository.getMonthBudgeted(now.monthValue + 1, now.year)
+        val nextMonth = OffsetDateTime.now().plusMonths(1)
+        return dashboardRepository.getMonthBudgeted(nextMonth.monthValue, nextMonth.year)
     }
 
     private fun getUncompletedBudget(): Flow<BudgetedAndGoal> {
