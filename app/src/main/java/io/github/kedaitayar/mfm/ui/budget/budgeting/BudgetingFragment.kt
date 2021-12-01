@@ -122,11 +122,7 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting),
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     budgetingViewModel.currentTotalNotBudgeted.collect {
-                        binding.textViewNotBudgetedAmount.text =
-                            requireContext().resources.getString(
-                                R.string.currency_symbol,
-                                it.toCurrency(requireContext())
-                            )
+                        binding.textViewNotBudgetedAmount.text = it.toCurrency(requireContext())
                         if (it < 0) {
                             binding.constraintLayoutNotBudgeted.setBackgroundColor(red)
                         } else {

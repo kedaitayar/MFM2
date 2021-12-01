@@ -55,7 +55,7 @@
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"
                 android:paddingBottom="4dp"
-                android:text="RM"
+                android:text="RM 0.00"
                 android:textColor="?onGGreen"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
