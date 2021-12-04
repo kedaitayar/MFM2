@@ -7,7 +7,6 @@ import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,14 +48,20 @@ class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
                     //not handled
                 }
 
-                override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+                override fun onSelectedChanged(
+                    viewHolder: RecyclerView.ViewHolder?,
+                    actionState: Int
+                ) {
                     super.onSelectedChanged(viewHolder, actionState)
                     if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
                         (viewHolder as BudgetListAdapter.BudgetListViewHolder).onDragHandler()
                     }
                 }
 
-                override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+                override fun clearView(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder
+                ) {
                     super.clearView(recyclerView, viewHolder)
                     val currentList = (recyclerView.adapter as BudgetListAdapter).currentList
                     (viewHolder as BudgetListAdapter.BudgetListViewHolder).onClearViewHandler()
@@ -108,7 +113,9 @@ class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
 //                        }
                         R.id.edit -> {
                             val action =
-                                MainFragmentDirections.actionMainFragmentToEditBudgetFragment(budgetListAdapterData)
+                                MainFragmentDirections.actionMainFragmentToEditBudgetFragment(
+                                    budgetListAdapterData
+                                )
                             findNavController().navigate(action)
                             true
                         }
@@ -119,7 +126,9 @@ class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
             }
 
             override fun onBudgetedPillClick(budgetListAdapterData: BudgetListAdapterData) {
-                val action = MainFragmentDirections.actionMainFragmentToSingleBudgetingFragment(budgetListAdapterData)
+                val action = MainFragmentDirections.actionMainFragmentToSingleBudgetingFragment(
+                    budgetListAdapterData
+                )
                 findNavController().navigate(action)
             }
         })
