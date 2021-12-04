@@ -13,8 +13,6 @@ Currently the project has implemented the following:
  - ViewModel (MVVM architecture)
  - LiveData - Flow (Observer pattern - MVVM)
  - Room (Local database)
- - Dao instrument test (Automated testing)
- - ViewBinding
  - Custom view (UI)
  - Material Design (UI and Theme)
  - [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart) (Chart and Graph view)
