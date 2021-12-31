@@ -101,6 +101,10 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
             addEditTransactionViewModel.inputNote = it
             binding.textInputEditNote.setText(it)
         }
+        addEditTransactionViewModel.quickTransaction?.transactionNote?.let {
+            addEditTransactionViewModel.inputNote = it
+            binding.textInputEditNote.setText(it)
+        }
         val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
         addEditTransactionViewModel.transaction?.transactionTime?.let {
             addEditTransactionViewModel.inputDate.value = it
@@ -131,6 +135,7 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
                 autoCompleteAccount.setText(it.accountName, false)
             }
             textInputEditAmount.setText(addEditTransactionViewModel.inputAmount?.toString())
+            textInputEditNote.setText(addEditTransactionViewModel.inputNote)
         }
     }
 

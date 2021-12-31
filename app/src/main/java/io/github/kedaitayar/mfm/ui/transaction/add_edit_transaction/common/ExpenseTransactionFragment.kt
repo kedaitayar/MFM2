@@ -118,6 +118,10 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
             addEditTransactionViewModel.inputNote = it
             binding.textInputEditNote.setText(it)
         }
+        addEditTransactionViewModel.quickTransaction?.transactionNote?.let {
+            addEditTransactionViewModel.inputNote = it
+            binding.textInputEditNote.setText(it)
+        }
         val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
         addEditTransactionViewModel.transaction?.transactionTime?.let {
             addEditTransactionViewModel.inputDate.value = it
@@ -172,6 +176,7 @@ class ExpenseTransactionFragment : Fragment(R.layout.fragment_expense_transactio
                 autoCompleteBudget.setText(it.budgetName, false)
             }
             textInputEditAmount.setText(addEditTransactionViewModel.inputAmount?.toString())
+            textInputEditNote.setText(addEditTransactionViewModel.inputNote)
         }
     }
 

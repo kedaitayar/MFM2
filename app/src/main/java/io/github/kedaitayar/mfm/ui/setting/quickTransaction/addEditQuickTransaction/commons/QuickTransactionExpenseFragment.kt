@@ -1,12 +1,7 @@
 package io.github.kedaitayar.mfm.ui.setting.quickTransaction.addEditQuickTransaction.commons
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Filter
-import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,8 +13,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.data.entity.Budget
-import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
-import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentQuickTransactionExpenseBinding
 import io.github.kedaitayar.mfm.ui.setting.quickTransaction.addEditQuickTransaction.AddEditQuickTransactionFragment
 import io.github.kedaitayar.mfm.ui.setting.quickTransaction.addEditQuickTransaction.AddEditQuickTransactionViewModel
@@ -27,10 +20,8 @@ import io.github.kedaitayar.mfm.ui.setting.quickTransaction.addEditQuickTransact
 import io.github.kedaitayar.mfm.ui.setting.quickTransaction.utils.AccountListArrayAdapter
 import io.github.kedaitayar.mfm.ui.setting.quickTransaction.utils.BudgetListArrayAdapter
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.AddEditTransactionViewModel
-import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transaction.AddTransactionFragment
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class QuickTransactionExpenseFragment : Fragment(R.layout.fragment_quick_transaction_expense),
@@ -106,6 +97,7 @@ class QuickTransactionExpenseFragment : Fragment(R.layout.fragment_quick_transac
                 autoCompleteBudget.setText(it.budgetName, false)
             }
             textInputEditAmount.setText(addEditQuickTransactionViewModel.inputAmount?.toString())
+            textInputEditNote.setText(addEditQuickTransactionViewModel.inputNote ?: "")
         }
     }
 }

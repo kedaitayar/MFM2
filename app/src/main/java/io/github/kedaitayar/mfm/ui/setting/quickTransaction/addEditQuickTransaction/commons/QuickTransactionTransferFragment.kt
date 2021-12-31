@@ -96,6 +96,7 @@ class QuickTransactionTransferFragment : Fragment(R.layout.fragment_quick_transa
                 autoCompleteTransferTo.setText(it.accountName, false)
             }
             textInputEditAmount.setText(addEditQuickTransactionViewModel.inputAmount?.toString())
+            textInputEditNote.setText(addEditQuickTransactionViewModel.inputNote ?: "")
         }
     }
 }

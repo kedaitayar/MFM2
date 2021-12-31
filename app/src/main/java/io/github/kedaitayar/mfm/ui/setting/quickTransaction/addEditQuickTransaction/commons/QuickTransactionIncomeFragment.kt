@@ -84,6 +84,7 @@ class QuickTransactionIncomeFragment : Fragment(R.layout.fragment_quick_transact
                 autoCompleteAccount.setText(it.accountName, false)
             }
             textInputEditAmount.setText(addEditQuickTransactionViewModel.inputAmount?.toString())
+            textInputEditNote.setText(addEditQuickTransactionViewModel.inputNote ?: "")
         }
     }
 }
