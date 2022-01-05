@@ -287,5 +287,5 @@ interface AccountDao {
         GROUP BY budgetTransactionMonth, budgetTransactionYear
     """
     )
-    fun getThisMonthBudgetedAmount(): Flow<Float>
+    fun getThisMonthBudgetedAmount(): Flow<Float?>
 }

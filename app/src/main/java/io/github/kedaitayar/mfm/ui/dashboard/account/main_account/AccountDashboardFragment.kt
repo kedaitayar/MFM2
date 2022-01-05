@@ -72,7 +72,7 @@ class AccountDashboardFragment : Fragment(R.layout.fragment_account_dashboard) {
 //                    }
                     accountDashboardViewModel.thisMonthBudgeted.collect {
                         binding.textViewSpendingThisMonthAmount.text =
-                            it.toDouble().toCurrency(requireContext())
+                            it?.toDouble().notNull().toCurrency(requireContext())
                     }
                 }
                 launch {

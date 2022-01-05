@@ -60,7 +60,7 @@ class DashboardRepository @Inject constructor(
         return accountDao.getUncompletedBudget(month, year)
     }
 
-    fun getThisMonthBudgetedAmount(): Flow<Float> {
+    fun getThisMonthBudgetedAmount(): Flow<Float?> {
         return accountDao.getThisMonthBudgetedAmount()
     }
 
