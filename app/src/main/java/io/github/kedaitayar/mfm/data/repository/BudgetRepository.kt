@@ -37,6 +37,10 @@ class BudgetRepository @Inject constructor(
         return basicDao.getAllBudget()
     }
 
+    fun getAllBudgetFlow(): Flow<List<Budget>> {
+        return basicDao.getAllBudgetFlow()
+    }
+
     suspend fun updatePosition(budgetPosition: BudgetPosition): Int {
         return basicDao.updatePosition(budgetPosition)
     }

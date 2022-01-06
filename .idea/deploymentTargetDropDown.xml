@@ -3,15 +3,15 @@
   <component name="deploymentTargetDropDown">
     <targetSelectedWithDropDown>
       <Target>
-        <type value="COLD_BOOT_TARGET" />
+        <type value="QUICK_BOOT_TARGET" />
         <deviceKey>
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\kedaitayar\.android\avd\Pixel_3a_API_30.avd" />
+            <value value="C:\Users\kedaitayar\.android\avd\Pixel_3a_API_30_2_1.avd" />
           </Key>
         </deviceKey>
       </Target>
     </targetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2021-09-26T13:35:53.836291300Z" />
+    <timeTargetWasSelectedWithDropDown value="2022-01-05T15:51:15.559959800Z" />
   </component>
 </project>

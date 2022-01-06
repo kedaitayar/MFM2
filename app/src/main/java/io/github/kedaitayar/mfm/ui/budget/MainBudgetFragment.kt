@@ -10,6 +10,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMainBudgetBinding
+import io.github.kedaitayar.mfm.ui.budget.budget_detail.BudgetDetailFragment
 import io.github.kedaitayar.mfm.ui.budget.budget_list.BudgetListFragment
 import io.github.kedaitayar.mfm.ui.budget.not_budgeted.NotBudgetedFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragment
@@ -31,6 +32,7 @@ class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
             replace(R.id.fragment_container_date, MonthYearScrollFragment())
             replace(R.id.fragment_container_budget_list_type1, BudgetListFragment.newInstance(1))
             replace(R.id.fragment_container_budget_list_type2, BudgetListFragment.newInstance(2))
+            replace(R.id.fragment_container_budget_detail, BudgetDetailFragment())
         }.commit()
 
         binding.buttonAddBudget.setOnClickListener {
