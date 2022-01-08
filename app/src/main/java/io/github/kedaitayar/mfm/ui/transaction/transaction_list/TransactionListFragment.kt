@@ -1,14 +1,11 @@
 package io.github.kedaitayar.mfm.ui.transaction.transaction_list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.PopupMenu
-import androidx.core.view.doOnPreDraw
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -17,9 +14,6 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.card.MaterialCardView
-import com.google.android.material.transition.Hold
-import com.google.android.material.transition.MaterialElevationScale
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.Transaction
@@ -114,7 +108,7 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
 
             override fun onClick(
                 transactionListAdapterData: TransactionListAdapterData,
-                transactionCard: MaterialCardView
+                transactionCard: ConstraintLayout
             ) {
                 val action =
                     MainFragmentDirections.actionMainFragmentToEditTransactionFragment(transactionListAdapterData.toTransaction())

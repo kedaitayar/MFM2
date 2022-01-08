@@ -20,7 +20,6 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
-                style="@style/Toolbar1"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize" />
         </com.google.android.material.appbar.AppBarLayout>
@@ -36,12 +35,15 @@
             android:id="@+id/fragment_container_account_budget_chart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:paddingBottom="8dp"
             app:layout_constraintTop_toBottomOf="@+id/fragment_container_date" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_container_account_transaction_graph"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
             app:layout_constraintTop_toBottomOf="@+id/fragment_container_account_budget_chart" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,7 +16,6 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
-            style="@style/Toolbar1"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:elevation="1dp" />
@@ -42,7 +41,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_save"
-        style="@style/ButtonStyle1"
+        style="@style/ButtonBig"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add"

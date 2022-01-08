@@ -7,7 +7,7 @@
     tools:context=".ui.dashboard.account.account_detail.AccountTransactionGraphFragment">
 
     <com.google.android.material.card.MaterialCardView
-        style="@style/CardView1"
+        style="?attr/materialCardViewElevatedStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

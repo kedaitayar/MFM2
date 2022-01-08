@@ -3,10 +3,12 @@ package io.github.kedaitayar.mfm.ui.budget.budget_list
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -73,6 +75,13 @@ class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
 
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                DividerItemDecoration.VERTICAL
+            )
+        )
+
         budgetListViewModel.budgetList.observe(viewLifecycleOwner) {
             if (it == null || it.isEmpty()) {
                 when (budgetListViewModel.budgetType) {

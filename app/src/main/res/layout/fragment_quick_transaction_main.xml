@@ -16,7 +16,6 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
-            style="@style/Toolbar1"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize" />
     </com.google.android.material.appbar.AppBarLayout>
@@ -46,7 +45,8 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_view_quick_transaction_list"
-                style="@style/CardView1"
+                style="?attr/materialCardViewElevatedStyle"
+                android:layout_marginHorizontal="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/button_add_quick_transaction">

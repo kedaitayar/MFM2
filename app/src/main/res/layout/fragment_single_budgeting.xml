@@ -221,7 +221,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_submit"
-        style="@style/ButtonStyle1"
+        style="@style/ButtonBig"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit"

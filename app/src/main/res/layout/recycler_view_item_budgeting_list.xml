@@ -47,7 +47,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/text_view_goal"
-        style="@style/TextButton1"
+        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fontFamily="sans-serif"
