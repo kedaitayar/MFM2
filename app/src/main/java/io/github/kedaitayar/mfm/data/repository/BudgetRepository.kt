@@ -8,6 +8,7 @@ import io.github.kedaitayar.mfm.data.entity.BudgetPosition
 import io.github.kedaitayar.mfm.data.entity.BudgetTransaction
 import io.github.kedaitayar.mfm.data.entity.BudgetType
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
+import io.github.kedaitayar.mfm.data.podata.BudgetTransactionAmountList
 import io.github.kedaitayar.mfm.data.podata.BudgetTransactionJoinTransaction
 import kotlinx.coroutines.flow.Flow
 import java.time.OffsetDateTime
@@ -164,5 +165,16 @@ class BudgetRepository @Inject constructor(
 
     suspend fun getBudgetTransactionJoinTransactionSuspend(): List<BudgetTransactionJoinTransaction> {
         return budgetDao.getBudgetTransactionJoinTransactionSuspend()
+    }
+
+    fun getBudgetTransactionAmountList(): Flow<List<BudgetTransactionAmountList>> {
+        return budgetDao.getBudgetTransactionAmountList()
+    }
+
+    fun getBudgetTransactionAmountList(
+        timeFrom: OffsetDateTime,
+        timeTo: OffsetDateTime
+    ): Flow<List<BudgetTransactionAmountList>> {
+        return budgetDao.getBudgetTransactionAmountList(timeFrom, timeTo)
     }
 }

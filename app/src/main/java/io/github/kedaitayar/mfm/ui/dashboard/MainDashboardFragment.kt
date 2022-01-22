@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMainDashboardBinding
+import io.github.kedaitayar.mfm.ui.dashboard.budget_detail.BudgetDetailFragment
 import io.github.kedaitayar.mfm.ui.dashboard.account.main_account.AccountDashboardFragment
 import io.github.kedaitayar.mfm.ui.dashboard.spending.MonthlySpendingFragment
 import io.github.kedaitayar.mfm.ui.dashboard.transaction_trend_graph.TransactionTrendGraphFragment
@@ -25,6 +26,7 @@ class MainDashboardFragment : Fragment(R.layout.fragment_main_dashboard) {
             replace(R.id.fragment_container_main_account, AccountDashboardFragment())
             replace(R.id.fragment_container_transaction_trend, TransactionTrendGraphFragment())
             replace(R.id.fragment_container_monthly_spending, MonthlySpendingFragment())
+            replace(R.id.fragment_container_budget_detail, BudgetDetailFragment())
         }.commit()
 
         setupHideFABOnScroll()

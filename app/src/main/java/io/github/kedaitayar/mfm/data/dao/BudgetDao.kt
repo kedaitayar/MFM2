@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
+import io.github.kedaitayar.mfm.data.podata.BudgetTransactionAmountList
 import io.github.kedaitayar.mfm.data.podata.BudgetTransactionJoinTransaction
 import kotlinx.coroutines.flow.Flow
 import java.time.OffsetDateTime
@@ -1164,4 +1165,83 @@ interface BudgetDao {
 
     @Query("SELECT SUM(transactionAmount) FROM `transaction` WHERE transactionType = 2")
     fun getTotalIncome(): Flow<Double>
+
+    @Query(
+        """
+        SELECT
+            sum(transactionAmount) AS transactionAmount,
+            budgetId,
+            budgetGoal,
+            budgetName,
+            budgetType,
+            (
+                Select
+                    sum(transactionAmount) 
+                FROM
+                    `Transaction` 
+                    LEFT JOIN
+                        Budget 
+                        ON transactionBudgetId = budgetId 
+                WHERE
+                    NOT transactionType = 2 
+                    AND NOT transactionType = 3
+            )
+            as totalTransactionAmount 
+        FROM
+            `Transaction` 
+            LEFT JOIN
+                Budget 
+                ON transactionBudgetId = budgetId 
+        WHERE
+            NOT transactionType = 2 
+            AND NOT transactionType = 3 
+        GROUP BY
+            transactionBudgetId 
+        ORDER BY
+            transactionAmount DESC
+    """
+    )
+    fun getBudgetTransactionAmountList(): Flow<List<BudgetTransactionAmountList>>
+
+    @Query(
+        """
+        SELECT
+            sum(transactionAmount) AS transactionAmount,
+            budgetId,
+            budgetGoal,
+            budgetName,
+            budgetType,
+            (
+                Select
+                    sum(transactionAmount) 
+                FROM
+                    `Transaction` 
+                    LEFT JOIN
+                        Budget 
+                        ON transactionBudgetId = budgetId 
+                WHERE
+                    NOT transactionType = 2 
+                    AND NOT transactionType = 3
+                    AND transactionTime BETWEEN :timeFrom AND :timeTo
+            )
+            as totalTransactionAmount 
+        FROM
+            `Transaction` 
+            LEFT JOIN
+                Budget 
+                ON transactionBudgetId = budgetId 
+        WHERE
+            NOT transactionType = 2 
+            AND NOT transactionType = 3
+            AND transactionTime BETWEEN :timeFrom AND :timeTo
+        GROUP BY
+            transactionBudgetId 
+        ORDER BY
+            transactionAmount DESC
+    """
+    )
+    fun getBudgetTransactionAmountList(
+        timeFrom: OffsetDateTime,
+        timeTo: OffsetDateTime
+    ): Flow<List<BudgetTransactionAmountList>>
 }
