@@ -35,6 +35,8 @@ class TransactionTrendGraphFragment : Fragment(R.layout.fragment_transaction_tre
         transactionTrendGraphViewModel.red = ContextCompat.getColor(requireContext(), typedValue.resourceId)
         requireContext().theme.resolveAttribute(R.attr.colorOnSurface, typedValue, true)
         transactionTrendGraphViewModel.colorOnSurface = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+        requireContext().theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
+        transactionTrendGraphViewModel.colorPrimary = ContextCompat.getColor(requireContext(), typedValue.resourceId)
     }
 
     private fun setupCombinedGraph() {

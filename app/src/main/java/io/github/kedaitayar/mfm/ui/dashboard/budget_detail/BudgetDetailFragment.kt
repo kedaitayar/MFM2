@@ -18,7 +18,6 @@ import io.github.kedaitayar.mfm.databinding.FragmentBudgetDetailBinding
 import io.github.kedaitayar.mfm.databinding.RecyclerViewItemBudgetTransactionAmountListBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.text.DecimalFormat
 
 
@@ -66,7 +65,6 @@ class BudgetDetailFragment : Fragment(R.layout.fragment_budget_detail) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     budgetDetailViewModel.budgetTransactionAmountList.collect {
-                        Timber.i(it.toString())
                         adapter.submitList(it)
                     }
                 }

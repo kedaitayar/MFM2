@@ -23,6 +23,7 @@ class TransactionTrendGraphViewModel @Inject constructor(
     var green = 0
     var red = 0
     var colorOnSurface = 0
+    var colorPrimary = 0
 
     init {
         setupTransactionGraphData()
@@ -52,7 +53,7 @@ class TransactionTrendGraphViewModel @Inject constructor(
 
                 val tempLineData = mutableListOf<Float>()
 
-                for (week in 0 until 53) {
+                for (week in 0 until 54) {
                     val barEntry = BarEntry(
                         week.toFloat(),
                         floatArrayOf(
@@ -67,12 +68,12 @@ class TransactionTrendGraphViewModel @Inject constructor(
                 }
 
                 tempLineData.reversed().forEachIndexed { index, fl ->
-                    lineEntries.add(Entry((index + 1).toFloat(), fl))
+                    lineEntries.add(Entry((index).toFloat(), fl))
                 }
                 val movingAverage = movingAverage(tempLineData, 12) { weightedMean() }
 
                 movingAverage.reversed().forEachIndexed { index, fl ->
-                    lineEntries2.add(Entry((index + 1).toFloat(), fl))
+                    lineEntries2.add(Entry((index).toFloat(), fl))
                 }
 
                 val barDataSet = BarDataSet(barEntries, "bardataset label")
@@ -88,14 +89,14 @@ class TransactionTrendGraphViewModel @Inject constructor(
                     setDrawValues(false)
                     mode = LineDataSet.Mode.HORIZONTAL_BEZIER
                     color = colorOnSurface
-                    lineWidth = 2f
+                    lineWidth = 1f
                     setDrawCircles(false)
                 }
                 val lineDataSet2 = LineDataSet(lineEntries2, "line label")
                 lineDataSet2.apply {
                     setDrawValues(false)
                     mode = LineDataSet.Mode.HORIZONTAL_BEZIER
-                    color = colorOnSurface
+                    color = colorPrimary
                     lineWidth = 1f
                     enableDashedLine(10f, 15f, 0f)
                     setDrawCircles(false)

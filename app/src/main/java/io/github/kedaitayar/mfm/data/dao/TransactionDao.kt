@@ -53,7 +53,8 @@ interface TransactionDao {
             --AND STRFTIME('%Y', transactionTime) = :year
             AND transactionTime > DATE('now', '-1 years')
         GROUP BY
-            STRFTIME('%W', transactionTime),
+            --STRFTIME('%W', transactionTime),
+            CAST((JulianDay("now") - JulianDay(transactionTime))/7 As Integer),
             transactionType 
         UNION ALL
         SELECT
@@ -76,7 +77,8 @@ interface TransactionDao {
                     --AND STRFTIME('%Y', transactionTime) < :year
                     AND transactionTime < DATE('now', '-2 years')
                 GROUP BY
-                    STRFTIME('%W', transactionTime),
+                    --STRFTIME('%W', transactionTime),
+                    CAST((JulianDay("now") - JulianDay(transactionTime))/7 As Integer),
                     transactionType 
                 --ORDER BY
                     --STRFTIME('%W', transactionTime) 
