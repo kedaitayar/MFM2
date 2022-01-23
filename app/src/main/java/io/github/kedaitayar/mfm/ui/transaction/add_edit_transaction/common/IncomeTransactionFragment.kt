@@ -5,6 +5,9 @@ import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
@@ -18,6 +21,8 @@ import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.edit_transac
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.utils.AccountListArrayAdapter
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.util.toStringOrBlank
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneId
@@ -40,9 +45,27 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
         setupAccountDropdown()
         setupDateInput()
         setupInputListener()
+        setupInputErrorListener()
 
         if (addEditTransactionViewModel.transaction != null || addEditTransactionViewModel.quickTransaction != null) {
             setupEditTransactionValue()
+        }
+    }
+
+    private fun setupInputErrorListener() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                launch {
+                    addEditTransactionViewModel.errorAccountFrom.collect {
+                        binding.textInputLayoutAccount.error = it
+                    }
+                }
+                launch {
+                    addEditTransactionViewModel.errorAmount.collect {
+                        binding.textInputLayoutAmount.error = it
+                    }
+                }
+            }
         }
     }
 
@@ -72,9 +95,11 @@ class IncomeTransactionFragment : Fragment(R.layout.fragment_income_transaction)
             autoCompleteAccount.setOnItemClickListener { parent, _, position, _ ->
                 addEditTransactionViewModel.inputAccountFrom =
                     parent.getItemAtPosition(position) as AccountListAdapterData?
+                addEditTransactionViewModel.errorAccountFrom.value = null
             }
             textInputEditAmount.addTextChangedListener {
                 addEditTransactionViewModel.inputAmount = it.toString().toDoubleOrNull()
+                addEditTransactionViewModel.errorAmount.value = null
             }
             textInputEditNote.addTextChangedListener {
                 addEditTransactionViewModel.inputNote = it.toStringOrBlank()

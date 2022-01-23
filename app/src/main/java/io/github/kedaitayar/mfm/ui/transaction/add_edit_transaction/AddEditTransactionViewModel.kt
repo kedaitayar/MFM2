@@ -33,6 +33,11 @@ constructor(
     val inputDate = MutableStateFlow(OffsetDateTime.now())
     var inputNote: String = ""
 
+    val errorAccountFrom = MutableStateFlow<String?>(null)
+     val errorBudget = MutableStateFlow<String?>(null)
+     val errorAccountTo = MutableStateFlow<String?>(null)
+     val errorAmount = MutableStateFlow<String?>(null)
+
     private val addEditTransactionEventChannel = Channel<AddEditTransactionEvent>()
     val addEditTransactionEvent = addEditTransactionEventChannel.receiveAsFlow()
 
@@ -81,69 +86,42 @@ constructor(
         viewModelScope.launch {
             when (transactionType) {
                 TransactionType.EXPENSE -> {
-                    when {
-                        inputAccountFrom == null -> {
+                    if (inputAccountFrom == null) {
+                        errorAccountFrom.value = "Account cannot be empty"
+                    }
+                    if (inputBudget == null) {
+                        errorBudget.value = "Budget cannot be empty"
+                    }
+                    if (inputAmount == null) {
+                        errorAmount.value = "Amount cannot be empty"
+                    }
+                    if (inputAccountFrom !== null || inputBudget !== null || inputAmount !== null) {
+                        val transaction =
+                            transaction?.copy(
+                                transactionAccountId = inputAccountFrom!!.accountId,
+                                transactionBudgetId = inputBudget!!.budgetId,
+                                transactionAmount = inputAmount!!,
+                                transactionTime = inputDate.value,
+                                transactionNote = inputNote
+                            )
+                        transaction?.let {
+                            val result = update(transaction)
                             addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "Account cannot be empty",
-                                    Snackbar.LENGTH_SHORT
+                                AddEditTransactionEvent.NavigateBackWithEditResult(
+                                    result
                                 )
                             )
-                        }
-                        inputBudget == null -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "Budget cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            )
-                        }
-                        inputAmount == null -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "Amount cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            )
-                        }
-                        else -> {
-                            val transaction =
-                                transaction?.copy(
-                                    transactionAccountId = inputAccountFrom!!.accountId,
-                                    transactionBudgetId = inputBudget!!.budgetId,
-                                    transactionAmount = inputAmount!!,
-                                    transactionTime = inputDate.value,
-                                    transactionNote = inputNote
-                                )
-                            transaction?.let {
-                                val result = update(transaction)
-                                addEditTransactionEventChannel.send(
-                                    AddEditTransactionEvent.NavigateBackWithEditResult(
-                                        result
-                                    )
-                                )
 
-                            }
                         }
                     }
                 }
                 TransactionType.INCOME -> {
                     when {
                         inputAccountFrom == null -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "Account cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            )
+                            errorAccountFrom.value = "Account cannot be empty"
                         }
                         inputAmount == null -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "Amount cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            )
+                            errorAmount.value = "Amount cannot be empty"
                         }
                         else -> {
                             val transaction =
@@ -167,36 +145,17 @@ constructor(
                 TransactionType.TRANSFER -> {
                     when {
                         inputAccountFrom == null -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "Account cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            )
+                            errorAccountFrom.value = "Account cannot be empty"
                         }
                         inputAccountTo == null -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "Account cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            )
+                            errorAccountTo.value = "Account cannot be empty"
                         }
                         inputAmount == null -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "Amount cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            )
+                            errorAmount.value = "Amount cannot be empty"
                         }
                         inputAccountFrom == inputAccountTo -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "'Account From' and 'Account To' cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            )
+                            errorAccountTo.value =
+                                "'Account From' and 'Account To' cannot be the same"
                         }
                         else -> {
                             val transaction =
@@ -218,7 +177,7 @@ constructor(
                         }
                     }
                 }
-            }.exhaustive
+            }
         }
     }
 
@@ -226,66 +185,39 @@ constructor(
         viewModelScope.launch {
             when (transactionType) {
                 TransactionType.EXPENSE -> {
-                    when {
-                        inputAccountFrom == null -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "Account cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
+                    if (inputAccountFrom == null) {
+                        errorAccountFrom.value = "Account cannot be empty"
+                    }
+                    if (inputBudget == null) {
+                        errorBudget.value = "Budget cannot be empty"
+                    }
+                    if (inputAmount == null) {
+                        errorAmount.value = "Amount cannot be empty"
+                    }
+                    if (inputAccountFrom !== null || inputBudget !== null || inputAmount !== null) {
+                        val transaction = Transaction(
+                            transactionAccountId = inputAccountFrom!!.accountId,
+                            transactionBudgetId = inputBudget!!.budgetId,
+                            transactionAmount = inputAmount ?: 0.0,
+                            transactionType = 1,
+                            transactionTime = inputDate.value,
+                            transactionNote = inputNote
+                        )
+                        val result = insert(transaction)
+                        addEditTransactionEventChannel.send(
+                            AddEditTransactionEvent.NavigateBackWithAddResult(
+                                result
                             )
-                        }
-                        inputBudget == null -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "Budget cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            )
-                        }
-                        inputAmount == null -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "Amount cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            )
-                        }
-                        else -> {
-                            val transaction = Transaction(
-                                transactionAccountId = inputAccountFrom!!.accountId,
-                                transactionBudgetId = inputBudget!!.budgetId,
-                                transactionAmount = inputAmount ?: 0.0,
-                                transactionType = 1,
-                                transactionTime = inputDate.value,
-                                transactionNote = inputNote
-                            )
-                            val result = insert(transaction)
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.NavigateBackWithAddResult(
-                                    result
-                                )
-                            )
-                        }
+                        )
                     }
                 }
                 TransactionType.INCOME -> {
                     when {
                         inputAccountFrom == null -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "Account cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            )
+                            errorAccountFrom.value = "Account cannot be empty"
                         }
                         inputAmount == null -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "Amount cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            )
+                            errorAmount.value = "Amount cannot be empty"
                         }
                         else -> {
                             val transaction = Transaction(
@@ -307,36 +239,17 @@ constructor(
                 TransactionType.TRANSFER -> {
                     when {
                         inputAccountFrom == null -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "Account cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            )
+                            errorAccountFrom.value = "Account cannot be empty"
                         }
                         inputAccountTo == null -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "Account cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            )
+                            errorAccountTo.value = "Account cannot be empty"
                         }
                         inputAmount == null -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "Amount cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            )
+                            errorAmount.value = "Amount cannot be empty"
                         }
                         inputAccountFrom == inputAccountTo -> {
-                            addEditTransactionEventChannel.send(
-                                AddEditTransactionEvent.ShowSnackbar(
-                                    "'Account From' and 'Account To' cannot be empty",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            )
+                            errorAccountTo.value =
+                                "'Account From' and 'Account To' cannot be the same"
                         }
                         else -> {
                             val transaction = Transaction(
@@ -356,7 +269,7 @@ constructor(
                         }
                     }
                 }
-            }.exhaustive
+            }
         }
     }
 
