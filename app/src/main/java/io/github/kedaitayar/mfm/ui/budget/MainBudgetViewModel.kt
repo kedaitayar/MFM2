@@ -26,6 +26,9 @@ class MainBudgetViewModel
                     item.budgetType == 2 && item.budgetTransactionYear < now.year && item.budgetTransactionAmount > item.transactionAmount -> {
                         true
                     }
+                    item.budgetTransactionYear < now.year && item.budgetTransactionAmount > item.transactionAmount && item.budgetType == 1 -> {
+                        true
+                    }
                     else -> false
                 }
             }
