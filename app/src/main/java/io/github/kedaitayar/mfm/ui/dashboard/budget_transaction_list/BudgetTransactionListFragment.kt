@@ -1,4 +1,4 @@
-package io.github.kedaitayar.mfm.ui.dashboard.budget_detail
+package io.github.kedaitayar.mfm.ui.dashboard.budget_transaction_list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +14,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetTransactionAmountList
-import io.github.kedaitayar.mfm.databinding.FragmentBudgetDetailBinding
+import io.github.kedaitayar.mfm.databinding.FragmentBudgetTransactionListBinding
 import io.github.kedaitayar.mfm.databinding.RecyclerViewItemBudgetTransactionAmountListBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -22,9 +22,9 @@ import java.text.DecimalFormat
 
 
 @AndroidEntryPoint
-class BudgetDetailFragment : Fragment(R.layout.fragment_budget_detail) {
-    private val binding: FragmentBudgetDetailBinding by viewBinding()
-    private val budgetDetailViewModel: BudgetDetailViewModel by viewModels()
+class BudgetTransactionListFragment : Fragment(R.layout.fragment_budget_transaction_list) {
+    private val binding: FragmentBudgetTransactionListBinding by viewBinding()
+    private val budgetTransactionListViewModel: BudgetTransactionListViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,20 +42,20 @@ class BudgetDetailFragment : Fragment(R.layout.fragment_budget_detail) {
             chipGroup.setOnCheckedChangeListener { group, checkedId ->
                 when (checkedId) {
                     chip1Month.id -> {
-                        budgetDetailViewModel.filterChip.value =
-                            BudgetDetailViewModel.TimeRangeChip.OneMonth
+                        budgetTransactionListViewModel.filterChip.value =
+                            BudgetTransactionListViewModel.TimeRangeChip.OneMonth
                     }
                     chip3Months.id -> {
-                        budgetDetailViewModel.filterChip.value =
-                            BudgetDetailViewModel.TimeRangeChip.ThreeMonth
+                        budgetTransactionListViewModel.filterChip.value =
+                            BudgetTransactionListViewModel.TimeRangeChip.ThreeMonth
                     }
                     chip1Year.id -> {
-                        budgetDetailViewModel.filterChip.value =
-                            BudgetDetailViewModel.TimeRangeChip.OneYear
+                        budgetTransactionListViewModel.filterChip.value =
+                            BudgetTransactionListViewModel.TimeRangeChip.OneYear
                     }
                     chipAllTime.id -> {
-                        budgetDetailViewModel.filterChip.value =
-                            BudgetDetailViewModel.TimeRangeChip.AllTime
+                        budgetTransactionListViewModel.filterChip.value =
+                            BudgetTransactionListViewModel.TimeRangeChip.AllTime
                     }
                 }
             }
@@ -64,7 +64,7 @@ class BudgetDetailFragment : Fragment(R.layout.fragment_budget_detail) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    budgetDetailViewModel.budgetTransactionAmountList.collect {
+                    budgetTransactionListViewModel.budgetTransactionAmountList.collect {
                         adapter.submitList(it)
                     }
                 }

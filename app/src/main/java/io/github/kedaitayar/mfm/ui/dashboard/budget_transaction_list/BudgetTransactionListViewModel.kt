@@ -1,17 +1,15 @@
-package io.github.kedaitayar.mfm.ui.dashboard.budget_detail
+package io.github.kedaitayar.mfm.ui.dashboard.budget_transaction_list
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.kedaitayar.mfm.data.repository.BudgetRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import timber.log.Timber
 import java.time.OffsetDateTime
 import javax.inject.Inject
 
 @HiltViewModel
-class BudgetDetailViewModel @Inject constructor(
+class BudgetTransactionListViewModel @Inject constructor(
     budgetRepository: BudgetRepository
 ) : ViewModel() {
     val filterChip = MutableStateFlow<TimeRangeChip>(TimeRangeChip.OneMonth)
