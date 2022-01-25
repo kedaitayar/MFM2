@@ -98,7 +98,7 @@ class BudgetRepository @Inject constructor(
 
     fun getBudgetYearlyListAdapter(month: Int, year: Int): LiveData<List<BudgetListAdapterData>> {
         val timeFrom = OffsetDateTime.of(year, 1, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
-        val timeTo = timeFrom.plusYears(1).minusNanos(1)
+        val timeTo = timeFrom.plusMonths(month.toLong()).minusNanos(1)
         return budgetDao.getBudgetYearlyListAdapter(month, year, timeFrom, timeTo)
     }
 

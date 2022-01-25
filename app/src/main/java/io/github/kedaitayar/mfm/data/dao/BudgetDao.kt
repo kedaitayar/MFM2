@@ -324,7 +324,6 @@ interface BudgetDao {
         timeTo: OffsetDateTime
     ): LiveData<List<BudgetListAdapterData>>
 
-    // TODO: unit test
     @Query(
         """
         SELECT
