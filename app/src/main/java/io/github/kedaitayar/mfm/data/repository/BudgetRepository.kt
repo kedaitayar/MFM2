@@ -1,15 +1,17 @@
 package io.github.kedaitayar.mfm.data.repository
 
 import androidx.lifecycle.LiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import io.github.kedaitayar.mfm.data.dao.BasicDao
 import io.github.kedaitayar.mfm.data.dao.BudgetDao
 import io.github.kedaitayar.mfm.data.entity.Budget
 import io.github.kedaitayar.mfm.data.entity.BudgetPosition
 import io.github.kedaitayar.mfm.data.entity.BudgetTransaction
 import io.github.kedaitayar.mfm.data.entity.BudgetType
-import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
-import io.github.kedaitayar.mfm.data.podata.BudgetTransactionAmountList
-import io.github.kedaitayar.mfm.data.podata.BudgetTransactionJoinTransaction
+import io.github.kedaitayar.mfm.data.podata.*
 import kotlinx.coroutines.flow.Flow
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -176,5 +178,14 @@ class BudgetRepository @Inject constructor(
         timeTo: OffsetDateTime
     ): Flow<List<BudgetTransactionAmountList>> {
         return budgetDao.getBudgetTransactionAmountList(timeFrom, timeTo)
+    }
+
+    fun getMonthlySpendingGraphDataByBudget(budgetId: Long): Flow<List<MonthlySpendingData>> {
+        return budgetDao.getMonthlySpendingGraphDataByBudget(budgetId)
+    }
+
+    fun getTransactionListByBudgetData(budgetId: Long): Flow<PagingData<TransactionListAdapterData>> {
+        return Pager(config = PagingConfig(pageSize = 30, enablePlaceholders = false),
+            pagingSourceFactory = { budgetDao.getTransactionListByBudgetData(budgetId) }).flow
     }
 }

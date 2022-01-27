@@ -116,6 +116,12 @@ class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
                 popupMenu.setOnMenuItemClickListener {
                     when (it.itemId) {
                         R.id.detail -> {
+                            val action =
+                                MainFragmentDirections.actionMainFragmentToBudgetDetailFragment(
+                                    budgetListAdapterData.budgetId,
+                                    budgetListAdapterData.budgetName
+                                )
+                            findNavController().navigate(action)
                             true
                         }
                         R.id.edit -> {

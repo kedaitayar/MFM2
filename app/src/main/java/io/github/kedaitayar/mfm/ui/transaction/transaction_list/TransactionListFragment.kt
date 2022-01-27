@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -22,6 +24,7 @@ import io.github.kedaitayar.mfm.databinding.FragmentTransactionListBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.ui.transaction.MainTransactionFragment
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -96,8 +99,10 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
             )
         )
         viewLifecycleOwner.lifecycleScope.launch {
-            transactionListViewModel.allTransactionListAdapterData.collectLatest {
-                adapter.submitData(it)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                transactionListViewModel.allTransactionListAdapterData.collect {
+                    adapter.submitData(it)
+                }
             }
         }
         popupMenuSetup(adapter)
@@ -112,8 +117,8 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
             ) {
                 val action =
                     MainFragmentDirections.actionMainFragmentToEditTransactionFragment(transactionListAdapterData.toTransaction())
-                val extras =
-                    FragmentNavigatorExtras(transactionCard to "edit_transaction_${transactionListAdapterData.transactionId}")
+//                val extras =
+//                    FragmentNavigatorExtras(transactionCard to "edit_transaction_${transactionListAdapterData.transactionId}")
 //                findNavController().navigate(action, extras)
                 findNavController().navigate(action)
             }

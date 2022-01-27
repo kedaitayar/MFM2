@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_mainFragment_to_quickTransactionSelectionDialogFragment"
             app:destination="@id/quickTransactionSelectionDialogFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_budgetDetailFragment"
+            app:destination="@id/budgetDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/addEditAccountFragment"
@@ -146,5 +149,17 @@
             android:defaultValue="@null"
             app:argType="io.github.kedaitayar.mfm.data.podata.QuickTransactionListAdapterData"
             app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/budgetDetailFragment"
+        android:name="io.github.kedaitayar.mfm.ui.budget.budget_detail.BudgetDetailFragment"
+        android:label="fragment_budget_detail"
+        tools:layout="@layout/fragment_budget_detail" >
+        <argument
+            android:name="budgetId"
+            app:argType="long" />
+        <argument
+            android:name="budgetName"
+            app:argType="string" />
     </fragment>
 </navigation>

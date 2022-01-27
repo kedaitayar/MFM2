@@ -1,11 +1,10 @@
 package io.github.kedaitayar.mfm.data.dao
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
-import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
-import io.github.kedaitayar.mfm.data.podata.BudgetTransactionAmountList
-import io.github.kedaitayar.mfm.data.podata.BudgetTransactionJoinTransaction
+import io.github.kedaitayar.mfm.data.podata.*
 import kotlinx.coroutines.flow.Flow
 import java.time.OffsetDateTime
 
@@ -1243,4 +1242,44 @@ interface BudgetDao {
         timeFrom: OffsetDateTime,
         timeTo: OffsetDateTime
     ): Flow<List<BudgetTransactionAmountList>>
+
+    @Query(
+        """
+        SELECT SUM(transactionAmount) as monthSpending , strftime('%Y-%m-%dT%H:%M:%SZ',transactionTime, 'start of month') as month
+        FROM `transaction` 
+        WHERE transactionType = 1 
+            AND transactionTime > DATE('now', '-1 years')
+            AND transactionBudgetId = :budgetId
+        GROUP BY STRFTIME('%Y-%m', transactionTime)
+        ORDER BY transactionTime DESC
+    """
+    )
+    fun getMonthlySpendingGraphDataByBudget(budgetId: Long): Flow<List<MonthlySpendingData>>
+
+    @Query(
+        """
+        SELECT 
+            transactionId,
+            transactionAmount,
+            transactionTime,
+            transactionTypeId,
+            transactionTypeName,
+            transactionAccountId,
+            account.accountName AS transactionAccountName,
+            transactionBudgetId,
+            budget.budgetName AS transactionBudgetName,
+            transactionAccountTransferTo,
+            account2.accountName AS transactionAccountTransferToName, 
+            transactionType.transactionTypeName as transactionTypeName,
+            transactionNote
+        FROM `transaction`
+        LEFT JOIN account ON transactionAccountId = account.accountId
+        LEFT JOIN budget ON transactionBudgetId = budget.budgetId
+        LEFT JOIN account AS account2 ON transactionAccountTransferTo = account2.accountId
+        LEFT JOIN transactiontype ON transactionTypeId = transactionType
+        WHERE transactionBudgetId = :budgetId
+        ORDER BY transactionTime DESC
+    """
+    )
+    fun getTransactionListByBudgetData(budgetId: Long): PagingSource<Int, TransactionListAdapterData>
 }
