@@ -1,13 +1,14 @@
 package io.github.kedaitayar.mfm.data.repository
 
 import androidx.lifecycle.LiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import io.github.kedaitayar.mfm.data.dao.AccountDao
 import io.github.kedaitayar.mfm.data.dao.BasicDao
 import io.github.kedaitayar.mfm.data.entity.Account
-import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
-import io.github.kedaitayar.mfm.data.podata.AccountTransactionBudgetData
-import io.github.kedaitayar.mfm.data.podata.AccountTransactionChartData
-import io.github.kedaitayar.mfm.data.podata.BudgetedAndGoal
+import io.github.kedaitayar.mfm.data.podata.*
 import kotlinx.coroutines.flow.Flow
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -86,5 +87,15 @@ class DashboardRepository @Inject constructor(
             timeTo,
             timeToPrevMonth
         )
+    }
+
+    fun getTransactionListByAccountData(accountId: Long): Flow<PagingData<TransactionListAdapterData>> {
+        return Pager(
+            config = PagingConfig(pageSize = 30, enablePlaceholders = false),
+            pagingSourceFactory = { accountDao.getTransactionListByAccountData(accountId) }).flow
+    }
+
+    fun getTransactionByAccountGraphData(accountId: Long): Flow<List<TransactionGraphData>> {
+        return accountDao.getTransactionByAccountGraphData(accountId)
     }
 }

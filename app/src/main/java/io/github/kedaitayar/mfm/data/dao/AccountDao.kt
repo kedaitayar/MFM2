@@ -1,12 +1,10 @@
 package io.github.kedaitayar.mfm.data.dao
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import androidx.room.*
-import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
-import io.github.kedaitayar.mfm.data.podata.AccountTransactionChartData
 import io.github.kedaitayar.mfm.data.entity.Account
-import io.github.kedaitayar.mfm.data.podata.AccountTransactionBudgetData
-import io.github.kedaitayar.mfm.data.podata.BudgetedAndGoal
+import io.github.kedaitayar.mfm.data.podata.*
 import kotlinx.coroutines.flow.Flow
 import java.time.OffsetDateTime
 
@@ -288,4 +286,121 @@ interface AccountDao {
     """
     )
     fun getThisMonthBudgetedAmount(): Flow<Float?>
+
+    @Query(
+        """
+        SELECT 
+            transactionId,
+            transactionAmount,
+            transactionTime,
+            transactionTypeId,
+            transactionTypeName,
+            transactionAccountId,
+            account.accountName AS transactionAccountName,
+            transactionBudgetId,
+            budget.budgetName AS transactionBudgetName,
+            transactionAccountTransferTo,
+            account2.accountName AS transactionAccountTransferToName, 
+            transactionType.transactionTypeName as transactionTypeName,
+            transactionNote
+        FROM `transaction`
+        LEFT JOIN account ON transactionAccountId = account.accountId
+        LEFT JOIN budget ON transactionBudgetId = budget.budgetId
+        LEFT JOIN account AS account2 ON transactionAccountTransferTo = account2.accountId
+        LEFT JOIN transactiontype ON transactionTypeId = transactionType
+        WHERE transactionAccountId = :accountId
+        OR transactionAccountTransferTo = :accountId
+        ORDER BY transactionTime DESC
+    """
+    )
+    fun getTransactionListByAccountData(accountId: Long): PagingSource<Int, TransactionListAdapterData>
+
+    @Query(
+        """
+        SELECT
+            transactionWeek,
+            SUM(transactionAmount) AS transactionAmount,
+            SUM(transactionAmountPrevYear) AS transactionAmountPrevYear,
+            transactionType,
+            transactionAgeInWeek 
+        FROM
+            (
+                SELECT
+                    STRFTIME('%W', transactionTime) AS transactionWeek,
+                    SUM(transactionAmount) AS transactionAmount,
+                    0 AS transactionAmountPrevYear,
+                    transactionType,
+                    CAST((JulianDay("now") - JulianDay(transactionTime)) / 7 AS INTEGER) AS transactionAgeInWeek 
+                FROM
+                    `transaction` 
+                WHERE
+                    transactionTime > DATE('now', '-1 years') 
+                    AND transactionType != 3 
+                    AND transactionAccountId = :accountId 
+                GROUP BY
+                    CAST((JulianDay("now") - JulianDay(transactionTime)) / 7 AS INTEGER),
+                    transactionType 
+                UNION ALL
+                SELECT
+                    '-1' AS transactionWeek,
+                    0 AS transactionAmount,
+                    SUM(transactionAmount) AS transactionAmountPrevYear,
+                    transactionType,
+                    '-1' AS transactionAgeInWeek 
+                FROM
+                    (
+                        SELECT
+                            STRFTIME('%W', transactionTime) AS transactionWeek,
+                            SUM(transactionAmount) AS transactionAmount,
+                            transactionType,
+                            transactionTime 
+                        FROM
+                            `transaction` 
+                        WHERE
+                            transactionTime < DATE('now', '-2 years') 
+                            AND transactionType != 3 
+                            AND transactionAccountId = :accountId 
+                        GROUP BY
+                            CAST((JulianDay("now") - JulianDay(transactionTime)) / 7 AS INTEGER),
+                            transactionType 
+                    )
+                GROUP BY
+                    transactionType 
+                UNION ALL
+                SELECT
+                    STRFTIME('%W', transactionTime) AS transactionWeek,
+                    SUM(transactionAmount) AS transactionAmount,
+                    0 AS transactionAmountPrevYear,
+                    2 AS transactionType,
+                    CAST((JulianDay("now") - JulianDay(transactionTime)) / 7 AS INTEGER) AS transactionAgeInWeek 
+                FROM
+                    `transaction` 
+                WHERE
+                    transactionAccountTransferTo = :accountId 
+                    AND transactionType = 3 
+                GROUP BY
+                    transactionWeek 
+                UNION ALL
+                SELECT
+                    STRFTIME('%W', transactionTime) AS transactionWeek,
+                    SUM(transactionAmount) AS transactionAmount,
+                    0 AS transactionAmountPrevYear,
+                    1 AS transactionType,
+                    CAST((JulianDay("now") - JulianDay(transactionTime)) / 7 AS INTEGER) AS transactionAgeInWeek 
+                FROM
+                    `transaction` 
+                WHERE
+                    transactionAccountId = :accountId
+                    AND transactionType = 3 
+                GROUP BY
+                    transactionWeek
+            )
+        GROUP BY
+            transactionAgeInWeek,
+            transactionType 
+        ORDER BY
+            transactionAgeInWeek
+    """
+    )
+    fun getTransactionByAccountGraphData(accountId: Long): Flow<List<TransactionGraphData>>
 }
