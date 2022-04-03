@@ -10,7 +10,7 @@ import javax.inject.Inject
 class MonthYearScrollViewModel @Inject constructor(
     private val selectedDateRepository: SelectedDateRepository
 ) : ViewModel() {
-    val selectedDate = selectedDateRepository.selectedDate.asFlow()
+    val selectedDate = selectedDateRepository.selectedOffsetDate
 
     fun increaseMonth() {
         selectedDateRepository.increaseMonth()

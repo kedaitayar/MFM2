@@ -39,8 +39,8 @@ class BudgetTransactionListFragment : Fragment(R.layout.fragment_budget_transact
                 )
             )
 
-            chipGroup.setOnCheckedChangeListener { group, checkedId ->
-                when (checkedId) {
+            chipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
+                when (checkedIds.firstOrNull()) {
                     chip1Month.id -> {
                         budgetTransactionListViewModel.filterChip.value =
                             BudgetTransactionListViewModel.TimeRangeChip.OneMonth
@@ -91,7 +91,7 @@ private class BudgetTransactionAmountListAdapter :
     inner class BudgetTransactionListViewHolder(private val binding: RecyclerViewItemBudgetTransactionAmountListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: BudgetTransactionAmountList, position: Int) {
+        fun bind(item: BudgetTransactionAmountList) {
 //            binding.budgetColor.background.setTint(colors[position])
             binding.textViewBudget.text = item.budgetName
             binding.textViewTransactionAmount.text = "${item.transactionAmount}"
@@ -115,7 +115,7 @@ private class BudgetTransactionAmountListAdapter :
     }
 
     override fun onBindViewHolder(holder: BudgetTransactionListViewHolder, position: Int) {
-        holder.bind(getItem(position), position)
+        holder.bind(getItem(position))
     }
 
 }

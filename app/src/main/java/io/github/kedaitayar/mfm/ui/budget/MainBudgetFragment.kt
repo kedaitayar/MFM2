@@ -6,6 +6,7 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
@@ -19,12 +20,10 @@ import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 @AndroidEntryPoint
 class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
     private val mainBudgetViewModel: MainBudgetViewModel by viewModels()
-    private var _binding: FragmentMainBudgetBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentMainBudgetBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentMainBudgetBinding.bind(view)
 
         childFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container_not_budgeted, NotBudgetedFragment())
@@ -73,10 +72,5 @@ class MainBudgetFragment : Fragment(R.layout.fragment_main_budget) {
                 }
             })
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

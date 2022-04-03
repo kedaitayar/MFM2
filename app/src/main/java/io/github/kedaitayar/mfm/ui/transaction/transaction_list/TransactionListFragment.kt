@@ -1,21 +1,19 @@
 package io.github.kedaitayar.mfm.ui.transaction.transaction_list
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import androidx.fragment.app.Fragment
 import android.view.View
-import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.Transaction
@@ -25,19 +23,12 @@ import io.github.kedaitayar.mfm.ui.main.MainFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.ui.transaction.MainTransactionFragment
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
     private val transactionListViewModel: TransactionListViewModel by viewModels()
-    private var _binding: FragmentTransactionListBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentTransactionListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private val binding: FragmentTransactionListBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,7 +62,8 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
     }
 
     private fun setupHideFABOnScroll() {
-        binding.recyclerViewTransactionList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.recyclerViewTransactionList.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val mainFragment = parentFragment?.parentFragment
                 if (mainFragment is MainFragment) {
@@ -116,7 +108,9 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
                 transactionCard: ConstraintLayout
             ) {
                 val action =
-                    MainFragmentDirections.actionMainFragmentToEditTransactionFragment(transactionListAdapterData.toTransaction())
+                    MainFragmentDirections.actionMainFragmentToEditTransactionFragment(
+                        transactionListAdapterData.toTransaction()
+                    )
 //                val extras =
 //                    FragmentNavigatorExtras(transactionCard to "edit_transaction_${transactionListAdapterData.transactionId}")
 //                findNavController().navigate(action, extras)
@@ -156,10 +150,5 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
             transactionAccountTransferTo = transactionAccountTransferTo,
             transactionNote = transactionNote
         )
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

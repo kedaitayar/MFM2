@@ -9,7 +9,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TransactionListViewModel @Inject constructor(
-    private val transactionRepository: TransactionRepository
+    transactionRepository: TransactionRepository
 ) : ViewModel() {
-    val allTransactionListAdapterData = transactionRepository.getTransactionListData().cachedIn(viewModelScope)
+    val allTransactionListAdapterData =
+        transactionRepository.getTransactionListData().cachedIn(viewModelScope)
 }

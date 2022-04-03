@@ -104,6 +104,24 @@ class BudgetRepository @Inject constructor(
         return budgetDao.getBudgetYearlyListAdapter(month, year, timeFrom, timeTo)
     }
 
+    fun getBudgetMonthlyListAdapterFlow(
+        month: Int,
+        year: Int,
+    ): Flow<List<BudgetListAdapterData>> {
+        val timeFrom = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+        val timeTo = timeFrom.plusMonths(1).minusNanos(1)
+        return budgetDao.getBudgetMonthlyListAdapterFlow(month, year, timeFrom, timeTo)
+    }
+
+    fun getBudgetYearlyListAdapterFlow(
+        month: Int,
+        year: Int,
+    ): Flow<List<BudgetListAdapterData>> {
+        val timeFrom = OffsetDateTime.of(year, 1, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
+        val timeTo = timeFrom.plusYears(1).minusNanos(1)
+        return budgetDao.getBudgetYearlyListAdapterFlow(month, year, timeFrom, timeTo)
+    }
+
     fun getBudgetingListAdapterDO(
         month: Int,
         year: Int
