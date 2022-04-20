@@ -102,7 +102,6 @@ interface BudgetDao {
         timeTo: OffsetDateTime
     ): Flow<List<BudgetListAdapterData>>
 
-    // TODO: unit test
     @Query(
         """
         SELECT

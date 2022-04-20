@@ -118,7 +118,7 @@ class BudgetRepository @Inject constructor(
         year: Int,
     ): Flow<List<BudgetListAdapterData>> {
         val timeFrom = OffsetDateTime.of(year, 1, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0))
-        val timeTo = timeFrom.plusYears(1).minusNanos(1)
+        val timeTo = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.ofTotalSeconds(0)).plusMonths(1).minusNanos(1)
         return budgetDao.getBudgetYearlyListAdapterFlow(month, year, timeFrom, timeTo)
     }
 
