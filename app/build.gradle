@@ -108,6 +108,8 @@ dependencies {
     //paging 3
     implementation "androidx.paging:paging-runtime-ktx:3.1.1"
 
+    //viewpager2
+    implementation "androidx.viewpager2:viewpager2:1.1.0-beta01"
 
     // local unit test
     testImplementation 'junit:junit:4.13.2'

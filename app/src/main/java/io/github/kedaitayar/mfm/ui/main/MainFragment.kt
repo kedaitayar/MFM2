@@ -21,25 +21,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private val mainViewModel: MainViewModel by activityViewModels()
     private val binding: FragmentMainBinding by viewBinding()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-//        exitTransition = MaterialElevationScale(false).apply {
-//            duration = 300
-//        }
-//        reenterTransition = MaterialElevationScale(true).apply {
-//            duration = 300
-//        }
-//        exitTransition = Hold()
-//        reenterTransition = Hold()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        postponeEnterTransition()
-//        view.doOnPreDraw { startPostponedEnterTransition() }
-
         val viewPager = binding.viewPagerMain
-
+        viewPager.offscreenPageLimit = 2
         viewPager.adapter = MainViewPagerAdapter(this)
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageScrolled(position: Int,
@@ -62,21 +47,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         binding.fab.setOnClickListener {
             val action = MainFragmentDirections.actionMainFragmentToAddTransactionFragment()
-//            val extras = FragmentNavigatorExtras(binding.fab to "add_transaction_activity_transition")
-//            findNavController().navigate(action, extras)
             findNavController().navigate(action)
         }
-
-//        binding.apply {
-//            menuCardRecyclerview.adapter = adapter
-//            menuCardRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-//            menuCardRecyclerview.addItemDecoration(
-//                DividerItemDecoration(
-//                    requireContext(),
-//                    DividerItemDecoration.VERTICAL
-//                )
-//            )
-//        }
 
         binding.fab.setOnLongClickListener {
             val action = MainFragmentDirections.actionMainFragmentToQuickTransactionSelectionDialogFragment()
