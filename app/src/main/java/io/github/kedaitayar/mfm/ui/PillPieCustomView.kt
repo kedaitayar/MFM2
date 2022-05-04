@@ -31,7 +31,12 @@ class PillPieCustomView @JvmOverloads constructor(
 
 
     init {
-        this.setPadding(paddingLeft, paddingTop, paddingRight + (textSize * 1.75).toInt(), paddingBottom)
+        this.setPadding(
+            paddingLeft,
+            paddingTop,
+            paddingRight + (textSize * 1.75).toInt(),
+            paddingBottom
+        )
         val typeArray = context.obtainStyledAttributes(attrs, R.styleable.PillPieCustomView)
         if (isInEditMode) {
             this.text = "Placeholder"
@@ -40,8 +45,14 @@ class PillPieCustomView @JvmOverloads constructor(
             piePercent = 80
         } else {
             piePercent = typeArray.getInt(R.styleable.PillPieCustomView_piePercentage, 0)
-            bgColor = typeArray.getColor(R.styleable.PillPieCustomView_bgColor, Color.parseColor("#4CAF50"))
-            pieColor = typeArray.getColor(R.styleable.PillPieCustomView_pieColor, Color.parseColor("#777777"))
+            bgColor = typeArray.getColor(
+                R.styleable.PillPieCustomView_bgColor,
+                Color.parseColor("#4CAF50")
+            )
+            pieColor = typeArray.getColor(
+                R.styleable.PillPieCustomView_pieColor,
+                Color.parseColor("#777777")
+            )
         }
         typeArray.recycle()
     }
@@ -66,18 +77,32 @@ class PillPieCustomView @JvmOverloads constructor(
         radius = height / 2f
         path.rewind()
         path.addCircle(radius, radius, radius * 0.75f, Path.Direction.CCW)
+        val clipRect01 = RectF(radius, 0f, radius * 2, height.toFloat())
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
             canvas?.clipPath(path, Region.Op.DIFFERENCE)
+            canvas?.save()
+            canvas?.clipRect(clipRect01, Region.Op.DIFFERENCE)
         } else {
             canvas?.clipOutPath(path)
+            canvas?.save()
+            canvas?.clipOutRect(clipRect01)
         }
+        canvas?.drawCircle(radius, radius, radius, paint)
+        canvas?.restore()
 
         val rightRadius = 8 * resources.displayMetrics.density
-
-        canvas?.drawCircle(radius, radius, radius, paint)
         canvas?.drawRect(radius, 0f, height.toFloat(), height.toFloat(), paint)
         val rect01 = RectF(radius, 0f, width.toFloat(), height.toFloat())
+
+        canvas?.save()
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
+            canvas?.clipRect(clipRect01, Region.Op.DIFFERENCE)
+        } else {
+            canvas?.clipOutRect(clipRect01)
+        }
         canvas?.drawRoundRect(rect01, rightRadius, rightRadius, paint)
+        canvas?.restore()
+
         canvas?.restore()
 
         paint.color = this@PillPieCustomView.pieColor
