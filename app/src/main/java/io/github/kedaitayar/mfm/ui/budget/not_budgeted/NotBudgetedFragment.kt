@@ -37,7 +37,7 @@ class NotBudgetedFragment : Fragment(R.layout.fragment_not_budgeted) {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 notBudgetedViewModel.notBudgetedAmount.collect {
                     binding.textViewNotBudgetedAmount.text =
                         resources.getString(R.string.currency_symbol, formatter.format(it))

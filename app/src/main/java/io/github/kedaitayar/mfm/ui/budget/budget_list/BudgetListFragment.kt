@@ -88,7 +88,7 @@ class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
         )
 
         viewLifecycleOwner.lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 budgetListViewModel.budgetList.collect {
                     if (it.isEmpty()) {
                         when (budgetListViewModel.budgetType) {

@@ -119,7 +119,7 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting),
         val red = ContextCompat.getColor(requireContext(), typedValue.resourceId)
 
         lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     budgetingViewModel.currentTotalNotBudgeted.collect {
                         binding.textViewNotBudgetedAmount.text = it.toCurrency(requireContext())

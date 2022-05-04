@@ -16,12 +16,9 @@ import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.util.exhaustive
 import io.github.kedaitayar.mfm.util.notNull
 import io.github.kedaitayar.mfm.util.toCurrency
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-
-private const val TAG = "AccountDashboardFragmen"
 
 @AndroidEntryPoint
 class AccountDashboardFragment : Fragment(R.layout.fragment_account_dashboard) {
@@ -41,7 +38,7 @@ class AccountDashboardFragment : Fragment(R.layout.fragment_account_dashboard) {
 
     private fun setupEventListener() {
         viewLifecycleOwner.lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 accountDashboardViewModel.accountDashboardEvent.collect { event ->
                     when (event) {
                         AccountDashboardViewModel.AccountDashboardEvent.NavigateToAddAccount -> {
@@ -64,7 +61,7 @@ class AccountDashboardFragment : Fragment(R.layout.fragment_account_dashboard) {
             decimalFormatSymbols = format
         }
         viewLifecycleOwner.lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
 //                    accountDashboardViewModel.thisMonthSpending.collect {
 //                        binding.textViewSpendingThisMonthAmount.text =
