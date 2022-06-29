@@ -1,5 +1,8 @@
 package io.github.kedaitayar.mfm.ui.dashboard.spending
 
+import android.graphics.Canvas
+import android.graphics.LinearGradient
+import android.graphics.Shader
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
@@ -14,10 +17,13 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
+import com.github.mikephil.charting.renderer.BarChartRenderer
+import com.github.mikephil.charting.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMonthlySpendingBinding
-import kotlinx.coroutines.flow.collect
+import io.github.kedaitayar.mfm.ui.CustomBarChartRenderer
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
 
@@ -28,6 +34,17 @@ class MonthlySpendingFragment : Fragment(R.layout.fragment_monthly_spending) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupChart()
+    }
+
+    private fun setupChart() {
+        binding.barChart.renderer = CustomBarChartRenderer(
+            binding.barChart,
+            binding.barChart.animator,
+            binding.barChart.viewPortHandler,
+            8f
+        )
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 monthlySpendingViewModel.monthlySpendingGraph.collect {
