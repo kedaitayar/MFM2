@@ -21,6 +21,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentAccountDetailBinding
+import io.github.kedaitayar.mfm.ui.CustomCombinedChartRenderer
 import io.github.kedaitayar.mfm.ui.transaction.transaction_list.TransactionListAdapter
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -84,6 +85,11 @@ class AccountDetailFragment : Fragment(R.layout.fragment_account_detail) {
 
     private fun setupCombinedGraph() {
         binding.combinedChart.apply {
+            renderer = CustomCombinedChartRenderer(
+                binding.combinedChart,
+                binding.combinedChart.animator,
+                binding.combinedChart.viewPortHandler
+            )
             setTouchEnabled(false)
             description.isEnabled = false
             drawOrder = arrayOf(

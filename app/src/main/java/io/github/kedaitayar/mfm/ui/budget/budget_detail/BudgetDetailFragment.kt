@@ -21,6 +21,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentBudgetDetailBinding
+import io.github.kedaitayar.mfm.ui.CustomBarChartRenderer
 import io.github.kedaitayar.mfm.ui.transaction.transaction_list.TransactionListAdapter
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -75,6 +76,12 @@ class BudgetDetailFragment : Fragment(R.layout.fragment_budget_detail) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 budgetDetailViewModel.monthlyBudgetSpendingGraph.collect {
                     binding.barChart.apply {
+                        binding.barChart.renderer = CustomBarChartRenderer(
+                            binding.barChart,
+                            binding.barChart.animator,
+                            binding.barChart.viewPortHandler,
+                            8f
+                        )
                         val barDataSet = BarDataSet(it, "bardataset label")
                         val typedValue = TypedValue()
                         requireContext().theme.resolveAttribute(
