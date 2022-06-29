@@ -75,7 +75,7 @@ interface TransactionDao {
                 WHERE
                     transactionType != 3 
                     --AND STRFTIME('%Y', transactionTime) < :year
-                    AND transactionTime < DATE('now', '-2 years')
+                    AND transactionTime < DATE('now', '-1 years')
                 GROUP BY
                     --STRFTIME('%W', transactionTime),
                     CAST((JulianDay("now") - JulianDay(transactionTime))/7 As Integer),
@@ -96,7 +96,7 @@ interface TransactionDao {
         SELECT SUM(transactionAmount) as monthSpending , strftime('%Y-%m-%dT%H:%M:%SZ',transactionTime, 'start of month') as month
         FROM `transaction` 
         WHERE transactionType = 1 
-            AND transactionTime > DATE('now', '-1 years')
+            AND transactionTime BETWEEN DATE('now', 'start of month', '-1 years', '+1 month') AND DATE('now', 'start of month', '+1 month')
         GROUP BY STRFTIME('%Y-%m', transactionTime)
         ORDER BY transactionTime DESC
     """
