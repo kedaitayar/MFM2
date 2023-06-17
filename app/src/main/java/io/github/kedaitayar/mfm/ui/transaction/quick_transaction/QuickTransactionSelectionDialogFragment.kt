@@ -1,26 +1,18 @@
 package io.github.kedaitayar.mfm.ui.transaction.quick_transaction
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.QuickTransaction
 import io.github.kedaitayar.mfm.databinding.FragmentQuickTransactionSelectionDialogBinding
-import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import timber.log.Timber
+import io.github.kedaitayar.mfm.util.safeCollection
 
 @AndroidEntryPoint
 class QuickTransactionSelectionDialogFragment : BottomSheetDialogFragment() {
@@ -51,12 +43,8 @@ class QuickTransactionSelectionDialogFragment : BottomSheetDialogFragment() {
             )
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                quickTransactionSelectionViewModel.allQuickTransaction.collect {
-                    quickTransactionAdapter.submitList(it)
-                }
-            }
+        quickTransactionSelectionViewModel.allQuickTransaction.safeCollection(viewLifecycleOwner) {
+            quickTransactionAdapter.submitList(it)
         }
 
         quickTransactionAdapter.setOnItemClickListener(object :

@@ -3,13 +3,9 @@ package io.github.kedaitayar.mfm.ui.budget.budget_list
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -21,8 +17,7 @@ import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentBudgetListBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import io.github.kedaitayar.mfm.util.safeCollection
 
 @AndroidEntryPoint
 class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
@@ -87,27 +82,25 @@ class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
             )
         )
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                budgetListViewModel.budgetList.collect {
-                    if (it.isEmpty()) {
-                        when (budgetListViewModel.budgetType) {
-                            1 -> {
-                                binding.textViewEmptyViewTopText.text = "Monthly budget is empty"
-                            }
-                            2 -> {
-                                binding.textViewEmptyViewTopText.text = "Yearly budget is empty"
-                            }
-                            else -> {
+        budgetListViewModel.budgetList.safeCollection(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                when (budgetListViewModel.budgetType) {
+                    1 -> {
+                        binding.textViewEmptyViewTopText.text = "Monthly budget is empty"
+                    }
 
-                            }
-                        }
-                        binding.linearLayoutEmptyView.visibility = View.VISIBLE
-                    } else {
-                        binding.linearLayoutEmptyView.visibility = View.GONE
-                        adapter.submitList(it)
+                    2 -> {
+                        binding.textViewEmptyViewTopText.text = "Yearly budget is empty"
+                    }
+
+                    else -> {
+
                     }
                 }
+                binding.linearLayoutEmptyView.visibility = View.VISIBLE
+            } else {
+                binding.linearLayoutEmptyView.visibility = View.GONE
+                adapter.submitList(it)
             }
         }
         popupMenuSetup(adapter)
@@ -133,6 +126,7 @@ class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
                             findNavController().navigate(action)
                             true
                         }
+
                         R.id.edit -> {
                             val action =
                                 MainFragmentDirections.actionMainFragmentToEditBudgetFragment(
@@ -141,6 +135,7 @@ class BudgetListFragment : Fragment(R.layout.fragment_budget_list) {
                             findNavController().navigate(action)
                             true
                         }
+
                         else -> false
                     }
                 }

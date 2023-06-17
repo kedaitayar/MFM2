@@ -6,7 +6,6 @@ import android.widget.Button
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,7 +15,7 @@ import io.github.kedaitayar.mfm.data.podata.AccountListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentAccountListBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.util.exhaustive
-import kotlinx.coroutines.flow.collect
+import io.github.kedaitayar.mfm.util.safeCollection
 
 @AndroidEntryPoint
 class AccountListFragment : Fragment(R.layout.fragment_account_list) {
@@ -68,10 +67,12 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
                             accountListViewModel.onAccountDetailClick(accountListAdapterData.toAccount())
                             true
                         }
+
                         R.id.edit -> {
                             accountListViewModel.onEditAccountClick(accountListAdapterData.toAccount())
                             true
                         }
+
                         else -> false
                     }
                 }
@@ -81,23 +82,24 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
     }
 
     private fun setupEventListener() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            accountListViewModel.accountListEvent.collect { event ->
-                when (event) {
-                    is AccountListViewModel.AccountListEvent.NavigateToAccountDetail -> {
-                        val action = MainFragmentDirections.actionMainFragmentToAccountDetailFragment(event.account)
-                        findNavController().navigate(action)
-                    }
-                    is AccountListViewModel.AccountListEvent.NavigateToEditAccount ->{
-                        val action = MainFragmentDirections.actionMainFragmentToAddEditAccountFragment(event.account)
-                        findNavController().navigate(action)
-                    }
-                }.exhaustive
-            }
+        accountListViewModel.accountListEvent.safeCollection(viewLifecycleOwner) { event ->
+            when (event) {
+                is AccountListViewModel.AccountListEvent.NavigateToAccountDetail -> {
+                    val action =
+                        MainFragmentDirections.actionMainFragmentToAccountDetailFragment(event.account)
+                    findNavController().navigate(action)
+                }
+
+                is AccountListViewModel.AccountListEvent.NavigateToEditAccount -> {
+                    val action =
+                        MainFragmentDirections.actionMainFragmentToAddEditAccountFragment(event.account)
+                    findNavController().navigate(action)
+                }
+            }.exhaustive
         }
     }
 
-    private fun AccountListAdapterData.toAccount() : Account {
+    private fun AccountListAdapterData.toAccount(): Account {
         return Account(
             accountId = accountId,
             accountName = accountName

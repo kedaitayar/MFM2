@@ -21,6 +21,7 @@ import io.github.kedaitayar.mfm.data.entity.BudgetType
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.ui.main.MainViewModel
 import io.github.kedaitayar.mfm.util.exhaustive
+import io.github.kedaitayar.mfm.util.safeCollection
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
@@ -43,8 +44,7 @@ class AddBudgetFragment : Fragment(R.layout.fragment_add_budget) {
     }
 
     private fun setupEventListener() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            addEditBudgetViewModel.addEditBudgetEvent.collect { event ->
+            addEditBudgetViewModel.addEditBudgetEvent.safeCollection(viewLifecycleOwner) { event ->
                 when (event) {
                     is AddEditBudgetViewModel.AddEditBudgetEvent.NavigateBackWithAddResult -> {
                         if (event.result > 0L) {
@@ -80,7 +80,6 @@ class AddBudgetFragment : Fragment(R.layout.fragment_add_budget) {
                     }
                 }.exhaustive
             }
-        }
     }
 
     private fun setupInputListener() {

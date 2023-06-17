@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.mikephil.charting.data.PieData
@@ -16,9 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.Account
 import io.github.kedaitayar.mfm.databinding.FragmentAccountBudgetChartBinding
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import java.util.*
+import io.github.kedaitayar.mfm.util.safeCollection
 
 private const val ARG_ACCOUNT =
     "io.github.kedaitayar.mfm.ui.dashboard.account.account_detail.AccountBudgetChartFragment.account"
@@ -31,7 +26,8 @@ class AccountBudgetChartFragment : Fragment(R.layout.fragment_account_budget_cha
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            accountBudgetChartViewModel.account.value = it.getParcelable(ARG_ACCOUNT) ?: Account(accountId = -1)
+            accountBudgetChartViewModel.account.value =
+                it.getParcelable(ARG_ACCOUNT) ?: Account(accountId = -1)
         }
     }
 
@@ -64,30 +60,20 @@ class AccountBudgetChartFragment : Fragment(R.layout.fragment_account_budget_cha
         for (c in ColorTemplate.LIBERTY_COLORS) colors.add(c)
         for (c in ColorTemplate.PASTEL_COLORS) colors.add(c)
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    accountBudgetChartViewModel.pieEntries.collect { list ->
-                        val dataSet = PieDataSet(list, "dataset label")
-                        dataSet.colors = colors
-                        val data = PieData(dataSet)
-                        data.setDrawValues(false)
-                        binding.pieChart.data = data
-                        binding.pieChart.notifyDataSetChanged()
-                        binding.pieChart.invalidate()
-                    }
-                }
-                launch {
-                    accountBudgetChartViewModel.totalTransactionAmount.collect {
-                        adapter.setTotalTransactionAmount(it)
-                    }
-                }
-                launch {
-                    accountBudgetChartViewModel.accountTransactionBudgetFlow.collect {
-                        adapter.submitList(it)
-                    }
-                }
-            }
+        accountBudgetChartViewModel.pieEntries.safeCollection(viewLifecycleOwner) { list ->
+            val dataSet = PieDataSet(list, "dataset label")
+            dataSet.colors = colors
+            val data = PieData(dataSet)
+            data.setDrawValues(false)
+            binding.pieChart.data = data
+            binding.pieChart.notifyDataSetChanged()
+            binding.pieChart.invalidate()
+        }
+        accountBudgetChartViewModel.totalTransactionAmount.safeCollection(viewLifecycleOwner) {
+            adapter.setTotalTransactionAmount(it)
+        }
+        accountBudgetChartViewModel.accountTransactionBudgetFlow.safeCollection(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
     }
 

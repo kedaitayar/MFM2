@@ -5,9 +5,6 @@ import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
@@ -20,8 +17,7 @@ import io.github.kedaitayar.mfm.ui.setting.quickTransaction.addEditQuickTransact
 import io.github.kedaitayar.mfm.ui.setting.quickTransaction.utils.AccountListArrayAdapter
 import io.github.kedaitayar.mfm.ui.setting.quickTransaction.utils.BudgetListArrayAdapter
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.AddEditTransactionViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import io.github.kedaitayar.mfm.util.safeCollection
 
 @AndroidEntryPoint
 class QuickTransactionExpenseFragment : Fragment(R.layout.fragment_quick_transaction_expense),
@@ -53,29 +49,21 @@ class QuickTransactionExpenseFragment : Fragment(R.layout.fragment_quick_transac
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    addEditQuickTransactionViewModel.allAccount.collect {
-                        val adapter = AccountListArrayAdapter(
-                            requireContext(),
-                            R.layout.support_simple_spinner_dropdown_item,
-                            it
-                        )
-                        binding.autoCompleteAccount.setAdapter(adapter)
-                    }
-                }
-                launch {
-                    addEditQuickTransactionViewModel.allBudget.collect {
-                        val adapter = BudgetListArrayAdapter(
-                            requireContext(),
-                            R.layout.support_simple_spinner_dropdown_item,
-                            it
-                        )
-                        binding.autoCompleteBudget.setAdapter(adapter)
-                    }
-                }
-            }
+        addEditQuickTransactionViewModel.allAccount.safeCollection(viewLifecycleOwner) {
+            val adapter = AccountListArrayAdapter(
+                requireContext(),
+                R.layout.support_simple_spinner_dropdown_item,
+                it
+            )
+            binding.autoCompleteAccount.setAdapter(adapter)
+        }
+        addEditQuickTransactionViewModel.allBudget.safeCollection(viewLifecycleOwner) {
+            val adapter = BudgetListArrayAdapter(
+                requireContext(),
+                R.layout.support_simple_spinner_dropdown_item,
+                it
+            )
+            binding.autoCompleteBudget.setAdapter(adapter)
         }
     }
 

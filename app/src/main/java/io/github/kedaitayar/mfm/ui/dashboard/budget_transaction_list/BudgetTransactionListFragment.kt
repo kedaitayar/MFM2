@@ -6,18 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetTransactionAmountList
 import io.github.kedaitayar.mfm.databinding.FragmentBudgetTransactionListBinding
 import io.github.kedaitayar.mfm.databinding.RecyclerViewItemBudgetTransactionAmountListBinding
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import io.github.kedaitayar.mfm.util.safeCollection
 import java.text.DecimalFormat
 
 
@@ -45,14 +45,17 @@ class BudgetTransactionListFragment : Fragment(R.layout.fragment_budget_transact
                         budgetTransactionListViewModel.filterChip.value =
                             BudgetTransactionListViewModel.TimeRangeChip.OneMonth
                     }
+
                     chip3Months.id -> {
                         budgetTransactionListViewModel.filterChip.value =
                             BudgetTransactionListViewModel.TimeRangeChip.ThreeMonth
                     }
+
                     chip1Year.id -> {
                         budgetTransactionListViewModel.filterChip.value =
                             BudgetTransactionListViewModel.TimeRangeChip.OneYear
                     }
+
                     chipAllTime.id -> {
                         budgetTransactionListViewModel.filterChip.value =
                             BudgetTransactionListViewModel.TimeRangeChip.AllTime
@@ -61,14 +64,8 @@ class BudgetTransactionListFragment : Fragment(R.layout.fragment_budget_transact
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    budgetTransactionListViewModel.budgetTransactionAmountList.collect {
-                        adapter.submitList(it)
-                    }
-                }
-            }
+        budgetTransactionListViewModel.budgetTransactionAmountList.safeCollection(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
     }
 }

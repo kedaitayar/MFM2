@@ -5,9 +5,6 @@ import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
@@ -20,9 +17,8 @@ import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transact
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.edit_transaction.EditTransactionChild
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.utils.AccountListArrayAdapter
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
+import io.github.kedaitayar.mfm.util.safeCollection
 import io.github.kedaitayar.mfm.util.toStringOrBlank
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneId
@@ -54,24 +50,14 @@ class TransferTransactionFragment : Fragment(R.layout.fragment_transfer_transact
     }
 
     private fun setupInputErrorListener() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-                launch {
-                    addEditTransactionViewModel.errorAccountFrom.collect {
-                        binding.textInputLayoutTransferFrom.error = it
-                    }
-                }
-                launch {
-                    addEditTransactionViewModel.errorAccountTo.collect {
-                        binding.textInputLayoutTransferTo.error = it
-                    }
-                }
-                launch {
-                    addEditTransactionViewModel.errorAmount.collect {
-                        binding.textInputLayoutAmount.error = it
-                    }
-                }
-            }
+        addEditTransactionViewModel.errorAccountFrom.safeCollection(viewLifecycleOwner) {
+            binding.textInputLayoutTransferFrom.error = it
+        }
+        addEditTransactionViewModel.errorAccountTo.safeCollection(viewLifecycleOwner) {
+            binding.textInputLayoutTransferTo.error = it
+        }
+        addEditTransactionViewModel.errorAmount.safeCollection(viewLifecycleOwner) {
+            binding.textInputLayoutAmount.error = it
         }
     }
 

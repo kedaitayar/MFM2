@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,8 +12,8 @@ import io.github.kedaitayar.mfm.databinding.FragmentAccountDashboardBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.util.exhaustive
 import io.github.kedaitayar.mfm.util.notNull
+import io.github.kedaitayar.mfm.util.safeCollection
 import io.github.kedaitayar.mfm.util.toCurrency
-import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
@@ -37,18 +34,14 @@ class AccountDashboardFragment : Fragment(R.layout.fragment_account_dashboard) {
     }
 
     private fun setupEventListener() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                accountDashboardViewModel.accountDashboardEvent.collect { event ->
-                    when (event) {
-                        AccountDashboardViewModel.AccountDashboardEvent.NavigateToAddAccount -> {
-                            val action =
-                                MainFragmentDirections.actionMainFragmentToAddEditAccountFragment()
-                            findNavController().navigate(action)
-                        }
-                    }.exhaustive
+        accountDashboardViewModel.accountDashboardEvent.safeCollection(viewLifecycleOwner) { event ->
+            when (event) {
+                AccountDashboardViewModel.AccountDashboardEvent.NavigateToAddAccount -> {
+                    val action =
+                        MainFragmentDirections.actionMainFragmentToAddEditAccountFragment()
+                    findNavController().navigate(action)
                 }
-            }
+            }.exhaustive
         }
     }
 
@@ -60,43 +53,27 @@ class AccountDashboardFragment : Fragment(R.layout.fragment_account_dashboard) {
         val formatter = DecimalFormat(resources.getString(R.string.currency_format)).apply {
             decimalFormatSymbols = format
         }
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-//                    accountDashboardViewModel.thisMonthSpending.collect {
-//                        binding.textViewSpendingThisMonthAmount.text =
-//                            resources.getString(R.string.currency_symbol, formatter.format(it.notNull()))
-//                    }
-                    accountDashboardViewModel.thisMonthBudgeted.collect {
-                        binding.textViewSpendingThisMonthAmount.text =
-                            it?.toDouble().notNull().toCurrency(requireContext())
-                    }
-                }
-                launch {
-                    accountDashboardViewModel.totalBudgetedAndGoal.collect {
-                        binding.textViewUncompletedBudget.text = resources.getString(
-                            R.string.currency_symbol,
-                            formatter.format(it.uncompletedGoal.notNull())
-                        )
-                        binding.ringView.setRingProgress(((it.budgetGoal.notNull() - it.uncompletedGoal.notNull()) / it.budgetGoal.notNull() * 100).toInt())
-                    }
-                }
-                launch {
-                    accountDashboardViewModel.nextMonthBudgeted.collect {
-                        binding.textViewBudgetedNextMonthAmount.text =
-                            resources.getString(
-                                R.string.currency_symbol,
-                                formatter.format(it.notNull())
-                            )
-                    }
-                }
-                launch {
-                    accountDashboardViewModel.notBudgetedAmount.collect {
-                        binding.textViewNotBudgetedAmount.text =
-                            resources.getString(R.string.currency_symbol, formatter.format(it))
-                    }
-                }
-            }
+        accountDashboardViewModel.thisMonthBudgeted.safeCollection(viewLifecycleOwner) {
+            binding.textViewSpendingThisMonthAmount.text =
+                it?.toDouble().notNull().toCurrency(requireContext())
+        }
+        accountDashboardViewModel.totalBudgetedAndGoal.safeCollection(viewLifecycleOwner) {
+            binding.textViewUncompletedBudget.text = resources.getString(
+                R.string.currency_symbol,
+                formatter.format(it.uncompletedGoal.notNull())
+            )
+            binding.ringView.setRingProgress(((it.budgetGoal.notNull() - it.uncompletedGoal.notNull()) / it.budgetGoal.notNull() * 100).toInt())
+        }
+        accountDashboardViewModel.nextMonthBudgeted.safeCollection(viewLifecycleOwner) {
+            binding.textViewBudgetedNextMonthAmount.text =
+                resources.getString(
+                    R.string.currency_symbol,
+                    formatter.format(it.notNull())
+                )
+        }
+        accountDashboardViewModel.notBudgetedAmount.safeCollection(viewLifecycleOwner) {
+            binding.textViewNotBudgetedAmount.text =
+                resources.getString(R.string.currency_symbol, formatter.format(it))
         }
     }
 

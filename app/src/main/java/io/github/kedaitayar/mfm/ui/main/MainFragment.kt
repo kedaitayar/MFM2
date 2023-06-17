@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -14,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentMainBinding
 import io.github.kedaitayar.mfm.util.exhaustive
-import kotlinx.coroutines.flow.collect
+import io.github.kedaitayar.mfm.util.safeCollection
 
 @AndroidEntryPoint
 class MainFragment : Fragment(R.layout.fragment_main) {
@@ -27,9 +26,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         viewPager.offscreenPageLimit = 2
         viewPager.adapter = MainViewPagerAdapter(this)
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageScrolled(position: Int,
-                    positionOffset: Float,
-                    positionOffsetPixels: Int) {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
                 if (position == 2) {
                     hideFAB()
@@ -51,19 +52,18 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
 
         binding.fab.setOnLongClickListener {
-            val action = MainFragmentDirections.actionMainFragmentToQuickTransactionSelectionDialogFragment()
+            val action =
+                MainFragmentDirections.actionMainFragmentToQuickTransactionSelectionDialogFragment()
             findNavController().navigate(action)
             true
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            mainViewModel.mainEvent.collect { event ->
-                when (event) {
-                    is MainViewModel.MainEvent.ShowSnackbar -> {
-                        showSnackBar(event.msg, event.length)
-                    }
-                }.exhaustive
-            }
+        mainViewModel.mainEvent.safeCollection(viewLifecycleOwner) { event ->
+            when (event) {
+                is MainViewModel.MainEvent.ShowSnackbar -> {
+                    showSnackBar(event.msg, event.length)
+                }
+            }.exhaustive
         }
 
         setupAppBar()
@@ -77,6 +77,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                     findNavController().navigate(actions)
                     true
                 }
+
                 else -> false
             }
         }

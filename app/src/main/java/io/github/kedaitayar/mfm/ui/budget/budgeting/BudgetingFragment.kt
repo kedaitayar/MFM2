@@ -7,9 +7,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -18,11 +15,10 @@ import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentBudgetingBinding
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
+import io.github.kedaitayar.mfm.util.safeCollection
 import io.github.kedaitayar.mfm.util.toCurrency
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import java.time.format.TextStyle
-import java.util.*
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -44,18 +40,17 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting),
     }
 
     private fun setupEventListener() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            budgetingViewModel.budgetingEvent.collect { event ->
-                when (event) {
-                    BudgetingViewModel.BudgetingEvent.NavigateBack -> {
-                        hideKeyboard()
-                        findNavController().navigateUp()
-                    }
-                    is BudgetingViewModel.BudgetingEvent.ShowSnackbar -> {
-                        Snackbar.make(requireView(), event.msg, event.length)
+        budgetingViewModel.budgetingEvent.safeCollection(viewLifecycleOwner) { event ->
+            when (event) {
+                BudgetingViewModel.BudgetingEvent.NavigateBack -> {
+                    hideKeyboard()
+                    findNavController().navigateUp()
+                }
+
+                is BudgetingViewModel.BudgetingEvent.ShowSnackbar -> {
+                    Snackbar.make(requireView(), event.msg, event.length)
 //                            .setAnchorView(binding)
-                            .show()
-                    }
+                        .show()
                 }
             }
         }
@@ -74,6 +69,7 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting),
                     budgetingViewModel.onSaveClick()
                     true
                 }
+
                 else -> {
                     false
                 }
@@ -118,18 +114,12 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting),
         requireContext().theme.resolveAttribute(R.attr.gRed, typedValue, true)
         val red = ContextCompat.getColor(requireContext(), typedValue.resourceId)
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    budgetingViewModel.currentTotalNotBudgeted.collect {
-                        binding.textViewNotBudgetedAmount.text = it.toCurrency(requireContext())
-                        if (it < 0) {
-                            binding.constraintLayoutNotBudgeted.setBackgroundColor(red)
-                        } else {
-                            binding.constraintLayoutNotBudgeted.setBackgroundColor(green)
-                        }
-                    }
-                }
+        budgetingViewModel.currentTotalNotBudgeted.safeCollection(viewLifecycleOwner) {
+            binding.textViewNotBudgetedAmount.text = it.toCurrency(requireContext())
+            if (it < 0) {
+                binding.constraintLayoutNotBudgeted.setBackgroundColor(red)
+            } else {
+                binding.constraintLayoutNotBudgeted.setBackgroundColor(green)
             }
         }
     }
@@ -148,6 +138,7 @@ class BudgetingFragment : Fragment(R.layout.fragment_budgeting),
                 budgetingViewModel.budgetingAmountListMonthly.value =
                     budgetingAmountListMonthly.toMap()
             }
+
             2L -> {
                 val budgetingAmountListYearly =
                     budgetingViewModel.budgetingAmountListYearly.value.toMutableMap()

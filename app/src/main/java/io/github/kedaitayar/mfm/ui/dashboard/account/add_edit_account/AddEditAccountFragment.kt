@@ -1,23 +1,22 @@
 package io.github.kedaitayar.mfm.ui.dashboard.account.add_edit_account
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
-import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
 import io.github.kedaitayar.mfm.databinding.FragmentAddEditAccountBinding
-import io.github.kedaitayar.mfm.util.exhaustive
 import io.github.kedaitayar.mfm.ui.main.MainViewModel
-import kotlinx.coroutines.flow.collect
+import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
+import io.github.kedaitayar.mfm.util.exhaustive
+import io.github.kedaitayar.mfm.util.safeCollection
 
 @AndroidEntryPoint
 class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
@@ -47,47 +46,48 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
     }
 
     private fun setupEventListener() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            addEditAccountViewModel.addEditAccountEvent.collect { event ->
-                when (event) {
-                    is AddEditAccountViewModel.AddEditAccountEvent.NavigateBackWithAddResult -> {
-                        if (event.result > 0L) {
-                            mainViewModel.showSnackbar("Account added", Snackbar.LENGTH_SHORT)
-                        } else {
-                            mainViewModel.showSnackbar("Account add failed", Snackbar.LENGTH_SHORT)
-                        }
-                        hideKeyboard()
-                        findNavController().navigateUp()
-                        true
+        addEditAccountViewModel.addEditAccountEvent.safeCollection(viewLifecycleOwner) { event ->
+            when (event) {
+                is AddEditAccountViewModel.AddEditAccountEvent.NavigateBackWithAddResult -> {
+                    if (event.result > 0L) {
+                        mainViewModel.showSnackbar("Account added", Snackbar.LENGTH_SHORT)
+                    } else {
+                        mainViewModel.showSnackbar("Account add failed", Snackbar.LENGTH_SHORT)
                     }
-                    is AddEditAccountViewModel.AddEditAccountEvent.NavigateBackWithDeleteResult -> {
-                        if (event.result == 1) {
-                            mainViewModel.showSnackbar("Account deleted", Snackbar.LENGTH_SHORT)
-                        } else {
-                            mainViewModel.showSnackbar("Account delete failed", Snackbar.LENGTH_SHORT)
-                        }
-                        hideKeyboard()
-                        findNavController().navigateUp()
-                        true
+                    hideKeyboard()
+                    findNavController().navigateUp()
+                    true
+                }
+
+                is AddEditAccountViewModel.AddEditAccountEvent.NavigateBackWithDeleteResult -> {
+                    if (event.result == 1) {
+                        mainViewModel.showSnackbar("Account deleted", Snackbar.LENGTH_SHORT)
+                    } else {
+                        mainViewModel.showSnackbar("Account delete failed", Snackbar.LENGTH_SHORT)
                     }
-                    is AddEditAccountViewModel.AddEditAccountEvent.NavigateBackWithEditResult -> {
-                        if (event.result == 1) {
-                            mainViewModel.showSnackbar("Account updated", Snackbar.LENGTH_SHORT)
-                        } else {
-                            mainViewModel.showSnackbar("Account update failed", Snackbar.LENGTH_SHORT)
-                        }
-                        hideKeyboard()
-                        findNavController().navigateUp()
-                        true
+                    hideKeyboard()
+                    findNavController().navigateUp()
+                    true
+                }
+
+                is AddEditAccountViewModel.AddEditAccountEvent.NavigateBackWithEditResult -> {
+                    if (event.result == 1) {
+                        mainViewModel.showSnackbar("Account updated", Snackbar.LENGTH_SHORT)
+                    } else {
+                        mainViewModel.showSnackbar("Account update failed", Snackbar.LENGTH_SHORT)
                     }
-                    is AddEditAccountViewModel.AddEditAccountEvent.ShowSnackbar -> {
-                        Snackbar.make(requireView(), event.msg, event.length)
-                            .setAnchorView(binding.buttonAddAccount)
-                            .show()
-                        true
-                    }
-                }.exhaustive
-            }
+                    hideKeyboard()
+                    findNavController().navigateUp()
+                    true
+                }
+
+                is AddEditAccountViewModel.AddEditAccountEvent.ShowSnackbar -> {
+                    Snackbar.make(requireView(), event.msg, event.length)
+                        .setAnchorView(binding.buttonAddAccount)
+                        .show()
+                    true
+                }
+            }.exhaustive
         }
     }
 
@@ -97,7 +97,8 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
             topAppBar.title = "Edit Account"
             textInputEditAccountName.setText(args.account!!.accountName)
             textInputEditAccountName.addTextChangedListener { editable ->
-                addEditAccountViewModel.account = addEditAccountViewModel.account.copy(accountName = editable.toString())
+                addEditAccountViewModel.account =
+                    addEditAccountViewModel.account.copy(accountName = editable.toString())
             }
             buttonAddAccount.setOnClickListener {
                 addEditAccountViewModel.onSaveClick()
@@ -109,7 +110,8 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
         binding.apply {
             topAppBar.title = "Add Account"
             textInputEditAccountName.addTextChangedListener { editable ->
-                addEditAccountViewModel.account = addEditAccountViewModel.account.copy(accountName = editable.toString())
+                addEditAccountViewModel.account =
+                    addEditAccountViewModel.account.copy(accountName = editable.toString())
             }
             buttonAddAccount.setOnClickListener {
                 addEditAccountViewModel.onAddClick()
@@ -130,6 +132,7 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_edit_account) {
                         }.show()
                     true
                 }
+
                 else -> {
                     false
                 }

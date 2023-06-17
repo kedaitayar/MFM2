@@ -1,31 +1,21 @@
 package io.github.kedaitayar.mfm.ui.dashboard.transaction_trend_graph
 
-import android.graphics.*
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.charts.CombinedChart.DrawOrder
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
-import com.github.mikephil.charting.renderer.*
-import com.github.mikephil.charting.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentTransactionTrendGraphBinding
-import io.github.kedaitayar.mfm.ui.CustomBarChartRenderer
 import io.github.kedaitayar.mfm.ui.CustomCombinedChartRenderer
-import kotlinx.coroutines.launch
+import io.github.kedaitayar.mfm.util.safeCollection
 
-private const val TAG = "TransactionTrendGraphFr"
 
 @AndroidEntryPoint
 class TransactionTrendGraphFragment : Fragment(R.layout.fragment_transaction_trend_graph) {
@@ -96,15 +86,13 @@ class TransactionTrendGraphFragment : Fragment(R.layout.fragment_transaction_tre
             axisRight.textColor = colorOnSurface
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                transactionTrendGraphViewModel.transactionGraphCombinedData.collect {
-                    binding.combinedChart.apply {
-                        data = it
-                        notifyDataSetChanged()
-                        invalidate()
-                    }
-                }
+        transactionTrendGraphViewModel.transactionGraphCombinedData.safeCollection(
+            viewLifecycleOwner
+        ) {
+            binding.combinedChart.apply {
+                data = it
+                notifyDataSetChanged()
+                invalidate()
             }
         }
     }

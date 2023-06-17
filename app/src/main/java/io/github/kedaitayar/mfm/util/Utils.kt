@@ -10,9 +10,14 @@ import android.view.View
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.core.content.res.use
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.entity.Budget
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
@@ -72,4 +77,12 @@ fun BudgetListAdapterData.toBudget(): Budget {
         budgetName = this.budgetName,
         budgetType = this.budgetTypeId.toInt()
     )
+}
+
+fun <T> Flow<T>.safeCollection(lifecycleOwner: LifecycleOwner, data: suspend (T) -> Unit) {
+    lifecycleOwner.lifecycleScope.launch {
+        this@safeCollection.flowWithLifecycle(lifecycleOwner.lifecycle).collect {
+            data(it)
+        }
+    }
 }

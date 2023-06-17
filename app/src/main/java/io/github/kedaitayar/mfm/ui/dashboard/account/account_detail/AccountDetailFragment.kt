@@ -2,14 +2,10 @@ package io.github.kedaitayar.mfm.ui.dashboard.account.account_detail
 
 import android.os.Bundle
 import android.util.TypedValue
-import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.commit
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -23,8 +19,7 @@ import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.databinding.FragmentAccountDetailBinding
 import io.github.kedaitayar.mfm.ui.CustomCombinedChartRenderer
 import io.github.kedaitayar.mfm.ui.transaction.transaction_list.TransactionListAdapter
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import io.github.kedaitayar.mfm.util.safeCollection
 
 @AndroidEntryPoint
 class AccountDetailFragment : Fragment(R.layout.fragment_account_detail) {
@@ -50,12 +45,8 @@ class AccountDetailFragment : Fragment(R.layout.fragment_account_detail) {
             )
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                accountDetailViewModel.transactionListByAccount.collect {
-                    adapter.submitData(it)
-                }
-            }
+        accountDetailViewModel.transactionListByAccount.safeCollection(viewLifecycleOwner) {
+            adapter.submitData(it)
         }
 
         setupTopAppBar()
@@ -74,13 +65,16 @@ class AccountDetailFragment : Fragment(R.layout.fragment_account_detail) {
     private fun initViewModelColor() {
         val typedValue = TypedValue()
         requireContext().theme.resolveAttribute(R.attr.gGreen, typedValue, true)
-        accountDetailViewModel.green = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+        accountDetailViewModel.green =
+            ContextCompat.getColor(requireContext(), typedValue.resourceId)
         requireContext().theme.resolveAttribute(R.attr.gRed, typedValue, true)
         accountDetailViewModel.red = ContextCompat.getColor(requireContext(), typedValue.resourceId)
         requireContext().theme.resolveAttribute(R.attr.colorOnSurface, typedValue, true)
-        accountDetailViewModel.colorOnSurface = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+        accountDetailViewModel.colorOnSurface =
+            ContextCompat.getColor(requireContext(), typedValue.resourceId)
         requireContext().theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
-        accountDetailViewModel.colorPrimary = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+        accountDetailViewModel.colorPrimary =
+            ContextCompat.getColor(requireContext(), typedValue.resourceId)
     }
 
     private fun setupCombinedGraph() {

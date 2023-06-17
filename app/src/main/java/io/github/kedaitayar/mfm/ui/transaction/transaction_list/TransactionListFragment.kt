@@ -5,9 +5,6 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -22,8 +19,7 @@ import io.github.kedaitayar.mfm.databinding.FragmentTransactionListBinding
 import io.github.kedaitayar.mfm.ui.main.MainFragment
 import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
 import io.github.kedaitayar.mfm.ui.transaction.MainTransactionFragment
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import io.github.kedaitayar.mfm.util.safeCollection
 
 @AndroidEntryPoint
 class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
@@ -90,12 +86,8 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
                 DividerItemDecoration.VERTICAL
             )
         )
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                transactionListViewModel.allTransactionListAdapterData.collect {
-                    adapter.submitData(it)
-                }
-            }
+        transactionListViewModel.allTransactionListAdapterData.safeCollection(viewLifecycleOwner) {
+            adapter.submitData(it)
         }
         popupMenuSetup(adapter)
     }

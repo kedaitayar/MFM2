@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,9 +13,7 @@ import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.podata.QuickTransactionListAdapterData
 import io.github.kedaitayar.mfm.databinding.FragmentQuickTransactionMainBinding
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import timber.log.Timber
+import io.github.kedaitayar.mfm.util.safeCollection
 
 @AndroidEntryPoint
 class QuickTransactionMainFragment : Fragment(R.layout.fragment_quick_transaction_main) {
@@ -52,12 +47,8 @@ class QuickTransactionMainFragment : Fragment(R.layout.fragment_quick_transactio
                 )
             )
         }
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                quickTransactionMainViewModel.quickTransactionList.collect {
-                    adapter.submitList(it)
-                }
-            }
+        quickTransactionMainViewModel.quickTransactionList.safeCollection(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
         adapter.setOnItemClickListener(object : QuickTransactionListAdapter.OnItemClickListener {
             override fun onClick(quickTransactionListAdapterData: QuickTransactionListAdapterData) {

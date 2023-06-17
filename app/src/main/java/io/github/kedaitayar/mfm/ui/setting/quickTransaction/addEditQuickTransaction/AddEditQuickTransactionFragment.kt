@@ -5,10 +5,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -21,9 +17,7 @@ import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transact
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transaction.INCOME_PAGE_INDEX
 import io.github.kedaitayar.mfm.ui.transaction.add_edit_transaction.add_transaction.TRANSFER_PAGE_INDEX
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import timber.log.Timber
+import io.github.kedaitayar.mfm.util.safeCollection
 import java.lang.ref.WeakReference
 
 @AndroidEntryPoint
@@ -54,56 +48,56 @@ class AddEditQuickTransactionFragment : Fragment(R.layout.fragment_add_edit_quic
     }
 
     private fun setupEventListener() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                addEditQuickTransactionViewModel.addEditQuickTransactionEvent.collect {
-                    when (it) {
-                        is AddEditQuickTransactionEvent.NavigateBackWithAddResult -> {
-                            if (it.result > 0L) {
-                                mainViewModel.showSnackbar(
-                                    "Quick Transaction added",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            } else {
-                                mainViewModel.showSnackbar(
-                                    "Quick Transaction add failed",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            }
-                            hideKeyboard()
-                            requireActivity().onBackPressed()
-                        }
-                        is AddEditQuickTransactionEvent.NavigateBackWithDeleteResult -> {
-                            if (it.result > 0) {
-                                mainViewModel.showSnackbar(
-                                    "Quick Transaction deleted",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            } else {
-                                mainViewModel.showSnackbar(
-                                    "Quick Transaction delete failed",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            }
-                            hideKeyboard()
-                            requireActivity().onBackPressed()
-                        }
-                        is AddEditQuickTransactionEvent.NavigateBackWithEditResult -> {
-                            if (it.result > 0) {
-                                mainViewModel.showSnackbar(
-                                    "Quick Transaction added",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            } else {
-                                mainViewModel.showSnackbar(
-                                    "Quick Transaction add failed",
-                                    Snackbar.LENGTH_SHORT
-                                )
-                            }
-                            hideKeyboard()
-                            requireActivity().onBackPressed()
-                        }
+        addEditQuickTransactionViewModel.addEditQuickTransactionEvent.safeCollection(
+            viewLifecycleOwner
+        ) {
+            when (it) {
+                is AddEditQuickTransactionEvent.NavigateBackWithAddResult -> {
+                    if (it.result > 0L) {
+                        mainViewModel.showSnackbar(
+                            "Quick Transaction added",
+                            Snackbar.LENGTH_SHORT
+                        )
+                    } else {
+                        mainViewModel.showSnackbar(
+                            "Quick Transaction add failed",
+                            Snackbar.LENGTH_SHORT
+                        )
                     }
+                    hideKeyboard()
+                    requireActivity().onBackPressed()
+                }
+
+                is AddEditQuickTransactionEvent.NavigateBackWithDeleteResult -> {
+                    if (it.result > 0) {
+                        mainViewModel.showSnackbar(
+                            "Quick Transaction deleted",
+                            Snackbar.LENGTH_SHORT
+                        )
+                    } else {
+                        mainViewModel.showSnackbar(
+                            "Quick Transaction delete failed",
+                            Snackbar.LENGTH_SHORT
+                        )
+                    }
+                    hideKeyboard()
+                    requireActivity().onBackPressed()
+                }
+
+                is AddEditQuickTransactionEvent.NavigateBackWithEditResult -> {
+                    if (it.result > 0) {
+                        mainViewModel.showSnackbar(
+                            "Quick Transaction added",
+                            Snackbar.LENGTH_SHORT
+                        )
+                    } else {
+                        mainViewModel.showSnackbar(
+                            "Quick Transaction add failed",
+                            Snackbar.LENGTH_SHORT
+                        )
+                    }
+                    hideKeyboard()
+                    requireActivity().onBackPressed()
                 }
             }
         }
@@ -145,6 +139,7 @@ class AddEditQuickTransactionFragment : Fragment(R.layout.fragment_add_edit_quic
                             }.show()
                         true
                     }
+
                     else -> {
                         false
                     }
