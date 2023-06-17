@@ -8,12 +8,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "io.github.kedaitayar.mfm"
         minSdkVersion 24
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode 18
         versionName "1.2.14-alpha"
 
@@ -50,13 +50,14 @@ android {
         //Java 8+ API desugaring to enable use of Java8 feature on any android sdk version
         coreLibraryDesugaringEnabled true
 
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
+    namespace 'io.github.kedaitayar.mfm'
 }
 
 kapt {
@@ -89,17 +90,17 @@ dependencies {
     androidTestImplementation "androidx.navigation:navigation-testing:$navigation_version"
 
     // room
-    implementation "androidx.room:room-runtime:2.4.2"
-    kapt "androidx.room:room-compiler:2.4.2"
-    implementation "androidx.room:room-ktx:2.4.2"
-    testImplementation "androidx.room:room-testing:2.4.2"
-    implementation "androidx.room:room-paging:2.4.2"
+    implementation "androidx.room:room-runtime:2.5.1"
+    kapt "androidx.room:room-compiler:2.5.1"
+    implementation "androidx.room:room-ktx:2.5.1"
+    testImplementation "androidx.room:room-testing:2.5.1"
+    implementation "androidx.room:room-paging:2.5.1"
 
     //dependency injection
-    implementation "com.google.dagger:hilt-android:2.38.1"
-    kapt "com.google.dagger:hilt-android-compiler:2.38.1"
-    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.38.1'
-    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.38.1'
+    implementation 'com.google.dagger:hilt-android:2.43.2'
+    kapt 'com.google.dagger:hilt-compiler:2.43.2'
+    androidTestImplementation  'com.google.dagger:hilt-android-testing:2.43.2'
+    kaptAndroidTest 'com.google.dagger:hilt-compiler:2.43.2'
 
 
     //coroutines
@@ -131,10 +132,10 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     //Android-Room-Database-Backup
-    implementation 'com.github.rafi0101:Android-Room-Database-Backup:1.0.0-beta06'
+    implementation 'de.raphaelebner:roomdatabasebackup:1.0.0-beta12'
 
     //ViewBindingPropertyDelegate
-    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.3'
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate-full:1.5.9'
 
     //Logger
     implementation 'com.jakewharton.timber:timber:5.0.1'

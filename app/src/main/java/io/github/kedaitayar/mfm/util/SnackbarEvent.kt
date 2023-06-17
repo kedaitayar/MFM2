@@ -18,10 +18,10 @@ class SnackbarEvent<out T>(private val content: T) {
     fun peekContent(): T = content
 }
 
-class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Observer<SnackbarEvent<T>> {
-    override fun onChanged(event: SnackbarEvent<T>?) {
-        event?.getContentIfNotHandled()?.let {
-            onEventUnhandledContent(it)
-        }
-    }
-}
+//class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Observer<SnackbarEvent<T>> {
+//    override fun onChanged(event: SnackbarEvent<T>?) {
+//        event?.getContentIfNotHandled()?.let {
+//            onEventUnhandledContent(it)
+//        }
+//    }
+//}

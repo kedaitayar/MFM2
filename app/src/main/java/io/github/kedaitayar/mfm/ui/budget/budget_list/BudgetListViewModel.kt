@@ -1,12 +1,15 @@
 package io.github.kedaitayar.mfm.ui.budget.budget_list
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.kedaitayar.mfm.data.entity.BudgetPosition
 import io.github.kedaitayar.mfm.data.podata.BudgetListAdapterData
 import io.github.kedaitayar.mfm.data.repository.BudgetRepository
 import io.github.kedaitayar.mfm.data.repository.SelectedDateRepository
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -32,9 +35,11 @@ class BudgetListViewModel
             1 -> {
                 budgetRepository.getBudgetMonthlyListAdapterFlow(it.monthValue, it.year)
             }
+
             2 -> {
                 budgetRepository.getBudgetYearlyListAdapterFlow(it.monthValue, it.year)
             }
+
             else -> {
                 budgetRepository.getBudgetMonthlyListAdapterFlow(it.monthValue, it.year)
             }
@@ -59,17 +64,19 @@ class BudgetListViewModel
     private fun getBudgetListData(): LiveData<List<BudgetListAdapterData>> {
         return when (budgetType) {
             1 -> {
-                Transformations.switchMap(selectedDate) {
+                selectedDate.switchMap {
                     budgetRepository.getBudgetMonthlyListAdapter(it.monthValue, it.year)
                 }
             }
+
             2 -> {
-                Transformations.switchMap(selectedDate) {
+                selectedDate.switchMap {
                     budgetRepository.getBudgetYearlyListAdapter(it.monthValue, it.year)
                 }
             }
+
             else -> {
-                Transformations.switchMap(selectedDate) {
+                selectedDate.switchMap {
                     budgetRepository.getBudgetMonthlyListAdapter(it.monthValue, it.year)
                 }
             }

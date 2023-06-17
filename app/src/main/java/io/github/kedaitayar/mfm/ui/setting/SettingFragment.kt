@@ -4,27 +4,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.ebner.roomdatabasebackup.core.RoomBackup
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import de.raphaelebner.roomdatabasebackup.core.RoomBackup
 import io.github.kedaitayar.mfm.MainActivity
 import io.github.kedaitayar.mfm.R
 import io.github.kedaitayar.mfm.data.database.MFMDatabase
 import io.github.kedaitayar.mfm.databinding.FragmentSettingBinding
-import io.github.kedaitayar.mfm.ui.main.MainFragmentDirections
-import io.github.kedaitayar.mfm.ui.main.MainViewModel
 import io.github.kedaitayar.mfm.util.SoftKeyboardManager.hideKeyboard
-import timber.log.Timber
 
 class SettingFragment : Fragment(R.layout.fragment_setting) {
     val binding: FragmentSettingBinding by viewBinding()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupTopbar()
         backupSetup()
         restoreSetup()
@@ -44,7 +37,8 @@ class SettingFragment : Fragment(R.layout.fragment_setting) {
 
     private fun setupQuickTransaction() {
         binding.quickTransaction.setOnClickListener {
-            val action = SettingFragmentDirections.actionSettingFragmentToQuickTransactionMainFragment()
+            val action =
+                SettingFragmentDirections.actionSettingFragmentToQuickTransactionMainFragment()
             findNavController().navigate(action)
         }
     }
@@ -57,36 +51,25 @@ class SettingFragment : Fragment(R.layout.fragment_setting) {
 
     private fun backupSetup() {
         binding.backup.setOnClickListener {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Backup")
-                .setMessage(
-                    "The backup file will be store in `/storage/emulated/0/Android/data/io.github.kedaitayar.mfm/files/backup/mfm_db-[DateTime].sqlite3`. " +
-                            "Move the file somewhere else because the file is deleted by Android after uninstalling the App." +
-                            " After the backup is done, the app will be restarted."
-                )
-                .setNegativeButton("Cancel") { dialog, _ ->
-                    dialog.cancel()
-                }
-                .setPositiveButton("Backup") { _, _ ->
-                    backup()
-                }
-                .show()
+            backup()
         }
     }
 
     private fun backup() {
-        RoomBackup()
-            .context(requireContext())
+        (activity as MainActivity).backup
             .database(MFMDatabase.getDatabase(requireContext()))
             .enableLogDebug(false)
             .backupIsEncrypted(false)
-            .useExternalStorage(true)
+            .backupLocation(RoomBackup.BACKUP_FILE_LOCATION_CUSTOM_DIALOG)
             .apply {
-                onCompleteListener { success, message ->
+                onCompleteListener { success, message, _ ->
                     if (success) {
                         restartApp(Intent(requireContext(), MainActivity::class.java))
                     } else {
-                        showSnackBar("There an error. Error message: $message", Snackbar.LENGTH_SHORT)
+                        showSnackBar(
+                            "There an error. Error message: $message",
+                            Snackbar.LENGTH_SHORT
+                        )
                     }
                 }
             }
@@ -94,18 +77,20 @@ class SettingFragment : Fragment(R.layout.fragment_setting) {
     }
 
     private fun restore() {
-        RoomBackup()
-            .context(requireContext())
+        (activity as MainActivity).backup
             .database(MFMDatabase.getDatabase(requireContext()))
             .enableLogDebug(false)
             .backupIsEncrypted(false)
-            .useExternalStorage(true)
+            .backupLocation(RoomBackup.BACKUP_FILE_LOCATION_CUSTOM_DIALOG)
             .apply {
-                onCompleteListener { success, message ->
+                onCompleteListener { success, message, _ ->
                     if (success) {
                         restartApp(Intent(requireContext(), MainActivity::class.java))
                     } else {
-                        showSnackBar("There an error. Error message: $message", Snackbar.LENGTH_SHORT)
+                        showSnackBar(
+                            "There an error. Error message: $message",
+                            Snackbar.LENGTH_SHORT
+                        )
                     }
                 }
             }
